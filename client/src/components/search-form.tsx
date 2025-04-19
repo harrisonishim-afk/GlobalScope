@@ -14,7 +14,7 @@ export default function SearchForm({
   setSearchQuery, 
   handleSearch 
 }: SearchFormProps) {
-  const popularCities = ["New York", "London", "Tokyo"];
+  const popularCities = ["New York", "London", "Tokyo", "Paris", "Sydney"];
   
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

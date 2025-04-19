@@ -17,7 +17,7 @@ export default function Home() {
     error,
     refetch,
   } = useQuery<NewsItem[]>({
-    queryKey: ["/api/news", currentCity],
+    queryKey: [`/api/news/${currentCity}`],
     enabled: !!currentCity,
   });
 
