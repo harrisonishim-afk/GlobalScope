@@ -1,0 +1,182 @@
+import type { Express } from "express";
+import { createServer, type Server } from "http";
+import { storage } from "./storage";
+import { insertNewsSchema } from "@shared/schema";
+import axios from "axios";
+import { z } from "zod";
+
+// News API key from environment
+const NEWS_API_KEY = process.env.NEWS_API_KEY || "";
+
+// Cache duration in milliseconds (30 minutes)
+const CACHE_DURATION = 30 * 60 * 1000;
+
+// Cache for news by city
+interface CacheItem {
+  data: any;
+  timestamp: number;
+}
+
+const newsCache = new Map<string, CacheItem>();
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  // Check if news data for a city is in cache and still valid
+  const getCachedNews = (city: string) => {
+    const cacheItem = newsCache.get(city.toLowerCase());
+    if (cacheItem && (Date.now() - cacheItem.timestamp) < CACHE_DURATION) {
+      return cacheItem.data;
+    }
+    return null;
+  };
+
+  // Set news data for a city in cache
+  const setCachedNews = (city: string, data: any) => {
+    newsCache.set(city.toLowerCase(), {
+      data,
+      timestamp: Date.now()
+    });
+  };
+
+  // API route to get news by city
+  app.get("/api/news/:city", async (req, res) => {
+    try {
+      const cityParam = req.params.city;
+      
+      if (!cityParam || typeof cityParam !== "string") {
+        return res.status(400).json({ message: "City parameter is required" });
+      }
+
+      const city = cityParam.trim();
+      if (city.length < 2) {
+        return res.status(400).json({ message: "City name is too short" });
+      }
+
+      // Check cache first
+      const cachedNews = getCachedNews(city);
+      if (cachedNews) {
+        return res.json(cachedNews);
+      }
+
+      // Track city search for analytics
+      await storage.updateCitySearch(city);
+
+      // Fetch from external news API
+      if (!NEWS_API_KEY) {
+        return res.status(500).json({ message: "News API key is not configured" });
+      }
+
+      // Use News API to get articles related to the city
+      const response = await axios.get("https://newsapi.org/v2/everything", {
+        params: {
+          q: city,
+          language: "en",
+          sortBy: "publishedAt",
+          apiKey: NEWS_API_KEY,
+          pageSize: 20, // Limit to 20 articles
+        },
+        timeout: 5000,
+      });
+
+      if (response.data.status !== "ok") {
+        return res.status(500).json({ message: "News API returned an error" });
+      }
+
+      // Transform and filter API response to match our schema
+      const newsItems = response.data.articles.map((article: any) => {
+        const category = determineCategory(article.title, article.description);
+        
+        return {
+          title: article.title || "Untitled",
+          description: article.description || "No description available",
+          content: article.content,
+          url: article.url,
+          imageUrl: article.urlToImage,
+          source: article.source?.name || "Unknown Source",
+          author: article.author,
+          category,
+          publishedAt: article.publishedAt ? new Date(article.publishedAt) : null,
+          city,
+        };
+      });
+
+      // Validate and store news items
+      const validNewsItems = newsItems.filter(item => {
+        try {
+          insertNewsSchema.parse(item);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      });
+
+      // Save news items to storage
+      for (const item of validNewsItems) {
+        await storage.createNews(item);
+      }
+
+      // Cache results
+      setCachedNews(city, validNewsItems);
+
+      res.json(validNewsItems);
+    } catch (error) {
+      console.error("Error fetching news:", error);
+      
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNABORTED") {
+          return res.status(504).json({ message: "Request to news service timed out" });
+        }
+        if (error.response) {
+          return res.status(error.response.status).json({ 
+            message: `News API error: ${error.response.data?.message || error.message}` 
+          });
+        }
+      }
+      
+      res.status(500).json({ message: "Failed to fetch news" });
+    }
+  });
+
+  // Get popular city searches
+  app.get("/api/popular-cities", async (req, res) => {
+    try {
+      const popularCities = await storage.getPopularCities(5); // Top 5 most searched cities
+      res.json(popularCities);
+    } catch (error) {
+      console.error("Error fetching popular cities:", error);
+      res.status(500).json({ message: "Failed to fetch popular cities" });
+    }
+  });
+
+  const httpServer = createServer(app);
+  return httpServer;
+}
+
+// Helper function to determine article category based on content
+function determineCategory(title?: string, description?: string): string {
+  const content = `${title || ""} ${description || ""}`.toLowerCase();
+  const categoryKeywords: Record<string, string[]> = {
+    "politics": ["politic", "government", "election", "vote", "congress", "senate", "president", "democrat", "republican"],
+    "business": ["business", "economy", "market", "stock", "invest", "finance", "economic", "trade", "company"],
+    "technology": ["tech", "technology", "software", "app", "digital", "internet", "cyber", "ai", "artificial intelligence"],
+    "health": ["health", "covid", "medical", "hospital", "doctor", "patient", "disease", "virus", "vaccine"],
+    "sports": ["sport", "game", "team", "player", "championship", "tournament", "match", "league", "athlete"],
+    "entertainment": ["entertainment", "movie", "film", "music", "celebrity", "actor", "actress", "show", "star"],
+    "science": ["science", "research", "study", "discover", "scientific", "scientist", "lab", "experiment"],
+    "environment": ["environment", "climate", "pollution", "energy", "sustainable", "green", "recycle", "carbon"],
+    "education": ["education", "school", "university", "college", "student", "teacher", "professor", "class", "academic"],
+    "food": ["food", "restaurant", "dining", "cuisine", "chef", "recipe", "menu", "dish"],
+    "housing": ["housing", "real estate", "property", "apartment", "house", "rent", "mortgage", "building"],
+    "traffic": ["traffic", "transit", "commute", "transportation", "road", "highway", "street", "bridge"],
+    "community": ["community", "neighborhood", "local", "resident", "volunteer", "charity", "donate", "program"],
+  };
+
+  // Check for each category
+  for (const [category, keywords] of Object.entries(categoryKeywords)) {
+    if (keywords.some(keyword => content.includes(keyword))) {
+      return category;
+    }
+  }
+
+  // Default category
+  return "local";
+}
