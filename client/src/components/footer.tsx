@@ -21,7 +21,7 @@ export default function Footer() {
           </div>
           <div className="mt-8 md:mt-0 md:order-1">
             <p className="text-center text-sm text-gray-500">
-              &copy; {new Date().getFullYear()} LocalNews. All rights reserved. Powered by News API.
+              &copy; {new Date().getFullYear()} Globalscope. All rights reserved. Powered by News API.
             </p>
           </div>
         </div>

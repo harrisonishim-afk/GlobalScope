@@ -34,8 +34,8 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <section className="mb-8">
             <div className="text-center max-w-2xl mx-auto mb-6">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Local Headlines, Instantly</h2>
-              <p className="text-lg text-gray-600">Enter your city to see what's happening in your area right now.</p>
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Global News, Local Focus</h2>
+              <p className="text-lg text-gray-600">Enter any city to discover what's happening around the world.</p>
             </div>
             <SearchForm 
               searchQuery={searchQuery} 
