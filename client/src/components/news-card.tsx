@@ -1,6 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { MapPin } from "lucide-react";
 import { NewsItem } from "@shared/schema";
 import { formatDistanceToNow } from "date-fns";
+import { getNormalizedCityName } from "@/lib/neighborhoodAnalysis";
 
 interface NewsCardProps {
   item: NewsItem;
@@ -28,6 +31,35 @@ export default function NewsCard({ item }: NewsCardProps) {
     return categoryClasses[category.toLowerCase()] || "bg-primary";
   };
 
+  // Check if this article mentions a specific neighborhood
+  const getNeighborhoodMention = (): string | null => {
+    if (!item.city) return null;
+    
+    const cityName = getNormalizedCityName(item.city);
+    const cityNeighborhoods: Record<string, string[]> = {
+      "new york": ["manhattan", "brooklyn", "queens", "bronx", "staten island", "harlem", "times square", "chelsea", "soho", "tribeca"],
+      "london": ["westminster", "hackney", "camden", "brixton", "shoreditch", "kensington", "chelsea", "islington", "southwark", "hammersmith"],
+      "paris": ["le marais", "montmartre", "champs-élysées", "bastille", "pigalle", "quartier latin", "la défense", "belleville", "montparnasse", "république"],
+      "tokyo": ["shinjuku", "shibuya", "ginza", "roppongi", "akihabara", "asakusa", "harajuku", "ikebukuro", "odaiba", "ueno"],
+      "sydney": ["cbd", "bondi", "manly", "newtown", "surry hills", "parramatta", "circular quay", "darling harbour", "chatswood", "kings cross"],
+      "boston": ["back bay", "beacon hill", "north end", "south end", "fenway", "downtown", "charlestown", "cambridge", "roxbury", "dorchester"],
+      "chicago": ["loop", "wicker park", "lincoln park", "gold coast", "hyde park", "lakeview", "pilsen", "uptown", "west loop", "rogers park"],
+    };
+    
+    const neighborhoods = cityNeighborhoods[cityName] || [];
+    const content = `${item.title} ${item.description}`.toLowerCase();
+    
+    for (const neighborhood of neighborhoods) {
+      if (content.includes(neighborhood)) {
+        return neighborhood;
+      }
+    }
+    
+    return null;
+  };
+
+  const neighborhood = getNeighborhoodMention();
+
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-1 news-card">
       <div className="relative h-48 bg-gray-200">
@@ -54,6 +86,16 @@ export default function NewsCard({ item }: NewsCardProps) {
         </div>
         <h3 className="text-lg font-medium text-gray-900 mb-2 line-clamp-2">{item.title}</h3>
         <p className="text-gray-600 text-sm mb-3 line-clamp-3">{item.description}</p>
+        
+        {neighborhood && (
+          <div className="mb-3">
+            <Badge variant="outline" className="flex items-center gap-1 text-xs">
+              <MapPin className="h-3 w-3" />
+              {neighborhood.charAt(0).toUpperCase() + neighborhood.slice(1)}
+            </Badge>
+          </div>
+        )}
+        
         <a 
           href={item.url} 
           target="_blank" 
