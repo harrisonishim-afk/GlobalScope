@@ -49,28 +49,24 @@ export default function Home() {
             />
           </section>
           
-          <div className={showNeighborhoodMap ? "grid grid-cols-1 lg:grid-cols-3 gap-6" : ""}>
-            <div className={showNeighborhoodMap ? "lg:col-span-2" : ""}>
-              <NewsSection 
+          {showNeighborhoodMap && newsItems && (
+            <div className="mb-8">
+              <NeighborhoodMap 
                 newsItems={newsItems} 
-                isLoading={isLoading} 
-                isError={isError} 
-                errorMessage={error instanceof Error ? error.message : "An error occurred"} 
-                currentCity={currentCity}
-                handleRetry={() => refetch()}
-                handleQuickSearch={handleSearch}
+                cityName={currentCity} 
               />
             </div>
-            
-            {showNeighborhoodMap && newsItems && (
-              <div className="lg:col-span-1">
-                <NeighborhoodMap 
-                  newsItems={newsItems} 
-                  cityName={currentCity} 
-                />
-              </div>
-            )}
-          </div>
+          )}
+          
+          <NewsSection 
+            newsItems={newsItems} 
+            isLoading={isLoading} 
+            isError={isError} 
+            errorMessage={error instanceof Error ? error.message : "An error occurred"} 
+            currentCity={currentCity}
+            handleRetry={() => refetch()}
+            handleQuickSearch={handleSearch}
+          />
         </div>
       </main>
       <Footer />

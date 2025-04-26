@@ -32,8 +32,8 @@ export default function NewsCard({ item }: NewsCardProps) {
   };
 
   // Check if this article mentions a specific neighborhood
-  const getNeighborhoodMention = (): string | null => {
-    if (!item.city) return null;
+  const getNeighborhoodMention = () => {
+    if (!item.city) return undefined;
     
     const cityName = getNormalizedCityName(item.city);
     const cityNeighborhoods: Record<string, string[]> = {
@@ -55,16 +55,26 @@ export default function NewsCard({ item }: NewsCardProps) {
       }
     }
     
-    return null;
+    return undefined;
+  };
+
+  const formatDate = (dateString?: Date | string | null) => {
+    if (!dateString) return "Recently";
+    try {
+      return formatDistanceToNow(new Date(dateString), { addSuffix: true });
+    } catch (e) {
+      return "Recently";
+    }
   };
 
   const neighborhood = getNeighborhoodMention();
+  const fallbackImage = "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=500&auto=format";
 
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-1 news-card">
       <div className="relative h-48 bg-gray-200">
         <img 
-          src={item.imageUrl || "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=500&auto=format"}
+          src={item.imageUrl || fallbackImage}
           alt={item.title} 
           className="w-full h-full object-cover"
         />
@@ -78,11 +88,7 @@ export default function NewsCard({ item }: NewsCardProps) {
         <div className="flex items-center text-xs text-gray-500 mb-2">
           <span className="font-medium text-gray-700">{item.source}</span>
           <span className="mx-2">•</span>
-          <span>
-            {item.publishedAt 
-              ? formatDistanceToNow(new Date(item.publishedAt), { addSuffix: true }) 
-              : "Recently"}
-          </span>
+          <span>{formatDate(item.publishedAt)}</span>
         </div>
         <h3 className="text-lg font-medium text-gray-900 mb-2 line-clamp-2">{item.title}</h3>
         <p className="text-gray-600 text-sm mb-3 line-clamp-3">{item.description}</p>
@@ -97,7 +103,7 @@ export default function NewsCard({ item }: NewsCardProps) {
         )}
         
         <a 
-          href={item.url} 
+          href={item.url || "#"} 
           target="_blank" 
           rel="noopener noreferrer" 
           className="text-primary font-medium text-sm hover:underline"
