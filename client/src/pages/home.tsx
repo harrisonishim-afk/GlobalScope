@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import SearchForm from "@/components/search-form";
 import NewsSection from "@/components/news-section";
 import NeighborhoodMap from "@/components/neighborhood-map";
+import CityVibe from "@/components/city-vibe";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
 
@@ -31,6 +32,9 @@ export default function Home() {
 
   // Determine if we should show the neighborhood map
   const showNeighborhoodMap = currentCity && newsItems && newsItems.length > 0 && hasNeighborhoodData(currentCity);
+  
+  // Determine if we should show the city vibe
+  const showCityVibe = currentCity && newsItems && newsItems.length > 0;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -56,6 +60,14 @@ export default function Home() {
                 cityName={currentCity} 
               />
             </div>
+          )}
+          
+          {/* City vibe with music recommendations */}
+          {showCityVibe && newsItems && (
+            <CityVibe 
+              newsItems={newsItems} 
+              cityName={currentCity} 
+            />
           )}
           
           <NewsSection 
