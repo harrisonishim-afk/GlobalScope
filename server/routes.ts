@@ -226,7 +226,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Validate news items
-      const validNewsItems = newsItems.filter(item => {
+      const validNewsItems = newsItems.filter((item: any) => {
         try {
           insertNewsSchema.parse(item);
           return true;
