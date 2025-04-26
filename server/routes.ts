@@ -100,7 +100,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
 
       // Validate and store news items
-      const validNewsItems = newsItems.filter(item => {
+      const validNewsItems = newsItems.filter((item: any) => {
         try {
           insertNewsSchema.parse(item);
           return true;
@@ -144,6 +144,116 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error fetching popular cities:", error);
       res.status(500).json({ message: "Failed to fetch popular cities" });
+    }
+  });
+  
+  // API route to get historical news from one year ago for a city
+  app.get("/api/news/:city/historical", async (req, res) => {
+    try {
+      const cityParam = req.params.city;
+      
+      if (!cityParam || typeof cityParam !== "string") {
+        return res.status(400).json({ message: "City parameter is required" });
+      }
+
+      const city = cityParam.trim();
+      if (city.length < 2) {
+        return res.status(400).json({ message: "City name is too short" });
+      }
+
+      // Check cache first
+      const cacheKey = `historical_${city.toLowerCase()}`;
+      const cachedNews = getCachedNews(cacheKey);
+      if (cachedNews) {
+        return res.json(cachedNews);
+      }
+
+      // Fetch from external news API
+      if (!NEWS_API_KEY) {
+        return res.status(500).json({ message: "News API key is not configured" });
+      }
+
+      // Calculate date range for exactly 1 year ago (with a window of a few days)
+      const today = new Date();
+      const oneYearAgo = new Date(today);
+      oneYearAgo.setFullYear(today.getFullYear() - 1);
+      
+      // Create a window of ±3 days around the exact date one year ago
+      const fromDate = new Date(oneYearAgo);
+      fromDate.setDate(oneYearAgo.getDate() - 3);
+      
+      const toDate = new Date(oneYearAgo);
+      toDate.setDate(oneYearAgo.getDate() + 3);
+      
+      // Format dates for the API
+      const fromDateStr = fromDate.toISOString().split('T')[0];
+      const toDateStr = toDate.toISOString().split('T')[0];
+
+      // Use News API to get articles from one year ago
+      const response = await axios.get("https://newsapi.org/v2/everything", {
+        params: {
+          q: city,
+          language: "en",
+          sortBy: "relevancy",
+          apiKey: NEWS_API_KEY,
+          pageSize: 5, // Limit to 5 articles
+          from: fromDateStr,
+          to: toDateStr
+        },
+        timeout: 5000,
+      });
+
+      if (response.data.status !== "ok") {
+        return res.status(500).json({ message: "News API returned an error" });
+      }
+
+      // Transform and filter API response to match our schema
+      const newsItems = response.data.articles.map((article: any) => {
+        const category = determineCategory(article.title, article.description);
+        
+        return {
+          title: article.title || "Untitled",
+          description: article.description || "No description available",
+          content: article.content,
+          url: article.url,
+          imageUrl: article.urlToImage,
+          source: article.source?.name || "Unknown Source",
+          author: article.author,
+          category,
+          publishedAt: article.publishedAt ? new Date(article.publishedAt) : null,
+          city,
+        };
+      });
+
+      // Validate news items
+      const validNewsItems = newsItems.filter(item => {
+        try {
+          insertNewsSchema.parse(item);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      });
+
+      // Cache results
+      setCachedNews(cacheKey, validNewsItems);
+
+      res.json(validNewsItems);
+    } catch (error) {
+      console.error("Error fetching historical news:", error);
+      
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNABORTED") {
+          return res.status(504).json({ message: "Request to news service timed out" });
+        }
+        if (error.response) {
+          return res.status(error.response.status).json({ 
+            message: `News API error: ${error.response.data?.message || error.message}` 
+          });
+        }
+      }
+      
+      res.status(500).json({ message: "Failed to fetch historical news" });
     }
   });
 
