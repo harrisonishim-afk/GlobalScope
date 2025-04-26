@@ -2,6 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Map Component Styles */
+.rsm-geography:focus {
+  outline: none;
+}
+
+.map-marker {
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.map-marker:hover {
+  transform: scale(1.1);
+}
+
+.map-tooltip {
+  position: absolute;
+  background: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  pointer-events: none;
+  z-index: 1000;
+}
+
 @layer base {
   * {
     @apply border-border;

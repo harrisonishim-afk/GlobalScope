@@ -4,7 +4,9 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import SearchForm from "@/components/search-form";
 import NewsSection from "@/components/news-section";
+import NeighborhoodMap from "@/components/neighborhood-map";
 import { NewsItem } from "@shared/schema";
+import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
 
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -27,6 +29,9 @@ export default function Home() {
     }
   };
 
+  // Determine if we should show the neighborhood map
+  const showNeighborhoodMap = currentCity && newsItems && newsItems.length > 0 && hasNeighborhoodData(currentCity);
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -44,15 +49,28 @@ export default function Home() {
             />
           </section>
           
-          <NewsSection 
-            newsItems={newsItems} 
-            isLoading={isLoading} 
-            isError={isError} 
-            errorMessage={error instanceof Error ? error.message : "An error occurred"} 
-            currentCity={currentCity}
-            handleRetry={() => refetch()}
-            handleQuickSearch={handleSearch}
-          />
+          <div className={showNeighborhoodMap ? "grid grid-cols-1 lg:grid-cols-3 gap-6" : ""}>
+            <div className={showNeighborhoodMap ? "lg:col-span-2" : ""}>
+              <NewsSection 
+                newsItems={newsItems} 
+                isLoading={isLoading} 
+                isError={isError} 
+                errorMessage={error instanceof Error ? error.message : "An error occurred"} 
+                currentCity={currentCity}
+                handleRetry={() => refetch()}
+                handleQuickSearch={handleSearch}
+              />
+            </div>
+            
+            {showNeighborhoodMap && newsItems && (
+              <div className="lg:col-span-1">
+                <NeighborhoodMap 
+                  newsItems={newsItems} 
+                  cityName={currentCity} 
+                />
+              </div>
+            )}
+          </div>
         </div>
       </main>
       <Footer />
