@@ -154,6 +154,20 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Chadchart Sittipunt",
     foundedYear: 1782,
     nickname: "Full ceremonial name of Bangkok"
+  },
+  "hell": {
+    population: "1,589",
+    famousPeople: ["Local Norwegian residents", "Train station workers", "Arctic farmers"],
+    currentMayor: "Steinar Aspli",
+    foundedYear: 1800,
+    nickname: "Hell, Norway"
+  },
+  "hell city": {
+    population: "1,589",
+    famousPeople: ["Local Norwegian residents", "Train station workers", "Arctic farmers"],
+    currentMayor: "Steinar Aspli",
+    foundedYear: 1800,
+    nickname: "Hell, Norway"
   }
 };
 

@@ -313,7 +313,9 @@ function getImprovedSearchQuery(city: string): string {
     "fucking city": "Fugging Austria village Tarsdorf",
     "bangkok": "Bangkok Thailand",
     "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": "Bangkok Thailand",
-    "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": "Bangkok Thailand"
+    "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": "Bangkok Thailand",
+    "hell": "Hell Norway village Trondheim",
+    "hell city": "Hell Norway village Trondheim"
   };
   
   // Return improved query if mapping exists, otherwise return original city

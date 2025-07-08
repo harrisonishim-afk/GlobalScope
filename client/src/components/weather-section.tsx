@@ -162,6 +162,24 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 8,
     feelsLike: 38,
     description: "Hot and humid tropical weather"
+  },
+  "hell": {
+    temperature: -5,
+    condition: "Snow",
+    humidity: 85,
+    windSpeed: 15,
+    visibility: 5,
+    feelsLike: -12,
+    description: "Cold Norwegian winter with snow"
+  },
+  "hell city": {
+    temperature: -5,
+    condition: "Snow",
+    humidity: 85,
+    windSpeed: 15,
+    visibility: 5,
+    feelsLike: -12,
+    description: "Cold Norwegian winter with snow"
   }
 };
 
