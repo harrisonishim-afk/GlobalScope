@@ -182,6 +182,13 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Unincorporated community",
     foundedYear: 1800,
     nickname: "West Virginia hamlet"
+  },
+  "b0ooger hole": {
+    population: "50",
+    famousPeople: ["Local Appalachian residents", "Coal miners", "Mountain folk"],
+    currentMayor: "Unincorporated community",
+    foundedYear: 1800,
+    nickname: "West Virginia hamlet"
   }
 };
 
