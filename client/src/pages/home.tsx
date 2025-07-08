@@ -7,6 +7,8 @@ import NewsSection from "@/components/news-section";
 import NeighborhoodMap from "@/components/neighborhood-map";
 import CityVibe from "@/components/city-vibe";
 import HistoricalNews from "@/components/historical-news";
+import WeatherSection from "@/components/weather-section";
+import CityFacts from "@/components/city-facts";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
 
@@ -54,6 +56,17 @@ export default function Home() {
             />
           </section>
           
+          {/* Weather section at the top */}
+          {currentCity && (
+            <WeatherSection cityName={currentCity} />
+          )}
+          
+          {/* City facts section */}
+          {currentCity && (
+            <CityFacts cityName={currentCity} />
+          )}
+          
+          {/* Neighborhood map */}
           {showNeighborhoodMap && newsItems && (
             <div className="mb-8">
               <NeighborhoodMap 
@@ -71,11 +84,12 @@ export default function Home() {
             />
           )}
           
-          {/* Historical news from one year ago */}
-          {showCityFeatures && (
+          {/* Historical news from one year ago - disabled due to API limitations */}
+          {false && showCityFeatures && (
             <HistoricalNews cityName={currentCity} />
           )}
           
+          {/* News section */}
           <NewsSection 
             newsItems={newsItems} 
             isLoading={isLoading} 
