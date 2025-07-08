@@ -117,6 +117,24 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 12,
     feelsLike: 19,
     description: "Partly cloudy with mild Mediterranean climate"
+  },
+  "fucking": {
+    temperature: 12,
+    condition: "Cloudy",
+    humidity: 75,
+    windSpeed: 8,
+    visibility: 9,
+    feelsLike: 10,
+    description: "Cool alpine weather with overcast skies"
+  },
+  "fucking city": {
+    temperature: 12,
+    condition: "Cloudy",
+    humidity: 75,
+    windSpeed: 8,
+    visibility: 9,
+    feelsLike: 10,
+    description: "Cool alpine weather with overcast skies"
   }
 };
 

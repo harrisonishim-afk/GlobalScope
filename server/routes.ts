@@ -308,7 +308,9 @@ function getImprovedSearchQuery(city: string): string {
     "minsk": "Minsk Belarus",
     "riga": "Riga Latvia",
     "tallinn": "Tallinn Estonia",
-    "vilnius": "Vilnius Lithuania"
+    "vilnius": "Vilnius Lithuania",
+    "fucking": "Fugging Austria village Tarsdorf",
+    "fucking city": "Fugging Austria village Tarsdorf"
   };
   
   // Return improved query if mapping exists, otherwise return original city

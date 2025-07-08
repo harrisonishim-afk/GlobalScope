@@ -119,6 +119,20 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Pope Leo XIV",
     foundedYear: 1929,
     nickname: "The Holy See"
+  },
+  "fucking": {
+    population: "104",
+    famousPeople: ["Local Austrian residents", "Village council members", "Alpine farmers"],
+    currentMayor: "Andrea Holzner",
+    foundedYear: 1070,
+    nickname: "Fugging (renamed 2020)"
+  },
+  "fucking city": {
+    population: "104",
+    famousPeople: ["Local Austrian residents", "Village council members", "Alpine farmers"],
+    currentMayor: "Andrea Holzner",
+    foundedYear: 1070,
+    nickname: "Fugging (renamed 2020)"
   }
 };
 
