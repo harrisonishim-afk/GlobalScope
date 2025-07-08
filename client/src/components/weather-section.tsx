@@ -189,6 +189,15 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 15,
     feelsLike: 27,
     description: "Warm and dry Mediterranean climate"
+  },
+  "booger hole": {
+    temperature: 8,
+    condition: "Cloudy",
+    humidity: 72,
+    windSpeed: 12,
+    visibility: 8,
+    feelsLike: 5,
+    description: "Cool Appalachian mountain weather"
   }
 };
 

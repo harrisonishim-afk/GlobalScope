@@ -175,6 +175,13 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Gülistan Sönük",
     foundedYear: 1955,
     nickname: "Oil Capital of Turkey"
+  },
+  "booger hole": {
+    population: "50",
+    famousPeople: ["Local Appalachian residents", "Coal miners", "Mountain folk"],
+    currentMayor: "Unincorporated community",
+    foundedYear: 1800,
+    nickname: "West Virginia hamlet"
   }
 };
 
