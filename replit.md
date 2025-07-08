@@ -26,6 +26,8 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **2025-01-08**: Disabled historical news feature due to NewsAPI limitations (requires paid plan for historical data)
 - **2025-01-08**: Added mock weather data for major cities (New York, London, Tokyo, Paris, etc.)
 - **2025-01-08**: Created comprehensive city facts database with 15+ major cities
+- **2025-01-08**: Fixed Vatican City search disambiguation by improving search queries with context keywords
+- **2025-01-08**: Updated Vatican City leadership information to reflect current Pope Leo XIV
 
 ## User Preferences
 - Weather information should be displayed at the top of the page
