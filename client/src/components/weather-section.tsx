@@ -379,6 +379,15 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 14,
     feelsLike: 10,
     description: "Cool Alpine climate with mountain breezes"
+  },
+  "jericho": {
+    temperature: 25,
+    condition: "Sunny",
+    humidity: 45,
+    windSpeed: 7,
+    visibility: 15,
+    feelsLike: 27,
+    description: "Hot desert climate with clear skies"
   }
 };
 

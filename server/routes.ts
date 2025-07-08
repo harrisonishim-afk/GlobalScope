@@ -320,7 +320,8 @@ function getImprovedSearchQuery(city: string): string {
     "booger hole": "\"Booger Hole\" West Virginia Clay County community",
     "b0ooger hole": "\"Booger Hole\" West Virginia Clay County community",
     "chimayo": "\"Chimayo\" New Mexico sanctuary pilgrimage site",
-    "riz": "\"Riz\" South Tyrol Italy Alpine village"
+    "riz": "\"Riz\" South Tyrol Italy Alpine village",
+    "jericho": "\"Jericho\" West Bank Palestine ancient city"
   };
   
   // Return improved query if mapping exists, otherwise return original city

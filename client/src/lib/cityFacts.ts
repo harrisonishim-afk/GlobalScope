@@ -323,6 +323,13 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Giuseppe Brigadoi",
     foundedYear: 1300,
     nickname: "South Tyrolean village"
+  },
+  "jericho": {
+    population: "20,300",
+    famousPeople: ["Ancient biblical figures", "Archaeological researchers", "Yasser Arafat", "Local Palestinian leaders"],
+    currentMayor: "Hassan Saleh",
+    foundedYear: -9000,
+    nickname: "City of Palms"
   }
 };
 
