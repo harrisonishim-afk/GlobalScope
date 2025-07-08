@@ -133,6 +133,27 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Andrea Holzner",
     foundedYear: 1070,
     nickname: "Fugging (renamed 2020)"
+  },
+  "bangkok": {
+    population: "10.7 million",
+    famousPeople: ["Tony Jaa", "Apichatpong Weerasethakul", "Yingluck Shinawatra", "Thaksin Shinawatra", "Mario Maurer"],
+    currentMayor: "Chadchart Sittipunt",
+    foundedYear: 1782,
+    nickname: "City of Angels"
+  },
+  "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": {
+    population: "10.7 million",
+    famousPeople: ["Tony Jaa", "Apichatpong Weerasethakul", "Yingluck Shinawatra", "Thaksin Shinawatra", "Mario Maurer"],
+    currentMayor: "Chadchart Sittipunt",
+    foundedYear: 1782,
+    nickname: "Full ceremonial name of Bangkok"
+  },
+  "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": {
+    population: "10.7 million",
+    famousPeople: ["Tony Jaa", "Apichatpong Weerasethakul", "Yingluck Shinawatra", "Thaksin Shinawatra", "Mario Maurer"],
+    currentMayor: "Chadchart Sittipunt",
+    foundedYear: 1782,
+    nickname: "Full ceremonial name of Bangkok"
   }
 };
 

@@ -310,7 +310,10 @@ function getImprovedSearchQuery(city: string): string {
     "tallinn": "Tallinn Estonia",
     "vilnius": "Vilnius Lithuania",
     "fucking": "Fugging Austria village Tarsdorf",
-    "fucking city": "Fugging Austria village Tarsdorf"
+    "fucking city": "Fugging Austria village Tarsdorf",
+    "bangkok": "Bangkok Thailand",
+    "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": "Bangkok Thailand",
+    "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": "Bangkok Thailand"
   };
   
   // Return improved query if mapping exists, otherwise return original city

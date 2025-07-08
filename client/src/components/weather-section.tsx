@@ -135,6 +135,33 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 9,
     feelsLike: 10,
     description: "Cool alpine weather with overcast skies"
+  },
+  "bangkok": {
+    temperature: 32,
+    condition: "Humid",
+    humidity: 89,
+    windSpeed: 6,
+    visibility: 8,
+    feelsLike: 38,
+    description: "Hot and humid tropical weather"
+  },
+  "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": {
+    temperature: 32,
+    condition: "Humid",
+    humidity: 89,
+    windSpeed: 6,
+    visibility: 8,
+    feelsLike: 38,
+    description: "Hot and humid tropical weather"
+  },
+  "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": {
+    temperature: 32,
+    condition: "Humid",
+    humidity: 89,
+    windSpeed: 6,
+    visibility: 8,
+    feelsLike: 38,
+    description: "Hot and humid tropical weather"
   }
 };
 
