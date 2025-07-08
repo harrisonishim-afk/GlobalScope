@@ -370,6 +370,15 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 16,
     feelsLike: 14,
     description: "High desert climate with crisp mountain air"
+  },
+  "riz": {
+    temperature: 12,
+    condition: "Partly Cloudy",
+    humidity: 65,
+    windSpeed: 9,
+    visibility: 14,
+    feelsLike: 10,
+    description: "Cool Alpine climate with mountain breezes"
   }
 };
 

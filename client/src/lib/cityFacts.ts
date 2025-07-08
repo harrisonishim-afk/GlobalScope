@@ -316,6 +316,13 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Unincorporated community",
     foundedYear: 1740,
     nickname: "Lourdes of America"
+  },
+  "riz": {
+    population: "8,500",
+    famousPeople: ["Local Italian residents", "Alpine farmers", "Mountain guides", "Regional artisans"],
+    currentMayor: "Giuseppe Brigadoi",
+    foundedYear: 1300,
+    nickname: "South Tyrolean village"
   }
 };
 
