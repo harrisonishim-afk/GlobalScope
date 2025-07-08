@@ -115,7 +115,7 @@ const cityFactsDatabase: Record<string, CityFacts> = {
   },
   "vatican city": {
     population: "825",
-    famousPeople: ["Pope John Paul II", "Pope Benedict XVI", "Pope Francis", "Michelangelo", "Bernini"],
+    famousPeople: ["Swiss Guard Members", "Vatican Citizens", "Papal Staff"],
     currentMayor: "Pope Leo XIV",
     foundedYear: 1929,
     nickname: "The Holy See"
