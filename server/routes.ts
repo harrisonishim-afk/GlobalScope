@@ -309,15 +309,15 @@ function getImprovedSearchQuery(city: string): string {
     "riga": "Riga Latvia",
     "tallinn": "Tallinn Estonia",
     "vilnius": "Vilnius Lithuania",
-    "fucking": "Fugging Austria village Tarsdorf",
-    "fucking city": "Fugging Austria village Tarsdorf",
+    "fucking": "\"Fugging\" Austria village renamed 2020",
+    "fucking city": "\"Fugging\" Austria village renamed 2020",
     "bangkok": "Bangkok Thailand",
     "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": "Bangkok Thailand",
     "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": "Bangkok Thailand",
-    "hell": "Hell Norway village Trondheim",
-    "hell city": "Hell Norway village Trondheim",
-    "batman": "Batman Turkey city province",
-    "booger hole": "Booger Hole West Virginia unincorporated community"
+    "hell": "\"Hell\" Norway village Trondheim",
+    "hell city": "\"Hell\" Norway village Trondheim", 
+    "batman": "\"Batman\" Turkey city province oil",
+    "booger hole": "\"Booger Hole\" West Virginia Clay County community"
   };
   
   // Return improved query if mapping exists, otherwise return original city
