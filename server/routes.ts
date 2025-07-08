@@ -318,7 +318,8 @@ function getImprovedSearchQuery(city: string): string {
     "hell city": "\"Hell\" Norway village Trondheim", 
     "batman": "\"Batman\" Turkey city province oil",
     "booger hole": "\"Booger Hole\" West Virginia Clay County community",
-    "b0ooger hole": "\"Booger Hole\" West Virginia Clay County community"
+    "b0ooger hole": "\"Booger Hole\" West Virginia Clay County community",
+    "chimayo": "\"Chimayo\" New Mexico sanctuary pilgrimage site"
   };
   
   // Return improved query if mapping exists, otherwise return original city

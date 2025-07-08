@@ -189,6 +189,133 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Unincorporated community",
     foundedYear: 1800,
     nickname: "West Virginia hamlet"
+  },
+  "madrid": {
+    population: "6.7 million",
+    famousPeople: ["Penélope Cruz", "Javier Bardem", "Pablo Alborán", "Alejandro Amenábar", "Pedro Almodóvar"],
+    currentMayor: "José Luis Martínez-Almeida",
+    foundedYear: 865,
+    nickname: "Capital of Spain"
+  },
+  "mumbai": {
+    population: "20.4 million",
+    famousPeople: ["Shah Rukh Khan", "Amitabh Bachchan", "Priyanka Chopra", "Aamir Khan", "A.R. Rahman"],
+    currentMayor: "Kishori Pednekar",
+    foundedYear: 1507,
+    nickname: "Bollywood Capital"
+  },
+  "delhi": {
+    population: "32.9 million",
+    famousPeople: ["Anushka Sharma", "Ranveer Singh", "Kapil Sharma", "Arijit Singh", "Kailash Kher"],
+    currentMayor: "Shelly Oberoi",
+    foundedYear: 1911,
+    nickname: "India's Capital Territory"
+  },
+  "istanbul": {
+    population: "15.8 million",
+    famousPeople: ["Tarkan", "Nuri Bilge Ceylan", "Orhan Pamuk", "Sezen Aksu", "Kenan İmirzalıoğlu"],
+    currentMayor: "Ekrem İmamoğlu",
+    foundedYear: 660,
+    nickname: "Bridge Between Continents"
+  },
+  "cairo": {
+    population: "21.3 million",
+    famousPeople: ["Omar Sharif", "Yousra", "Mohamed Salah", "Amr Diab", "Adel Imam"],
+    currentMayor: "Khaled Abdel Aal",
+    foundedYear: 969,
+    nickname: "City of a Thousand Minarets"
+  },
+  "lagos": {
+    population: "15.4 million",
+    famousPeople: ["Burna Boy", "Wizkid", "Davido", "Genevieve Nnaji", "Ramsey Nouah"],
+    currentMayor: "Babajide Sanwo-Olu",
+    foundedYear: 1472,
+    nickname: "Centre of Excellence"
+  },
+  "shanghai": {
+    population: "24.9 million",
+    famousPeople: ["Jackie Chan", "Zhang Ziyi", "Yao Ming", "Liu Xiang", "Wang Leehom"],
+    currentMayor: "Gong Zheng",
+    foundedYear: 1291,
+    nickname: "Pearl of the Orient"
+  },
+  "mexico city": {
+    population: "21.8 million",
+    famousPeople: ["Gael García Bernal", "Diego Luna", "Salma Hayek", "Guillermo del Toro", "Alfonso Cuarón"],
+    currentMayor: "Martí Batres",
+    foundedYear: 1325,
+    nickname: "City of Palaces"
+  },
+  "sao paulo": {
+    population: "22.6 million",
+    famousPeople: ["Pelé", "Ayrton Senna", "Caetano Veloso", "Gisele Bündchen", "Wagner Moura"],
+    currentMayor: "Ricardo Nunes",
+    foundedYear: 1554,
+    nickname: "Land of Drizzle"
+  },
+  "rio de janeiro": {
+    population: "13.7 million",
+    famousPeople: ["Carmen Miranda", "Ronaldinho", "Rodrigo Santoro", "Alice Braga", "City of God cast"],
+    currentMayor: "Eduardo Paes",
+    foundedYear: 1565,
+    nickname: "Marvelous City"
+  },
+  "buenos aires": {
+    population: "15.6 million",
+    famousPeople: ["Diego Maradona", "Lionel Messi", "Jorge Luis Borges", "Eva Perón", "Pope Francis"],
+    currentMayor: "Jorge Macri",
+    foundedYear: 1536,
+    nickname: "Paris of South America"
+  },
+  "jakarta": {
+    population: "35.4 million",
+    famousPeople: ["Soekarno", "Megawati Sukarnoputri", "Agnes Monica", "Raline Shah", "Rio Dewanto"],
+    currentMayor: "Heru Budi Hartono",
+    foundedYear: 397,
+    nickname: "Big Durian"
+  },
+
+  "seoul": {
+    population: "25.7 million",
+    famousPeople: ["BTS", "BLACKPINK", "Psy", "Song Joong-ki", "IU"],
+    currentMayor: "Oh Se-hoon",
+    foundedYear: 18,
+    nickname: "Han River Miracle"
+  },
+  "tehran": {
+    population: "15.2 million",
+    famousPeople: ["Shohreh Aghdashloo", "Golshifteh Farahani", "Leila Hatami", "Ali Daei", "Googoosh"],
+    currentMayor: "Alireza Zakani",
+    foundedYear: 3000,
+    nickname: "City of 72 Nations"
+  },
+  "karachi": {
+    population: "16.0 million",
+    famousPeople: ["Mahira Khan", "Fawad Khan", "Atif Aslam", "Rahat Fateh Ali Khan", "Nusrat Fateh Ali Khan"],
+    currentMayor: "Barrister Murtaza Wahab",
+    foundedYear: 1729,
+    nickname: "City of Lights"
+  },
+  "dhaka": {
+    population: "22.5 million",
+    famousPeople: ["Shakib Al Hasan", "Mashrafe Mortaza", "Jaya Ahsan", "Chanchal Chowdhury", "Fazlur Rahman Khan"],
+    currentMayor: "Sheikh Fazle Noor Taposh",
+    foundedYear: 1608,
+    nickname: "City of Mosques"
+  },
+  "lima": {
+    population: "11.1 million",
+    famousPeople: ["Mario Vargas Llosa", "Gastón Acurio", "Magaly Medina", "Jefferson Farfán", "Claudio Pizarro"],
+    currentMayor: "Rafael López Aliaga",
+    foundedYear: 1535,
+    nickname: "City of Kings"
+  },
+  "chimayo": {
+    population: "3,177",
+    famousPeople: ["Chimayo weavers", "Local santeros", "Traditional artisans", "Hispanic heritage keepers"],
+    currentMayor: "Unincorporated community",
+    foundedYear: 1740,
+    nickname: "Lourdes of America"
   }
 };
 

@@ -207,6 +207,169 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 12,
     feelsLike: 12,
     description: "Mild Appalachian weather with mountain breeze"
+  },
+  "madrid": {
+    temperature: 21,
+    condition: "Sunny",
+    humidity: 52,
+    windSpeed: 9,
+    visibility: 15,
+    feelsLike: 23,
+    description: "Warm Mediterranean climate with clear skies"
+  },
+  "mumbai": {
+    temperature: 29,
+    condition: "Humid",
+    humidity: 84,
+    windSpeed: 14,
+    visibility: 6,
+    feelsLike: 35,
+    description: "Hot and humid monsoon climate"
+  },
+  "delhi": {
+    temperature: 27,
+    condition: "Sunny",
+    humidity: 65,
+    windSpeed: 8,
+    visibility: 10,
+    feelsLike: 31,
+    description: "Hot continental climate with haze"
+  },
+  "istanbul": {
+    temperature: 19,
+    condition: "Partly Cloudy",
+    humidity: 71,
+    windSpeed: 12,
+    visibility: 12,
+    feelsLike: 18,
+    description: "Mild continental climate with sea breeze"
+  },
+  "cairo": {
+    temperature: 26,
+    condition: "Sunny",
+    humidity: 40,
+    windSpeed: 7,
+    visibility: 15,
+    feelsLike: 28,
+    description: "Hot desert climate with clear skies"
+  },
+  "lagos": {
+    temperature: 30,
+    condition: "Humid",
+    humidity: 86,
+    windSpeed: 11,
+    visibility: 8,
+    feelsLike: 36,
+    description: "Hot tropical climate with high humidity"
+  },
+  "shanghai": {
+    temperature: 23,
+    condition: "Cloudy",
+    humidity: 76,
+    windSpeed: 13,
+    visibility: 9,
+    feelsLike: 25,
+    description: "Humid subtropical climate with overcast skies"
+  },
+  "mexico city": {
+    temperature: 20,
+    condition: "Partly Cloudy",
+    humidity: 58,
+    windSpeed: 8,
+    visibility: 12,
+    feelsLike: 22,
+    description: "Mild highland climate with afternoon clouds"
+  },
+  "sao paulo": {
+    temperature: 18,
+    condition: "Light Rain",
+    humidity: 80,
+    windSpeed: 10,
+    visibility: 7,
+    feelsLike: 17,
+    description: "Subtropical climate with light drizzle"
+  },
+  "rio de janeiro": {
+    temperature: 25,
+    condition: "Sunny",
+    humidity: 72,
+    windSpeed: 15,
+    visibility: 14,
+    feelsLike: 28,
+    description: "Tropical climate with ocean breeze"
+  },
+  "buenos aires": {
+    temperature: 17,
+    condition: "Partly Cloudy",
+    humidity: 63,
+    windSpeed: 11,
+    visibility: 13,
+    feelsLike: 16,
+    description: "Temperate climate with river winds"
+  },
+  "jakarta": {
+    temperature: 31,
+    condition: "Humid",
+    humidity: 89,
+    windSpeed: 8,
+    visibility: 5,
+    feelsLike: 38,
+    description: "Hot tropical climate with high humidity"
+  },
+
+  "seoul": {
+    temperature: 16,
+    condition: "Clear",
+    humidity: 55,
+    windSpeed: 12,
+    visibility: 14,
+    feelsLike: 15,
+    description: "Continental climate with clear skies"
+  },
+  "tehran": {
+    temperature: 22,
+    condition: "Sunny",
+    humidity: 45,
+    windSpeed: 9,
+    visibility: 12,
+    feelsLike: 24,
+    description: "Semi-arid climate with mountain air"
+  },
+  "karachi": {
+    temperature: 28,
+    condition: "Humid",
+    humidity: 82,
+    windSpeed: 16,
+    visibility: 9,
+    feelsLike: 34,
+    description: "Hot coastal climate with sea breeze"
+  },
+  "dhaka": {
+    temperature: 30,
+    condition: "Humid",
+    humidity: 87,
+    windSpeed: 7,
+    visibility: 6,
+    feelsLike: 37,
+    description: "Hot humid subtropical climate"
+  },
+  "lima": {
+    temperature: 19,
+    condition: "Foggy",
+    humidity: 77,
+    windSpeed: 13,
+    visibility: 8,
+    feelsLike: 18,
+    description: "Mild desert climate with coastal fog"
+  },
+  "chimayo": {
+    temperature: 16,
+    condition: "Clear",
+    humidity: 42,
+    windSpeed: 8,
+    visibility: 16,
+    feelsLike: 14,
+    description: "High desert climate with crisp mountain air"
   }
 };
 
