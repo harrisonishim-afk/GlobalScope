@@ -315,7 +315,8 @@ function getImprovedSearchQuery(city: string): string {
     "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": "Bangkok Thailand",
     "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": "Bangkok Thailand",
     "hell": "Hell Norway village Trondheim",
-    "hell city": "Hell Norway village Trondheim"
+    "hell city": "Hell Norway village Trondheim",
+    "batman": "Batman Turkey city province"
   };
   
   // Return improved query if mapping exists, otherwise return original city

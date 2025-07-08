@@ -168,6 +168,13 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Steinar Aspli",
     foundedYear: 1800,
     nickname: "Hell, Norway"
+  },
+  "batman": {
+    population: "452,157",
+    famousPeople: ["Necmettin Bilal Erdoğan", "Local Kurdish artists", "Turkish politicians"],
+    currentMayor: "Gülistan Sönük",
+    foundedYear: 1955,
+    nickname: "Oil Capital of Turkey"
   }
 };
 

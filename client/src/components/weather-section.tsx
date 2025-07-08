@@ -180,6 +180,15 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 5,
     feelsLike: -12,
     description: "Cold Norwegian winter with snow"
+  },
+  "batman": {
+    temperature: 25,
+    condition: "Sunny",
+    humidity: 45,
+    windSpeed: 8,
+    visibility: 15,
+    feelsLike: 27,
+    description: "Warm and dry Mediterranean climate"
   }
 };
 
