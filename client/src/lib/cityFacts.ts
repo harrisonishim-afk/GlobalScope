@@ -112,6 +112,13 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     currentMayor: "Roberto Gualtieri",
     foundedYear: -753,
     nickname: "The Eternal City"
+  },
+  "vatican city": {
+    population: "825",
+    famousPeople: ["Pope Francis", "Pope John Paul II", "Pope Benedict XVI", "Michelangelo", "Bernini"],
+    currentMayor: "Pope Francis",
+    foundedYear: 1929,
+    nickname: "The Holy See"
   }
 };
 

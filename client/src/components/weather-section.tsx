@@ -108,6 +108,15 @@ const mockWeatherData: Record<string, WeatherData> = {
     visibility: 6,
     feelsLike: 15,
     description: "Light drizzle with overcast skies"
+  },
+  "vatican city": {
+    temperature: 18,
+    condition: "Partly Cloudy",
+    humidity: 68,
+    windSpeed: 7,
+    visibility: 12,
+    feelsLike: 19,
+    description: "Partly cloudy with mild Mediterranean climate"
   }
 };
 

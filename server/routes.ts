@@ -65,10 +65,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(500).json({ message: "News API key is not configured" });
       }
 
+      // Improve search query for specific cities
+      const searchQuery = getImprovedSearchQuery(city);
+      
       // Use News API to get articles related to the city
       const response = await axios.get("https://newsapi.org/v2/everything", {
         params: {
-          q: city,
+          q: searchQuery,
           language: "en",
           sortBy: "publishedAt",
           apiKey: NEWS_API_KEY,
@@ -259,6 +262,57 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   const httpServer = createServer(app);
   return httpServer;
+}
+
+// Helper function to improve search queries for specific cities
+function getImprovedSearchQuery(city: string): string {
+  const normalizedCity = city.toLowerCase().trim();
+  
+  // Special cases for cities that commonly have disambiguation issues
+  const cityMappings: Record<string, string> = {
+    "vatican city": "Vatican City Holy See Pope",
+    "vatican": "Vatican City Holy See Pope",
+    "monaco": "Monaco Monte Carlo",
+    "san marino": "San Marino Republic",
+    "luxembourg": "Luxembourg City Europe",
+    "andorra": "Andorra la Vella",
+    "liechtenstein": "Liechtenstein Vaduz",
+    "georgia": "Georgia Tbilisi country",
+    "jordan": "Jordan Amman country",
+    "lebanon": "Lebanon Beirut country",
+    "malta": "Malta Valletta",
+    "cyprus": "Cyprus Nicosia",
+    "dublin": "Dublin Ireland",
+    "paris": "Paris France",
+    "london": "London UK Britain",
+    "rome": "Rome Italy",
+    "athens": "Athens Greece",
+    "madrid": "Madrid Spain",
+    "berlin": "Berlin Germany",
+    "vienna": "Vienna Austria",
+    "brussels": "Brussels Belgium",
+    "amsterdam": "Amsterdam Netherlands",
+    "stockholm": "Stockholm Sweden",
+    "oslo": "Oslo Norway",
+    "copenhagen": "Copenhagen Denmark",
+    "helsinki": "Helsinki Finland",
+    "moscow": "Moscow Russia",
+    "warsaw": "Warsaw Poland",
+    "prague": "Prague Czech Republic",
+    "budapest": "Budapest Hungary",
+    "bucharest": "Bucharest Romania",
+    "sofia": "Sofia Bulgaria",
+    "zagreb": "Zagreb Croatia",
+    "belgrade": "Belgrade Serbia",
+    "kiev": "Kiev Ukraine",
+    "minsk": "Minsk Belarus",
+    "riga": "Riga Latvia",
+    "tallinn": "Tallinn Estonia",
+    "vilnius": "Vilnius Lithuania"
+  };
+  
+  // Return improved query if mapping exists, otherwise return original city
+  return cityMappings[normalizedCity] || city;
 }
 
 // Helper function to determine article category based on content
