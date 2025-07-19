@@ -10,63 +10,63 @@ export interface CityFacts {
 const cityFactsDatabase: Record<string, CityFacts> = {
   "new york": {
     population: "8.3 million",
-    famousPeople: ["Jay-Z", "Lady Gaga", "Robert De Niro", "Scarlett Johansson", "Alicia Keys"],
+    famousPeople: ["Alicia Keys", "50 Cent", "Notorious B.I.G.", "Jennifer Lopez", "Donald Trump"],
     currentMayor: "Eric Adams",
     foundedYear: 1624,
     nickname: "The Big Apple"
   },
   "london": {
     population: "9.5 million",
-    famousPeople: ["David Beckham", "Adele", "Benedict Cumberbatch", "Emma Watson", "Daniel Craig"],
+    famousPeople: ["Adele", "Daniel Craig", "Keira Knightley", "Kate Beckinsale", "Jude Law"],
     currentMayor: "Sadiq Khan",
     foundedYear: 43,
     nickname: "The Big Smoke"
   },
   "tokyo": {
     population: "37.4 million",
-    famousPeople: ["Akira Kurosawa", "Yoko Ono", "Haruki Murakami", "Sofia Coppola", "Takeshi Kitano"],
+    famousPeople: ["Akira Kurosawa", "Takeshi Kitano", "Hayao Miyazaki", "Satoshi Tajiri", "Hideo Kojima"],
     currentMayor: "Yuriko Koike",
     foundedYear: 1603,
     nickname: "The Eastern Capital"
   },
   "paris": {
     population: "12.3 million",
-    famousPeople: ["Marion Cotillard", "Jean-Paul Gaultier", "Brigitte Bardot", "Omar Sy", "Vincent Cassel"],
+    famousPeople: ["Marion Cotillard", "Vincent Cassel", "Jean-Paul Gaultier", "Édith Piaf", "Jean-Luc Godard"],
     currentMayor: "Anne Hidalgo",
     foundedYear: 250,
     nickname: "City of Light"
   },
   "sydney": {
     population: "5.3 million",
-    famousPeople: ["Hugh Jackman", "Nicole Kidman", "Russell Crowe", "Rebel Wilson", "Chris Hemsworth"],
+    famousPeople: ["Hugh Jackman", "Rebel Wilson", "Kylie Minogue", "Rose Byrne", "Toni Collette"],
     currentMayor: "Clover Moore",
     foundedYear: 1788,
     nickname: "Harbour City"
   },
   "chicago": {
     population: "2.7 million",
-    famousPeople: ["Oprah Winfrey", "Kanye West", "Hillary Clinton", "Barack Obama", "Walt Disney"],
+    famousPeople: ["Kanye West", "Common", "Jennifer Hudson", "John Cusack", "Bill Murray"],
     currentMayor: "Brandon Johnson",
     foundedYear: 1837,
     nickname: "The Windy City"
   },
   "boston": {
     population: "4.9 million",
-    famousPeople: ["Matt Damon", "Ben Affleck", "Mark Wahlberg", "John Krasinski", "Conan O'Brien"],
+    famousPeople: ["Mark Wahlberg", "John Krasinski", "Conan O'Brien", "Amy Poehler", "Steve Carell"],
     currentMayor: "Michelle Wu",
     foundedYear: 1630,
     nickname: "Beantown"
   },
   "los angeles": {
     population: "13.2 million",
-    famousPeople: ["Leonardo DiCaprio", "Jennifer Aniston", "Will Smith", "Sandra Bullock", "Ryan Gosling"],
+    famousPeople: ["Leonardo DiCaprio", "Angelina Jolie", "Ryan Gosling", "Jake Gyllenhaal", "Anne Hathaway"],
     currentMayor: "Karen Bass",
     foundedYear: 1781,
     nickname: "City of Angels"
   },
   "miami": {
     population: "6.1 million",
-    famousPeople: ["Gloria Estefan", "Pitbull", "Andy Garcia", "Eva Mendes", "Enrique Iglesias"],
+    famousPeople: ["Andy Garcia", "Eva Mendes", "Enrique Iglesias", "Sofia Vergara", "Cameron Diaz"],
     currentMayor: "Francis Suarez",
     foundedYear: 1896,
     nickname: "Magic City"

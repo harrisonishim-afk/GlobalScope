@@ -20,14 +20,16 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **Routing**: Wouter for client-side routing
 
 ## Recent Changes
+- **2025-01-19**: Fixed accuracy of famous people data for all major cities (now shows people actually born there)
+- **2025-01-19**: Added comprehensive data for Jericho (ancient Palestinian city with proper historical context)
+- **2025-01-19**: Added Riz (South Tyrolean Alpine village) with authentic Italian mountain climate
+- **2025-01-19**: Added Chimayo (New Mexico) with high desert climate and Hispanic cultural heritage
+- **2025-01-19**: Expanded city database to 30+ cities including major global metros and unique locations
+- **2025-01-19**: Removed duplicate Bangkok entries and cleaned up data consistency issues
 - **2025-01-08**: Added weather section at the top of the dashboard
 - **2025-01-08**: Implemented city facts component showing population, famous people, and current mayor
 - **2025-01-08**: Reorganized page layout: Weather → City Facts → Neighborhood Map → Music Recommendations → News
-- **2025-01-08**: Disabled historical news feature due to NewsAPI limitations (requires paid plan for historical data)
-- **2025-01-08**: Added mock weather data for major cities (New York, London, Tokyo, Paris, etc.)
-- **2025-01-08**: Created comprehensive city facts database with 15+ major cities
-- **2025-01-08**: Fixed Vatican City search disambiguation by improving search queries with context keywords
-- **2025-01-08**: Updated Vatican City leadership information to reflect current Pope Leo XIV
+- **2025-01-08**: Created comprehensive city facts database with search disambiguation for unusual cities
 
 ## User Preferences
 - Weather information should be displayed at the top of the page
