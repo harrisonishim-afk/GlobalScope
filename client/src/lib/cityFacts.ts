@@ -5,6 +5,12 @@ export interface WhatsNewItem {
   openingDate?: string;
 }
 
+export interface EmergencyAlert {
+  type: "Weather Warning" | "Heat Alert" | "Storm Alert" | "Road Closure";
+  description: string;
+  validUntil?: string;
+}
+
 export interface CityFacts {
   population: string;
   famousPeople: string[];
@@ -12,6 +18,7 @@ export interface CityFacts {
   foundedYear?: number;
   nickname?: string;
   whatsNew?: WhatsNewItem[];
+  emergencyAlerts?: EmergencyAlert[];
 }
 
 // City facts database
@@ -27,6 +34,10 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "TechHub Manhattan", category: "Business", description: "New co-working space for startups in Midtown", openingDate: "February 2026" },
       { name: "Chelsea Waterfront Park Extension", category: "Park", description: "2-acre expansion along the Hudson River with public art installations", openingDate: "March 2026" },
       { name: "Nike Store SoHo", category: "Store Opening", description: "Flagship Nike store featuring interactive tech experiences", openingDate: "March 2026" }
+    ],
+    emergencyAlerts: [
+      { type: "Weather Warning", description: "High wind advisory in effect. Wind gusts up to 45 mph expected. Secure outdoor items.", validUntil: "March 8, 2026 6:00 PM" },
+      { type: "Road Closure", description: "FDR Drive closed northbound between 42nd and 59th Street for construction. Use alternate routes.", validUntil: "March 10, 2026" }
     ]
   },
   "london": {
@@ -40,6 +51,10 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "London Green Tech Hub", category: "Business", description: "Sustainability-focused innovation center in King's Cross", openingDate: "February 2026" },
       { name: "Regent's Park East Wing Renovation", category: "Park", description: "Enhanced walking paths and wildlife observation areas", openingDate: "March 2026" },
       { name: "Selfridges Beauty Hall Extension", category: "Store Opening", description: "New luxury beauty concept with personalized consultations", openingDate: "March 2026" }
+    ],
+    emergencyAlerts: [
+      { type: "Storm Alert", description: "Heavy rain and thunderstorms expected this evening. Conditions may affect public transport.", validUntil: "March 7, 2026 11:00 PM" },
+      { type: "Road Closure", description: "Piccadilly Circus area partially closed for emergency repairs. Use Regent Street alternative.", validUntil: "March 9, 2026" }
     ]
   },
   "tokyo": {
@@ -53,6 +68,9 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Tokyo Innovation Labs", category: "Business", description: "Joint venture AI and robotics incubator in Odaiba", openingDate: "February 2026" },
       { name: "Chiyoda Nature Path", category: "Park", description: "New 3km jogging and walking path through cherry blossom gardens", openingDate: "March 2026" },
       { name: "Uniqlo LifeWear Store Shibuya", category: "Store Opening", description: "Largest flagship with digital fitting rooms", openingDate: "March 2026" }
+    ],
+    emergencyAlerts: [
+      { type: "Weather Warning", description: "Spring wind advisory. Gusts reaching 40 km/h in elevated areas. Keep secured outdoor objects.", validUntil: "March 8, 2026 3:00 PM" }
     ]
   },
   "paris": {
@@ -79,6 +97,9 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Sydney Creative Hub", category: "Business", description: "Digital media and arts collaborative space in Barangaroo", openingDate: "February 2026" },
       { name: "Centennial Park Water Feature", category: "Park", description: "New interactive fountain and native plant gardens", openingDate: "March 2026" },
       { name: "Apple Store Pitt Street", category: "Store Opening", description: "Redesigned flagship with outdoor terraces", openingDate: "March 2026" }
+    ],
+    emergencyAlerts: [
+      { type: "Heat Alert", description: "High temperatures expected reaching 32°C. Stay hydrated and avoid prolonged sun exposure. Check on elderly neighbors.", validUntil: "March 9, 2026" }
     ]
   },
   "chicago": {
@@ -92,6 +113,10 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Chicago Analytics Hub", category: "Business", description: "Data science and tech startup incubator near Willis Tower", openingDate: "February 2026" },
       { name: "Grant Park Green Corridor", category: "Park", description: "New native habitat restoration and recreational pathways", openingDate: "March 2026" },
       { name: "Jordan Brand Chicago Store", category: "Store Opening", description: "New retail experience featuring exclusive sneaker collaborations", openingDate: "March 2026" }
+    ],
+    emergencyAlerts: [
+      { type: "Storm Alert", description: "Severe thunderstorms expected late afternoon with heavy downpours. Avoid travel if possible.", validUntil: "March 7, 2026 8:00 PM" },
+      { type: "Road Closure", description: "Lake Shore Drive closed inbound at Monroe Street due to accident. Expect heavy delays.", validUntil: "March 7, 2026 5:30 PM" }
     ]
   },
   "boston": {
@@ -422,6 +447,16 @@ export function getCityFacts(cityName: string): CityFacts | null {
 export function getWhatsNewItems(cityName: string): WhatsNewItem[] {
   const facts = getCityFacts(cityName);
   return facts?.whatsNew || [];
+}
+
+/**
+ * Get emergency alerts for a city
+ * @param cityName The name of the city
+ * @returns Array of emergency alerts or empty array
+ */
+export function getEmergencyAlerts(cityName: string): EmergencyAlert[] {
+  const facts = getCityFacts(cityName);
+  return facts?.emergencyAlerts || [];
 }
 
 /**

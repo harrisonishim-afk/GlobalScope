@@ -8,6 +8,7 @@ import NeighborhoodMap from "@/components/neighborhood-map";
 import CityVibe from "@/components/city-vibe";
 import HistoricalNews from "@/components/historical-news";
 import WeatherSection from "@/components/weather-section";
+import EmergencyAlerts from "@/components/emergency-alerts";
 import CityFacts from "@/components/city-facts";
 import WhatsNewSection from "@/components/whats-new-section";
 import { NewsItem } from "@shared/schema";
@@ -60,6 +61,11 @@ export default function Home() {
           {/* Weather section at the top */}
           {currentCity && (
             <WeatherSection cityName={currentCity} />
+          )}
+          
+          {/* Emergency alerts section */}
+          {currentCity && (
+            <EmergencyAlerts cityName={currentCity} />
           )}
           
           {/* City facts section */}
