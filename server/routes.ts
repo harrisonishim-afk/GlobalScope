@@ -37,6 +37,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   };
 
+  app.get("/api/facts/:city", async (req, res) => {
+    try {
+      let cityParam = req.params.city;
+
+      if (!cityParam || typeof cityParam !== "string") {
+        return res.status(400).json({ message: "City parameter is required" });
+      }
+      
+      cityParam = cityParam.toLowerCase()
+      let cityWords = cityParam.split(" ")
+      cityWords.forEach(s => {
+        return s.charAt(0).toUpperCase() + s.slice(1);
+      })
+      cityParam = cityWords.join("_");
+    
+      const response = await axios.get("https://citystats.xyz/cities/" + cityParam, {
+        timeout: 5000,
+      });
+
+      if (response.data.status !== "ok") {
+        return res.status(500).json({ message: "Facts API returned an error" });
+      }
+      res.status(200).json( response.data);
+    }
+    catch {
+      res.status(500).json({ message: "Failed to fetch facts" });
+    }
+  });
+
   // API route to get news by city
   app.get("/api/news/:city", async (req, res) => {
     try {
