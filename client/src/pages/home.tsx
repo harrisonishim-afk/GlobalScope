@@ -9,6 +9,7 @@ import CityVibe from "@/components/city-vibe";
 import HistoricalNews from "@/components/historical-news";
 import WeatherSection from "@/components/weather-section";
 import CityFacts from "@/components/city-facts";
+import WhatsNewSection from "@/components/whats-new-section";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
 
@@ -64,6 +65,11 @@ export default function Home() {
           {/* City facts section */}
           {currentCity && (
             <CityFacts cityName={currentCity} />
+          )}
+          
+          {/* What's new section */}
+          {currentCity && (
+            <WhatsNewSection cityName={currentCity} />
           )}
           
           {/* Neighborhood map */}

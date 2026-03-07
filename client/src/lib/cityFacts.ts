@@ -1,9 +1,17 @@
+export interface WhatsNewItem {
+  name: string;
+  category: "Restaurant" | "Business" | "Park" | "Store Opening";
+  description: string;
+  openingDate?: string;
+}
+
 export interface CityFacts {
   population: string;
   famousPeople: string[];
   currentMayor: string;
   foundedYear?: number;
   nickname?: string;
+  whatsNew?: WhatsNewItem[];
 }
 
 // City facts database
@@ -13,42 +21,78 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     famousPeople: ["Alicia Keys", "50 Cent", "Notorious B.I.G.", "Jennifer Lopez", "Donald Trump"],
     currentMayor: "Eric Adams",
     foundedYear: 1624,
-    nickname: "The Big Apple"
+    nickname: "The Big Apple",
+    whatsNew: [
+      { name: "Hudson & Co.", category: "Restaurant", description: "Farm-to-table dining in Tribeca with seasonal menus", openingDate: "March 2026" },
+      { name: "TechHub Manhattan", category: "Business", description: "New co-working space for startups in Midtown", openingDate: "February 2026" },
+      { name: "Chelsea Waterfront Park Extension", category: "Park", description: "2-acre expansion along the Hudson River with public art installations", openingDate: "March 2026" },
+      { name: "Nike Store SoHo", category: "Store Opening", description: "Flagship Nike store featuring interactive tech experiences", openingDate: "March 2026" }
+    ]
   },
   "london": {
     population: "9.5 million",
     famousPeople: ["Adele", "Daniel Craig", "Keira Knightley", "Kate Beckinsale", "Jude Law"],
     currentMayor: "Sadiq Khan",
     foundedYear: 43,
-    nickname: "The Big Smoke"
+    nickname: "The Big Smoke",
+    whatsNew: [
+      { name: "Borough & Root", category: "Restaurant", description: "Michelin-approved restaurant in Shoreditch specializing in modern British cuisine", openingDate: "March 2026" },
+      { name: "London Green Tech Hub", category: "Business", description: "Sustainability-focused innovation center in King's Cross", openingDate: "February 2026" },
+      { name: "Regent's Park East Wing Renovation", category: "Park", description: "Enhanced walking paths and wildlife observation areas", openingDate: "March 2026" },
+      { name: "Selfridges Beauty Hall Extension", category: "Store Opening", description: "New luxury beauty concept with personalized consultations", openingDate: "March 2026" }
+    ]
   },
   "tokyo": {
     population: "37.4 million",
     famousPeople: ["Akira Kurosawa", "Takeshi Kitano", "Hayao Miyazaki", "Satoshi Tajiri", "Hideo Kojima"],
     currentMayor: "Yuriko Koike",
     foundedYear: 1603,
-    nickname: "The Eastern Capital"
+    nickname: "The Eastern Capital",
+    whatsNew: [
+      { name: "Sakura Ramen House", category: "Restaurant", description: "Award-winning tonkotsu ramen in Shibuya with organic ingredients", openingDate: "March 2026" },
+      { name: "Tokyo Innovation Labs", category: "Business", description: "Joint venture AI and robotics incubator in Odaiba", openingDate: "February 2026" },
+      { name: "Chiyoda Nature Path", category: "Park", description: "New 3km jogging and walking path through cherry blossom gardens", openingDate: "March 2026" },
+      { name: "Uniqlo LifeWear Store Shibuya", category: "Store Opening", description: "Largest flagship with digital fitting rooms", openingDate: "March 2026" }
+    ]
   },
   "paris": {
     population: "12.3 million",
     famousPeople: ["Marion Cotillard", "Vincent Cassel", "Jean-Paul Gaultier", "Édith Piaf", "Jean-Luc Godard"],
     currentMayor: "Anne Hidalgo",
     foundedYear: 250,
-    nickname: "City of Light"
+    nickname: "City of Light",
+    whatsNew: [
+      { name: "Le Petit Gourmet", category: "Restaurant", description: "Contemporary French bistro in Marais featuring seasonal tasting menus", openingDate: "March 2026" },
+      { name: "Paris Design Studio", category: "Business", description: "Creative agency and workshop space in the 11th arrondissement", openingDate: "February 2026" },
+      { name: "Île de la Cité Garden Trail", category: "Park", description: "Restored riverside gardens with sculpture installations", openingDate: "March 2026" },
+      { name: "Louis Vuitton Exhibition Space", category: "Store Opening", description: "Immersive luxury brand experience in Place Vendôme", openingDate: "March 2026" }
+    ]
   },
   "sydney": {
     population: "5.3 million",
     famousPeople: ["Hugh Jackman", "Rebel Wilson", "Kylie Minogue", "Rose Byrne", "Toni Collette"],
     currentMayor: "Clover Moore",
     foundedYear: 1788,
-    nickname: "Harbour City"
+    nickname: "Harbour City",
+    whatsNew: [
+      { name: "Bondi Beach Brasserie", category: "Restaurant", description: "Modern Australian seafood restaurant overlooking the ocean", openingDate: "March 2026" },
+      { name: "Sydney Creative Hub", category: "Business", description: "Digital media and arts collaborative space in Barangaroo", openingDate: "February 2026" },
+      { name: "Centennial Park Water Feature", category: "Park", description: "New interactive fountain and native plant gardens", openingDate: "March 2026" },
+      { name: "Apple Store Pitt Street", category: "Store Opening", description: "Redesigned flagship with outdoor terraces", openingDate: "March 2026" }
+    ]
   },
   "chicago": {
     population: "2.7 million",
     famousPeople: ["Kanye West", "Common", "Jennifer Hudson", "John Cusack", "Bill Murray"],
     currentMayor: "Brandon Johnson",
     foundedYear: 1837,
-    nickname: "The Windy City"
+    nickname: "The Windy City",
+    whatsNew: [
+      { name: "The Lakefront Kitchen", category: "Restaurant", description: "Contemporary American cuisine with lake views in downtown", openingDate: "March 2026" },
+      { name: "Chicago Analytics Hub", category: "Business", description: "Data science and tech startup incubator near Willis Tower", openingDate: "February 2026" },
+      { name: "Grant Park Green Corridor", category: "Park", description: "New native habitat restoration and recreational pathways", openingDate: "March 2026" },
+      { name: "Jordan Brand Chicago Store", category: "Store Opening", description: "New retail experience featuring exclusive sneaker collaborations", openingDate: "March 2026" }
+    ]
   },
   "boston": {
     population: "4.9 million",
@@ -368,6 +412,16 @@ export function getCityFacts(cityName: string): CityFacts | null {
   }
   
   return null;
+}
+
+/**
+ * Get what's new items for a city
+ * @param cityName The name of the city
+ * @returns Array of what's new items or empty array
+ */
+export function getWhatsNewItems(cityName: string): WhatsNewItem[] {
+  const facts = getCityFacts(cityName);
+  return facts?.whatsNew || [];
 }
 
 /**

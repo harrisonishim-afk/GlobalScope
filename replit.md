@@ -6,6 +6,7 @@ Globalscope is a comprehensive React-based web application that provides users w
 ## Key Features
 - **Weather Dashboard**: Real-time weather information displayed at the top of the page
 - **City Facts**: Quick facts showing population, famous people born there, and current mayor
+- **What's New in the City**: Daily updates featuring new restaurants, businesses, parks, and store openings
 - **News Feed**: Latest news headlines from NewsAPI.org with categorization
 - **Neighborhood Activity Map**: Interactive map showing news activity hotspots in specific neighborhoods
 - **Music Recommendations**: AI-powered music suggestions based on the mood of city news (peaceful, dramatic, chaotic themes)
@@ -20,6 +21,8 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **Routing**: Wouter for client-side routing
 
 ## Recent Changes
+- **2026-03-07**: Added "What's New in the City" section with daily updates for restaurants, businesses, parks, and store openings
+- **2026-03-07**: Created WhatsNewSection component with color-coded categories and opening dates
 - **2025-01-19**: Fixed accuracy of famous people data for all major cities (now shows people actually born there)
 - **2025-01-19**: Added comprehensive data for Jericho (ancient Palestinian city with proper historical context)
 - **2025-01-19**: Added Riz (South Tyrolean Alpine village) with authentic Italian mountain climate
@@ -48,9 +51,10 @@ Globalscope is a comprehensive React-based web application that provides users w
 - `/client/src/pages/home.tsx` - Main dashboard page
 - `/client/src/components/weather-section.tsx` - Weather display component
 - `/client/src/components/city-facts.tsx` - City facts component
+- `/client/src/components/whats-new-section.tsx` - What's new updates component with restaurants, businesses, parks, store openings
 - `/client/src/components/neighborhood-map.tsx` - Interactive neighborhood map
 - `/client/src/components/city-vibe.tsx` - Music recommendations based on news mood
-- `/client/src/lib/cityFacts.ts` - City facts database and utilities
+- `/client/src/lib/cityFacts.ts` - City facts database and utilities (includes WhatsNewItem interface and getWhatsNewItems function)
 - `/client/src/lib/musicRecommender.ts` - Music recommendation logic
 - `/client/src/lib/neighborhoodAnalysis.ts` - Neighborhood data and mapping
 - `/server/routes.ts` - API routes for news and city data
