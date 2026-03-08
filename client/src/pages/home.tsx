@@ -12,6 +12,7 @@ import EmergencyAlerts from "@/components/emergency-alerts";
 import CityFacts from "@/components/city-facts";
 import WhatsNewSection from "@/components/whats-new-section";
 import PlacesPopularityMap from "@/components/places-popularity-map";
+import CityProblems from "@/components/city-problems";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
 
@@ -82,6 +83,11 @@ export default function Home() {
           {/* Places popularity map */}
           {currentCity && (
             <PlacesPopularityMap cityName={currentCity} />
+          )}
+          
+          {/* City problems and issues */}
+          {currentCity && (
+            <CityProblems cityName={currentCity} />
           )}
           
           {/* Neighborhood map */}

@@ -20,6 +20,14 @@ export interface PopularPlace {
   visitorCount?: string;
 }
 
+export interface CityProblem {
+  type: "Protests" | "Crime" | "Infrastructure";
+  description: string;
+  severity: "Critical" | "High" | "Moderate" | "Low";
+  details?: string[];
+  lastUpdated?: string;
+}
+
 export interface CityFacts {
   population: string;
   famousPeople: string[];
@@ -29,6 +37,7 @@ export interface CityFacts {
   whatsNew?: WhatsNewItem[];
   emergencyAlerts?: EmergencyAlert[];
   popularPlaces?: PopularPlace[];
+  problems?: CityProblem[];
 }
 
 // City facts database
@@ -56,6 +65,11 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "High Line", type: "Park & Restaurant Scene", location: "Chelsea & Meatpacking", popularity: "High", description: "Elevated park with art installations and dining venues", visitorCount: "8,000+" },
       { name: "SoHo Boutiques", type: "Shopping District", location: "South of Houston", popularity: "High", description: "Premium fashion and designer retail stores", visitorCount: "50,000+" },
       { name: "East Village Cafes", type: "Cafe & Dining", location: "Lower East Side", popularity: "Medium", description: "Trendy coffee shops and restaurants in bohemian neighborhood", visitorCount: "15,000+" }
+    ],
+    problems: [
+      { type: "Crime", severity: "Moderate", description: "Theft and robbery incidents in high-traffic areas", details: ["15% increase in petty theft in Midtown", "Subway safety concerns during late hours", "Recommended: Travel in groups at night"], lastUpdated: "March 6, 2026" },
+      { type: "Infrastructure", severity: "High", description: "Significant pothole and road damage issues", details: ["500+ reported potholes in Manhattan", "Subway delays due to track maintenance", "Street flooding in Lower East Side"], lastUpdated: "March 5, 2026" },
+      { type: "Protests", severity: "Low", description: "Occasional demonstrations and rally activity", details: ["Weekly labor union gatherings", "Climate activism events on weekends"], lastUpdated: "March 3, 2026" }
     ]
   },
   "london": {
@@ -81,6 +95,11 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Oxford Street", type: "Shopping District", location: "West End", popularity: "High", description: "Europe's busiest shopping street with major retailers", visitorCount: "500,000+" },
       { name: "Shoreditch Independent Shops", type: "Boutiques & Cafes", location: "East London", popularity: "Medium", description: "Trendy vintage and independent designer stores", visitorCount: "25,000+" },
       { name: "Covent Garden Market", type: "Shopping & Entertainment", location: "West End", popularity: "High", description: "Historic market with street performers and specialty shops", visitorCount: "40,000+" }
+    ],
+    problems: [
+      { type: "Infrastructure", severity: "High", description: "Underground rail maintenance and road reconstruction", details: ["Central Line disruptions through March", "Multiple A-road closures for repair work", "Pothole maintenance ongoing in West End"], lastUpdated: "March 4, 2026" },
+      { type: "Crime", severity: "Moderate", description: "Street crime and theft in central areas", details: ["Pickpocketing in Oxford Street area", "Bike theft increasing in East London", "Recommended: Avoid Piccadilly area late at night"], lastUpdated: "March 6, 2026" },
+      { type: "Protests", severity: "Low", description: "Regular activism and demonstration activity", details: ["Environmental protests on weekends", "Workers' rights marches scheduled"], lastUpdated: "March 2, 2026" }
     ]
   },
   "tokyo": {
@@ -105,6 +124,11 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Senso-ji Temple & Market", type: "Cultural & Shopping", location: "Asakusa", popularity: "High", description: "Historic temple with traditional shops and street food", visitorCount: "100,000+" },
       { name: "Harajuku Fashion District", type: "Fashion & Youth Culture", location: "Harajuku", popularity: "High", description: "Trendy boutiques and vintage shops popular with young shoppers", visitorCount: "180,000+" },
       { name: "Ikebukuro Department Stores", type: "Shopping", location: "Ikebukuro", popularity: "Medium", description: "Major department stores and shopping complexes", visitorCount: "120,000+" }
+    ],
+    problems: [
+      { type: "Infrastructure", severity: "Moderate", description: "Road and rail maintenance projects", details: ["Shinjuku station renovation in progress", "Multiple street reconstructions in Ginza", "Minor pothole repairs across wards"], lastUpdated: "March 5, 2026" },
+      { type: "Crime", severity: "Low", description: "Generally low crime rates with minor pickpocketing", details: ["Occasional purse snatching in crowded areas", "Bicycle theft in residential areas", "Overall safe for visitors"], lastUpdated: "March 6, 2026" },
+      { type: "Protests", severity: "Low", description: "Minimal protest activity", details: ["Occasional labor demonstrations", "Annual environmental marches"], lastUpdated: "February 28, 2026" }
     ]
   },
   "paris": {
@@ -142,6 +166,11 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Pitt Street Mall", type: "Shopping District", location: "Central Business District", popularity: "High", description: "Pedestrian shopping mall with flagship stores and cafes", visitorCount: "100,000+" },
       { name: "Surry Hills Brunch Scene", type: "Cafes & Restaurants", location: "Surry Hills", popularity: "Medium", description: "Trendy cafe culture with independent boutiques", visitorCount: "20,000+" },
       { name: "Barangaroo Reserve & Dining", type: "Waterfront & Restaurants", location: "Barangaroo", popularity: "High", description: "Waterfront precinct with fine dining and shopping", visitorCount: "30,000+" }
+    ],
+    problems: [
+      { type: "Infrastructure", severity: "Moderate", description: "Road maintenance and coastal erosion concerns", details: ["Pothole repairs ongoing across CBD", "Bondi beachfront erosion management", "Parramatta train line upgrade work"], lastUpdated: "March 5, 2026" },
+      { type: "Crime", severity: "Moderate", description: "Drug-related activity and property crime", details: ["Kings Cross late-night safety concerns", "Vehicle break-ins in inner suburbs", "Recommended: Avoid certain areas after dark"], lastUpdated: "March 6, 2026" },
+      { type: "Protests", severity: "Low", description: "Occasional activism and community gatherings", details: ["Indigenous rights demonstrations", "Climate action events"], lastUpdated: "March 1, 2026" }
     ]
   },
   "chicago": {
@@ -167,6 +196,11 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Navy Pier", type: "Entertainment & Dining", location: "Downtown", popularity: "High", description: "Historic pier with restaurants, shops, and attractions", visitorCount: "8,000,000+" },
       { name: "Wicker Park Boutiques", type: "Shopping & Cafes", location: "Wicker Park", popularity: "Medium", description: "Vintage shops and independent retailers in bohemian neighborhood", visitorCount: "15,000+" },
       { name: "River North Galleries", type: "Art & Dining", location: "River North", popularity: "High", description: "Art galleries, restaurants, and upscale shopping", visitorCount: "40,000+" }
+    ],
+    problems: [
+      { type: "Crime", severity: "High", description: "Higher violent crime rates in certain neighborhoods", details: ["Gang-related activity in South and West sides", "Increased carjacking incidents", "Loop and downtown generally safe"], lastUpdated: "March 6, 2026" },
+      { type: "Infrastructure", severity: "High", description: "Extensive pothole and street damage issues", details: ["1000+ reported potholes citywide", "CTA train delays due to track work", "Spring flooding in low-lying areas"], lastUpdated: "March 5, 2026" },
+      { type: "Protests", severity: "Moderate", description: "Regular activism and demonstrations", details: ["Workers' rights and labor protests", "Social justice demonstrations", "Permit required for large gatherings"], lastUpdated: "March 4, 2026" }
     ]
   },
   "boston": {
@@ -517,6 +551,16 @@ export function getEmergencyAlerts(cityName: string): EmergencyAlert[] {
 export function getPopularPlaces(cityName: string): PopularPlace[] {
   const facts = getCityFacts(cityName);
   return facts?.popularPlaces || [];
+}
+
+/**
+ * Get city problems and issues
+ * @param cityName The name of the city
+ * @returns Array of city problems or empty array
+ */
+export function getCityProblems(cityName: string): CityProblem[] {
+  const facts = getCityFacts(cityName);
+  return facts?.problems || [];
 }
 
 /**
