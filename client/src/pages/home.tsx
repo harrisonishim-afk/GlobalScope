@@ -11,6 +11,7 @@ import WeatherSection from "@/components/weather-section";
 import EmergencyAlerts from "@/components/emergency-alerts";
 import CityFacts from "@/components/city-facts";
 import WhatsNewSection from "@/components/whats-new-section";
+import PlacesPopularityMap from "@/components/places-popularity-map";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
 
@@ -76,6 +77,11 @@ export default function Home() {
           {/* What's new section */}
           {currentCity && (
             <WhatsNewSection cityName={currentCity} />
+          )}
+          
+          {/* Places popularity map */}
+          {currentCity && (
+            <PlacesPopularityMap cityName={currentCity} />
           )}
           
           {/* Neighborhood map */}

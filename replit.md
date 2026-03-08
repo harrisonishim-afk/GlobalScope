@@ -5,8 +5,10 @@ Globalscope is a comprehensive React-based web application that provides users w
 
 ## Key Features
 - **Weather Dashboard**: Real-time weather information displayed at the top of the page
+- **Emergency Alerts**: Weather warnings, heat alerts, storm alerts, and road closures
 - **City Facts**: Quick facts showing population, famous people born there, and current mayor
 - **What's New in the City**: Daily updates featuring new restaurants, businesses, parks, and store openings
+- **Places Popularity Map**: Color-coded map showing shops and venues by popularity (Very High, High, Medium, Low) with visitor counts
 - **News Feed**: Latest news headlines from NewsAPI.org with categorization
 - **Neighborhood Activity Map**: Interactive map showing news activity hotspots in specific neighborhoods
 - **Music Recommendations**: AI-powered music suggestions based on the mood of city news (peaceful, dramatic, chaotic themes)
@@ -21,6 +23,8 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **Routing**: Wouter for client-side routing
 
 ## Recent Changes
+- **2026-03-07**: Added Places Popularity Map with color-coded indicators (Very High, High, Medium, Low) showing shops and venues
+- **2026-03-07**: Added Emergency Alerts component for weather warnings, heat alerts, storm alerts, and road closures
 - **2026-03-07**: Added "What's New in the City" section with daily updates for restaurants, businesses, parks, and store openings
 - **2026-03-07**: Created WhatsNewSection component with color-coded categories and opening dates
 - **2025-01-19**: Fixed accuracy of famous people data for all major cities (now shows people actually born there)
@@ -50,11 +54,13 @@ Globalscope is a comprehensive React-based web application that provides users w
 ## File Structure
 - `/client/src/pages/home.tsx` - Main dashboard page
 - `/client/src/components/weather-section.tsx` - Weather display component
+- `/client/src/components/emergency-alerts.tsx` - Emergency alerts component for weather warnings, heat/storm alerts, road closures
 - `/client/src/components/city-facts.tsx` - City facts component
 - `/client/src/components/whats-new-section.tsx` - What's new updates component with restaurants, businesses, parks, store openings
+- `/client/src/components/places-popularity-map.tsx` - Popular shops and places with color-coded popularity levels
 - `/client/src/components/neighborhood-map.tsx` - Interactive neighborhood map
 - `/client/src/components/city-vibe.tsx` - Music recommendations based on news mood
-- `/client/src/lib/cityFacts.ts` - City facts database and utilities (includes WhatsNewItem interface and getWhatsNewItems function)
+- `/client/src/lib/cityFacts.ts` - City facts database and utilities (includes WhatsNewItem, EmergencyAlert, PopularPlace interfaces and related functions)
 - `/client/src/lib/musicRecommender.ts` - Music recommendation logic
 - `/client/src/lib/neighborhoodAnalysis.ts` - Neighborhood data and mapping
 - `/server/routes.ts` - API routes for news and city data

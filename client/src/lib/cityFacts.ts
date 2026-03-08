@@ -11,6 +11,15 @@ export interface EmergencyAlert {
   validUntil?: string;
 }
 
+export interface PopularPlace {
+  name: string;
+  type: string;
+  location: string;
+  popularity: "Very High" | "High" | "Medium" | "Low";
+  description?: string;
+  visitorCount?: string;
+}
+
 export interface CityFacts {
   population: string;
   famousPeople: string[];
@@ -19,6 +28,7 @@ export interface CityFacts {
   nickname?: string;
   whatsNew?: WhatsNewItem[];
   emergencyAlerts?: EmergencyAlert[];
+  popularPlaces?: PopularPlace[];
 }
 
 // City facts database
@@ -38,6 +48,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     emergencyAlerts: [
       { type: "Weather Warning", description: "High wind advisory in effect. Wind gusts up to 45 mph expected. Secure outdoor items.", validUntil: "March 8, 2026 6:00 PM" },
       { type: "Road Closure", description: "FDR Drive closed northbound between 42nd and 59th Street for construction. Use alternate routes.", validUntil: "March 10, 2026" }
+    ],
+    popularPlaces: [
+      { name: "Times Square", type: "Shopping & Entertainment", location: "Midtown Manhattan", popularity: "Very High", description: "World's busiest pedestrian intersection with theaters, restaurants, and shops", visitorCount: "300,000+" },
+      { name: "Central Park", type: "Park & Recreation", location: "Uptown Manhattan", popularity: "Very High", description: "Iconic 843-acre urban park with trails, lakes, and cultural attractions", visitorCount: "40,000+" },
+      { name: "Brooklyn Bridge", type: "Landmark & Walkway", location: "Lower Manhattan to Brooklyn", popularity: "High", description: "Historic bridge with pedestrian path offering skyline views", visitorCount: "4,000+" },
+      { name: "High Line", type: "Park & Restaurant Scene", location: "Chelsea & Meatpacking", popularity: "High", description: "Elevated park with art installations and dining venues", visitorCount: "8,000+" },
+      { name: "SoHo Boutiques", type: "Shopping District", location: "South of Houston", popularity: "High", description: "Premium fashion and designer retail stores", visitorCount: "50,000+" },
+      { name: "East Village Cafes", type: "Cafe & Dining", location: "Lower East Side", popularity: "Medium", description: "Trendy coffee shops and restaurants in bohemian neighborhood", visitorCount: "15,000+" }
     ]
   },
   "london": {
@@ -55,6 +73,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     emergencyAlerts: [
       { type: "Storm Alert", description: "Heavy rain and thunderstorms expected this evening. Conditions may affect public transport.", validUntil: "March 7, 2026 11:00 PM" },
       { type: "Road Closure", description: "Piccadilly Circus area partially closed for emergency repairs. Use Regent Street alternative.", validUntil: "March 9, 2026" }
+    ],
+    popularPlaces: [
+      { name: "Harrods", type: "Luxury Department Store", location: "Knightsbridge", popularity: "Very High", description: "World-famous luxury shopping destination with premium brands", visitorCount: "15,000+" },
+      { name: "Piccadilly Circus", type: "Shopping & Dining", location: "West End", popularity: "Very High", description: "Iconic public space with theaters, restaurants, and boutiques", visitorCount: "300,000+" },
+      { name: "Borough Market", type: "Food Market", location: "Southwark", popularity: "High", description: "Historic food market with artisanal producers and restaurants", visitorCount: "100,000+" },
+      { name: "Oxford Street", type: "Shopping District", location: "West End", popularity: "High", description: "Europe's busiest shopping street with major retailers", visitorCount: "500,000+" },
+      { name: "Shoreditch Independent Shops", type: "Boutiques & Cafes", location: "East London", popularity: "Medium", description: "Trendy vintage and independent designer stores", visitorCount: "25,000+" },
+      { name: "Covent Garden Market", type: "Shopping & Entertainment", location: "West End", popularity: "High", description: "Historic market with street performers and specialty shops", visitorCount: "40,000+" }
     ]
   },
   "tokyo": {
@@ -71,6 +97,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     ],
     emergencyAlerts: [
       { type: "Weather Warning", description: "Spring wind advisory. Gusts reaching 40 km/h in elevated areas. Keep secured outdoor objects.", validUntil: "March 8, 2026 3:00 PM" }
+    ],
+    popularPlaces: [
+      { name: "Shibuya Crossing", type: "Shopping & Dining", location: "Shibuya", popularity: "Very High", description: "World's busiest pedestrian crossing surrounded by shops and restaurants", visitorCount: "500,000+" },
+      { name: "Ginza Luxury Shopping", type: "Premium Retail", location: "Ginza", popularity: "Very High", description: "Upscale shopping district with international luxury brands", visitorCount: "200,000+" },
+      { name: "Akihabara Electronics District", type: "Tech & Gaming", location: "Akihabara", popularity: "High", description: "Famous for electronics, anime, and gaming merchandise", visitorCount: "150,000+" },
+      { name: "Senso-ji Temple & Market", type: "Cultural & Shopping", location: "Asakusa", popularity: "High", description: "Historic temple with traditional shops and street food", visitorCount: "100,000+" },
+      { name: "Harajuku Fashion District", type: "Fashion & Youth Culture", location: "Harajuku", popularity: "High", description: "Trendy boutiques and vintage shops popular with young shoppers", visitorCount: "180,000+" },
+      { name: "Ikebukuro Department Stores", type: "Shopping", location: "Ikebukuro", popularity: "Medium", description: "Major department stores and shopping complexes", visitorCount: "120,000+" }
     ]
   },
   "paris": {
@@ -100,6 +134,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     ],
     emergencyAlerts: [
       { type: "Heat Alert", description: "High temperatures expected reaching 32°C. Stay hydrated and avoid prolonged sun exposure. Check on elderly neighbors.", validUntil: "March 9, 2026" }
+    ],
+    popularPlaces: [
+      { name: "Bondi Beach", type: "Beach & Dining", location: "Bondi", popularity: "Very High", description: "Famous beach with restaurants, bars, and water sports", visitorCount: "40,000+" },
+      { name: "Sydney Opera House", type: "Cultural Landmark", location: "Circular Quay", popularity: "Very High", description: "Iconic performing arts venue with dining and tour options", visitorCount: "8,000+" },
+      { name: "Queen Victoria Building", type: "Shopping & Dining", location: "Central Business District", popularity: "High", description: "Historic building converted to premium shopping and dining", visitorCount: "50,000+" },
+      { name: "Pitt Street Mall", type: "Shopping District", location: "Central Business District", popularity: "High", description: "Pedestrian shopping mall with flagship stores and cafes", visitorCount: "100,000+" },
+      { name: "Surry Hills Brunch Scene", type: "Cafes & Restaurants", location: "Surry Hills", popularity: "Medium", description: "Trendy cafe culture with independent boutiques", visitorCount: "20,000+" },
+      { name: "Barangaroo Reserve & Dining", type: "Waterfront & Restaurants", location: "Barangaroo", popularity: "High", description: "Waterfront precinct with fine dining and shopping", visitorCount: "30,000+" }
     ]
   },
   "chicago": {
@@ -117,6 +159,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     emergencyAlerts: [
       { type: "Storm Alert", description: "Severe thunderstorms expected late afternoon with heavy downpours. Avoid travel if possible.", validUntil: "March 7, 2026 8:00 PM" },
       { type: "Road Closure", description: "Lake Shore Drive closed inbound at Monroe Street due to accident. Expect heavy delays.", validUntil: "March 7, 2026 5:30 PM" }
+    ],
+    popularPlaces: [
+      { name: "The Magnificent Mile", type: "Shopping & Dining", location: "Downtown Chicago", popularity: "Very High", description: "Premier shopping district on North Michigan Avenue with luxury brands", visitorCount: "250,000+" },
+      { name: "Willis Tower Skydeck", type: "Observation Deck", location: "Loop", popularity: "Very High", description: "Iconic building with observation deck and restaurants", visitorCount: "1,700,000+" },
+      { name: "Millennium Park", type: "Park & Culture", location: "Downtown", popularity: "High", description: "Urban park with art installations, concerts, and dining", visitorCount: "25,000+" },
+      { name: "Navy Pier", type: "Entertainment & Dining", location: "Downtown", popularity: "High", description: "Historic pier with restaurants, shops, and attractions", visitorCount: "8,000,000+" },
+      { name: "Wicker Park Boutiques", type: "Shopping & Cafes", location: "Wicker Park", popularity: "Medium", description: "Vintage shops and independent retailers in bohemian neighborhood", visitorCount: "15,000+" },
+      { name: "River North Galleries", type: "Art & Dining", location: "River North", popularity: "High", description: "Art galleries, restaurants, and upscale shopping", visitorCount: "40,000+" }
     ]
   },
   "boston": {
@@ -457,6 +507,16 @@ export function getWhatsNewItems(cityName: string): WhatsNewItem[] {
 export function getEmergencyAlerts(cityName: string): EmergencyAlert[] {
   const facts = getCityFacts(cityName);
   return facts?.emergencyAlerts || [];
+}
+
+/**
+ * Get popular places for a city
+ * @param cityName The name of the city
+ * @returns Array of popular places or empty array
+ */
+export function getPopularPlaces(cityName: string): PopularPlace[] {
+  const facts = getCityFacts(cityName);
+  return facts?.popularPlaces || [];
 }
 
 /**
