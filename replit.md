@@ -10,6 +10,7 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **What's New in the City**: Daily updates featuring new restaurants, businesses, parks, and store openings
 - **Places Popularity Map**: Color-coded map showing shops and venues by popularity (Very High, High, Medium, Low) with visitor counts
 - **City Problems & Issues**: Information on protests, crime statistics, and infrastructure problems (potholes, road damage)
+- **Local Jobs**: Open job listings for new workers, with salary, employer, location, job type, and sector
 - **News Feed**: Latest news headlines from NewsAPI.org with categorization
 - **Neighborhood Activity Map**: Interactive map showing news activity hotspots in specific neighborhoods
 - **Music Recommendations**: AI-powered music suggestions based on the mood of city news (peaceful, dramatic, chaotic themes)
@@ -24,6 +25,7 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **Routing**: Wouter for client-side routing
 
 ## Recent Changes
+- **2026-03-07**: Added Local Jobs section showing open positions for new workers (salary, employer, type, sector)
 - **2026-03-07**: Added City Problems & Issues section showing protests, crime statistics, and infrastructure problems
 - **2026-03-07**: Added Places Popularity Map with color-coded indicators (Very High, High, Medium, Low) showing shops and venues
 - **2026-03-07**: Added Emergency Alerts component for weather warnings, heat alerts, storm alerts, and road closures
@@ -61,6 +63,7 @@ Globalscope is a comprehensive React-based web application that provides users w
 - `/client/src/components/whats-new-section.tsx` - What's new updates component with restaurants, businesses, parks, store openings
 - `/client/src/components/places-popularity-map.tsx` - Popular shops and places with color-coded popularity levels
 - `/client/src/components/city-problems.tsx` - City problems component showing protests, crime, and infrastructure issues
+- `/client/src/components/local-jobs.tsx` - Local job listings component with sector, salary, type, and employer info
 - `/client/src/components/neighborhood-map.tsx` - Interactive neighborhood map
 - `/client/src/components/city-vibe.tsx` - Music recommendations based on news mood
 - `/client/src/lib/cityFacts.ts` - City facts database and utilities (includes WhatsNewItem, EmergencyAlert, PopularPlace, CityProblem interfaces and related functions)

@@ -13,6 +13,7 @@ import CityFacts from "@/components/city-facts";
 import WhatsNewSection from "@/components/whats-new-section";
 import PlacesPopularityMap from "@/components/places-popularity-map";
 import CityProblems from "@/components/city-problems";
+import LocalJobs from "@/components/local-jobs";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
 
@@ -88,6 +89,11 @@ export default function Home() {
           {/* City problems and issues */}
           {currentCity && (
             <CityProblems cityName={currentCity} />
+          )}
+
+          {/* Local jobs */}
+          {currentCity && (
+            <LocalJobs cityName={currentCity} />
           )}
           
           {/* Neighborhood map */}

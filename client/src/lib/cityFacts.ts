@@ -28,6 +28,17 @@ export interface CityProblem {
   lastUpdated?: string;
 }
 
+export interface LocalJob {
+  title: string;
+  employer: string;
+  neighborhood: string;
+  type: "Full-time" | "Part-time" | "Contract" | "Internship";
+  sector: string;
+  description: string;
+  salary?: string;
+  posted?: string;
+}
+
 export interface CityFacts {
   population: string;
   famousPeople: string[];
@@ -38,6 +49,7 @@ export interface CityFacts {
   emergencyAlerts?: EmergencyAlert[];
   popularPlaces?: PopularPlace[];
   problems?: CityProblem[];
+  localJobs?: LocalJob[];
 }
 
 // City facts database
@@ -70,6 +82,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { type: "Crime", severity: "Moderate", description: "Theft and robbery incidents in high-traffic areas", details: ["15% increase in petty theft in Midtown", "Subway safety concerns during late hours", "Recommended: Travel in groups at night"], lastUpdated: "March 6, 2026" },
       { type: "Infrastructure", severity: "High", description: "Significant pothole and road damage issues", details: ["500+ reported potholes in Manhattan", "Subway delays due to track maintenance", "Street flooding in Lower East Side"], lastUpdated: "March 5, 2026" },
       { type: "Protests", severity: "Low", description: "Occasional demonstrations and rally activity", details: ["Weekly labor union gatherings", "Climate activism events on weekends"], lastUpdated: "March 3, 2026" }
+    ],
+    localJobs: [
+      { title: "Restaurant Server", employer: "The River Café", neighborhood: "Brooklyn", type: "Full-time", sector: "Hospitality", description: "Seeking experienced servers for upscale waterfront dining. Evening shifts available, tips included.", salary: "$18–$25/hr + tips", posted: "2 days ago" },
+      { title: "Software Engineer", employer: "FinTech Startup", neighborhood: "Midtown Manhattan", type: "Full-time", sector: "Technology", description: "Build scalable payment systems with React and Node.js. 2+ years experience preferred.", salary: "$90,000–$130,000/yr", posted: "1 day ago" },
+      { title: "Warehouse Associate", employer: "Amazon Fulfillment Center", neighborhood: "Queens", type: "Full-time", sector: "Transportation", description: "Packing, sorting, and shipping orders. No experience needed. Benefits included from day one.", salary: "$20.50/hr", posted: "Today" },
+      { title: "Teaching Assistant", employer: "NYC Department of Education", neighborhood: "The Bronx", type: "Part-time", sector: "Education", description: "Support elementary school teachers and students. Ideal for education students.", salary: "$16–$18/hr", posted: "3 days ago" },
+      { title: "Retail Sales Associate", employer: "Nike Flagship SoHo", neighborhood: "SoHo", type: "Part-time", sector: "Retail", description: "Assist customers, manage inventory, and represent the brand in a flagship store environment.", salary: "$17–$20/hr", posted: "Today" },
+      { title: "Construction Laborer", employer: "Turner Construction", neighborhood: "Lower Manhattan", type: "Full-time", sector: "Construction", description: "General labor on commercial high-rise project. OSHA certification a plus but not required.", salary: "$25–$32/hr", posted: "2 days ago" }
     ]
   },
   "london": {
@@ -100,6 +120,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { type: "Infrastructure", severity: "High", description: "Underground rail maintenance and road reconstruction", details: ["Central Line disruptions through March", "Multiple A-road closures for repair work", "Pothole maintenance ongoing in West End"], lastUpdated: "March 4, 2026" },
       { type: "Crime", severity: "Moderate", description: "Street crime and theft in central areas", details: ["Pickpocketing in Oxford Street area", "Bike theft increasing in East London", "Recommended: Avoid Piccadilly area late at night"], lastUpdated: "March 6, 2026" },
       { type: "Protests", severity: "Low", description: "Regular activism and demonstration activity", details: ["Environmental protests on weekends", "Workers' rights marches scheduled"], lastUpdated: "March 2, 2026" }
+    ],
+    localJobs: [
+      { title: "Barista", employer: "Monmouth Coffee Company", neighborhood: "Borough Market, Southwark", type: "Full-time", sector: "Hospitality", description: "Craft specialty coffees at one of London's most beloved cafes. Experience preferred.", salary: "£12.50–£14/hr", posted: "Today" },
+      { title: "Junior Web Developer", employer: "Digital Agency Shoreditch", neighborhood: "Shoreditch, East London", type: "Full-time", sector: "Technology", description: "HTML, CSS, JavaScript front-end role at a growing creative agency. Portfolio required.", salary: "£32,000–£40,000/yr", posted: "1 day ago" },
+      { title: "NHS Healthcare Assistant", employer: "NHS Trust", neighborhood: "Camden", type: "Full-time", sector: "Healthcare", description: "Support nursing staff in a busy hospital ward. Full training provided for motivated applicants.", salary: "£24,000–£27,000/yr", posted: "2 days ago" },
+      { title: "Retail Team Member", employer: "Marks & Spencer", neighborhood: "Oxford Street", type: "Part-time", sector: "Retail", description: "Customer-facing role in one of London's busiest department stores. Flexible hours available.", salary: "£12–£13.50/hr", posted: "Today" },
+      { title: "Event Staff", employer: "ExCeL London Events", neighborhood: "Docklands", type: "Contract", sector: "Hospitality", description: "Set-up, hosting, and breakdown for large trade events. Weekend availability required.", salary: "£13/hr", posted: "3 days ago" },
+      { title: "Graduate Finance Analyst", employer: "Barclays Bank", neighborhood: "Canary Wharf", type: "Internship", sector: "Finance", description: "12-month rotational program across investment banking divisions. Graduates only.", salary: "£38,000/yr", posted: "4 days ago" }
     ]
   },
   "tokyo": {
@@ -129,6 +157,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { type: "Infrastructure", severity: "Moderate", description: "Road and rail maintenance projects", details: ["Shinjuku station renovation in progress", "Multiple street reconstructions in Ginza", "Minor pothole repairs across wards"], lastUpdated: "March 5, 2026" },
       { type: "Crime", severity: "Low", description: "Generally low crime rates with minor pickpocketing", details: ["Occasional purse snatching in crowded areas", "Bicycle theft in residential areas", "Overall safe for visitors"], lastUpdated: "March 6, 2026" },
       { type: "Protests", severity: "Low", description: "Minimal protest activity", details: ["Occasional labor demonstrations", "Annual environmental marches"], lastUpdated: "February 28, 2026" }
+    ],
+    localJobs: [
+      { title: "English Language Teacher", employer: "NOVA English Academy", neighborhood: "Shinjuku", type: "Full-time", sector: "Education", description: "Teach conversational English to adult students. Native or fluent English speakers welcome.", salary: "¥250,000/month", posted: "Today" },
+      { title: "IT Systems Engineer", employer: "Sony Group", neighborhood: "Minato", type: "Full-time", sector: "Technology", description: "Maintain enterprise IT infrastructure for global media division. Japanese language skills a plus.", salary: "¥5,500,000–¥7,000,000/yr", posted: "2 days ago" },
+      { title: "Hotel Concierge", employer: "Park Hyatt Tokyo", neighborhood: "Shinjuku", type: "Full-time", sector: "Hospitality", description: "Assist international guests with bookings, recommendations, and luxury services. English fluency required.", salary: "¥220,000/month", posted: "1 day ago" },
+      { title: "Graphic Designer", employer: "Hakuhodo Ad Agency", neighborhood: "Akasaka", type: "Full-time", sector: "Media", description: "Create advertising visuals for major Japanese and international brands. Portfolio essential.", salary: "¥3,500,000–¥4,500,000/yr", posted: "3 days ago" },
+      { title: "Retail Assistant (Part-time)", employer: "Uniqlo Ginza", neighborhood: "Ginza", type: "Part-time", sector: "Retail", description: "Assist customers in flagship store. Great for students or newcomers to Tokyo.", salary: "¥1,100–¥1,300/hr", posted: "Today" },
+      { title: "Research Intern", employer: "University of Tokyo", neighborhood: "Bunkyo", type: "Internship", sector: "Education", description: "Support AI and robotics research labs. Programming skills in Python required.", salary: "¥150,000/month", posted: "5 days ago" }
     ]
   },
   "paris": {
@@ -142,6 +178,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Paris Design Studio", category: "Business", description: "Creative agency and workshop space in the 11th arrondissement", openingDate: "February 2026" },
       { name: "Île de la Cité Garden Trail", category: "Park", description: "Restored riverside gardens with sculpture installations", openingDate: "March 2026" },
       { name: "Louis Vuitton Exhibition Space", category: "Store Opening", description: "Immersive luxury brand experience in Place Vendôme", openingDate: "March 2026" }
+    ],
+    localJobs: [
+      { title: "Sommelier", employer: "Le Grand Véfour", neighborhood: "Palais-Royal, 1st arr.", type: "Full-time", sector: "Hospitality", description: "Serve and recommend wines in a historic Michelin-starred restaurant. French language required.", salary: "€2,800–€3,500/month", posted: "Today" },
+      { title: "Fashion Design Assistant", employer: "Chanel Studio", neighborhood: "8th arrondissement", type: "Full-time", sector: "Media", description: "Support senior designers on seasonal collections. Fashion degree and portfolio required.", salary: "€2,500–€3,200/month", posted: "2 days ago" },
+      { title: "Museum Guide", employer: "Louvre Museum", neighborhood: "1st arrondissement", type: "Part-time", sector: "Education", description: "Lead tours in English, French or Spanish through world-class art collections. History knowledge required.", salary: "€14–€17/hr", posted: "1 day ago" },
+      { title: "Software Engineer", employer: "BlaBlaCar", neighborhood: "Montparnasse, 14th arr.", type: "Full-time", sector: "Technology", description: "Build features for Europe's leading carpooling platform. Python and React experience needed.", salary: "€50,000–€70,000/yr", posted: "3 days ago" },
+      { title: "Baker (Boulanger)", employer: "Poilâne Bakery", neighborhood: "Saint-Germain, 6th arr.", type: "Full-time", sector: "Hospitality", description: "Traditional French bread baking using wood-fired ovens. Experience with artisan baking preferred.", salary: "€1,900–€2,400/month", posted: "Today" },
+      { title: "Finance Intern", employer: "BNP Paribas", neighborhood: "La Défense", type: "Internship", sector: "Finance", description: "6-month internship supporting investment banking analysts. Finance students in final year.", salary: "€1,200/month", posted: "4 days ago" }
     ]
   },
   "sydney": {
@@ -171,6 +215,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { type: "Infrastructure", severity: "Moderate", description: "Road maintenance and coastal erosion concerns", details: ["Pothole repairs ongoing across CBD", "Bondi beachfront erosion management", "Parramatta train line upgrade work"], lastUpdated: "March 5, 2026" },
       { type: "Crime", severity: "Moderate", description: "Drug-related activity and property crime", details: ["Kings Cross late-night safety concerns", "Vehicle break-ins in inner suburbs", "Recommended: Avoid certain areas after dark"], lastUpdated: "March 6, 2026" },
       { type: "Protests", severity: "Low", description: "Occasional activism and community gatherings", details: ["Indigenous rights demonstrations", "Climate action events"], lastUpdated: "March 1, 2026" }
+    ],
+    localJobs: [
+      { title: "Café Barista", employer: "Single O Coffee", neighborhood: "Surry Hills", type: "Part-time", sector: "Hospitality", description: "Specialty coffee role in a beloved local café. Latte art skills a bonus.", salary: "AUD $26–$30/hr", posted: "Today" },
+      { title: "Registered Nurse", employer: "St Vincent's Hospital", neighborhood: "Darlinghurst", type: "Full-time", sector: "Healthcare", description: "Medical-surgical ward nursing. AHPRA registration required.", salary: "AUD $75,000–$90,000/yr", posted: "2 days ago" },
+      { title: "Software Developer", employer: "Atlassian", neighborhood: "CBD", type: "Full-time", sector: "Technology", description: "Work on cloud collaboration tools used by millions worldwide. React and Java skills needed.", salary: "AUD $110,000–$145,000/yr", posted: "1 day ago" },
+      { title: "Tour Guide", employer: "Bondi to Coogee Walks", neighborhood: "Bondi", type: "Part-time", sector: "Hospitality", description: "Guide visitors along the famous coastal walk. Great communication and passion for Sydney required.", salary: "AUD $28/hr", posted: "Today" },
+      { title: "Finance Graduate", employer: "Commonwealth Bank", neighborhood: "Darling Harbour", type: "Internship", sector: "Finance", description: "12-month graduate program in retail or business banking. Open to commerce and economics graduates.", salary: "AUD $55,000/yr", posted: "3 days ago" },
+      { title: "Construction Worker", employer: "Multiplex Constructions", neighborhood: "Parramatta", type: "Full-time", sector: "Construction", description: "General labourer for large-scale residential tower project. White Card required.", salary: "AUD $35–$45/hr", posted: "1 day ago" }
     ]
   },
   "chicago": {
@@ -201,6 +253,14 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { type: "Crime", severity: "High", description: "Higher violent crime rates in certain neighborhoods", details: ["Gang-related activity in South and West sides", "Increased carjacking incidents", "Loop and downtown generally safe"], lastUpdated: "March 6, 2026" },
       { type: "Infrastructure", severity: "High", description: "Extensive pothole and street damage issues", details: ["1000+ reported potholes citywide", "CTA train delays due to track work", "Spring flooding in low-lying areas"], lastUpdated: "March 5, 2026" },
       { type: "Protests", severity: "Moderate", description: "Regular activism and demonstrations", details: ["Workers' rights and labor protests", "Social justice demonstrations", "Permit required for large gatherings"], lastUpdated: "March 4, 2026" }
+    ],
+    localJobs: [
+      { title: "Line Cook", employer: "Girl & the Goat", neighborhood: "West Loop", type: "Full-time", sector: "Hospitality", description: "Join the kitchen team at a James Beard Award-winning restaurant. Fast-paced, team-oriented environment.", salary: "$19–$24/hr", posted: "Today" },
+      { title: "Social Worker", employer: "Chicago Department of Family Services", neighborhood: "South Side", type: "Full-time", sector: "Government", description: "Case management and community outreach for at-risk families. BSW or MSW required.", salary: "$48,000–$58,000/yr", posted: "2 days ago" },
+      { title: "Data Analyst", employer: "Morningstar Inc.", neighborhood: "Loop", type: "Full-time", sector: "Finance", description: "Analyze investment data and build dashboards for financial research products. SQL and Python skills needed.", salary: "$70,000–$90,000/yr", posted: "1 day ago" },
+      { title: "Bus Operator Trainee", employer: "Chicago Transit Authority (CTA)", neighborhood: "Citywide", type: "Full-time", sector: "Transportation", description: "No experience required. Full training, benefits, and pension provided. CDL preferred.", salary: "$25/hr + benefits", posted: "Today" },
+      { title: "Pharmacy Technician", employer: "Advocate Health", neighborhood: "Lincoln Park", type: "Full-time", sector: "Healthcare", description: "Assist licensed pharmacists in a busy outpatient clinic. Certification preferred.", salary: "$20–$24/hr", posted: "3 days ago" },
+      { title: "Marketing Intern", employer: "Leo Burnett Agency", neighborhood: "Streeterville", type: "Internship", sector: "Media", description: "Assist brand strategy team on consumer campaigns. Open to marketing and communications students.", salary: "$18/hr", posted: "4 days ago" }
     ]
   },
   "boston": {
@@ -561,6 +621,16 @@ export function getPopularPlaces(cityName: string): PopularPlace[] {
 export function getCityProblems(cityName: string): CityProblem[] {
   const facts = getCityFacts(cityName);
   return facts?.problems || [];
+}
+
+/**
+ * Get local job listings for a city
+ * @param cityName The name of the city
+ * @returns Array of local jobs or empty array
+ */
+export function getLocalJobs(cityName: string): LocalJob[] {
+  const facts = getCityFacts(cityName);
+  return facts?.localJobs || [];
 }
 
 /**
