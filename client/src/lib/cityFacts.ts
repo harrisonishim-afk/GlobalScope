@@ -179,6 +179,21 @@ const cityFactsDatabase: Record<string, CityFacts> = {
       { name: "Île de la Cité Garden Trail", category: "Park", description: "Restored riverside gardens with sculpture installations", openingDate: "March 2026" },
       { name: "Louis Vuitton Exhibition Space", category: "Store Opening", description: "Immersive luxury brand experience in Place Vendôme", openingDate: "March 2026" }
     ],
+    emergencyAlerts: [
+      { type: "Storm Alert", description: "Strong storm warning for Île-de-France. Gusts up to 90km/h expected. Avoid outdoor areas and secure loose objects.", validUntil: "March 8, 2026 11:00 PM" }
+    ],
+    popularPlaces: [
+      { name: "Champs-Élysées & Arc de Triomphe", type: "Shopping & Landmark", location: "8th arrondissement", popularity: "Very High", description: "World-famous avenue with luxury shops, cafes, and cinemas", visitorCount: "300,000+" },
+      { name: "Le Marais District", type: "Boutiques & Dining", location: "3rd & 4th arr.", popularity: "Very High", description: "Historic Jewish quarter with trendy boutiques, galleries, and falafel shops", visitorCount: "50,000+" },
+      { name: "Galeries Lafayette Haussmann", type: "Luxury Shopping", location: "9th arrondissement", popularity: "High", description: "Iconic department store with stunning glass dome and top international brands", visitorCount: "35,000,000+" },
+      { name: "Saint-Germain-des-Prés", type: "Cafes & Bookshops", location: "6th arrondissement", popularity: "High", description: "Literary neighbourhood with historic cafes, bookshops, and art galleries", visitorCount: "20,000+" },
+      { name: "Montmartre & Sacré-Cœur", type: "Art & Cafes", location: "18th arrondissement", popularity: "High", description: "Bohemian hilltop neighbourhood with artists, cabarets, and the White Church", visitorCount: "10,000,000+" }
+    ],
+    problems: [
+      { type: "Infrastructure", severity: "Moderate", description: "Metro overcrowding and street maintenance backlog", details: ["RER and Métro overcrowded at rush hour", "Road repairs ongoing near Place de la République", "Cycling lane conflicts with traffic"], lastUpdated: "March 5, 2026" },
+      { type: "Crime", severity: "Moderate", description: "Tourist-targeted pickpocketing and scams", details: ["Pickpocketing on Metro Line 1 and near Eiffel Tower", "Petition scam near Sacré-Cœur", "Avoid unofficial guides near monuments"], lastUpdated: "March 6, 2026" },
+      { type: "Protests", severity: "High", description: "Regular large-scale strikes and demonstrations", details: ["SNCF and RATP transport strikes", "Farmers' tractor protests blocking highways", "Gilets Jaunes-style demonstrations periodically"], lastUpdated: "March 4, 2026" }
+    ],
     localJobs: [
       { title: "Sommelier", employer: "Le Grand Véfour", neighborhood: "Palais-Royal, 1st arr.", type: "Full-time", sector: "Hospitality", description: "Serve and recommend wines in a historic Michelin-starred restaurant. French language required.", salary: "€2,800–€3,500/month", posted: "Today" },
       { title: "Fashion Design Assistant", employer: "Chanel Studio", neighborhood: "8th arrondissement", type: "Full-time", sector: "Media", description: "Support senior designers on seasonal collections. Fashion degree and portfolio required.", salary: "€2,500–€3,200/month", posted: "2 days ago" },
@@ -606,7 +621,35 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     famousPeople: ["Tony Jaa", "Apichatpong Weerasethakul", "Yingluck Shinawatra", "Thaksin Shinawatra", "Mario Maurer"],
     currentMayor: "Chadchart Sittipunt",
     foundedYear: 1782,
-    nickname: "City of Angels"
+    nickname: "City of Angels",
+    whatsNew: [
+      { name: "Sukhumvit Rooftop Sushi", category: "Restaurant", description: "New Japanese-Thai fusion rooftop restaurant on Sukhumvit with panoramic city views", openingDate: "March 2026" },
+      { name: "One Bangkok Tower", category: "Business", description: "Thailand's largest mixed-use development opens its first commercial office tower", openingDate: "February 2026" },
+      { name: "Benjakitti Forest Park", category: "Park", description: "New urban forest park with elevated sky walkways and lake views near Asok", openingDate: "March 2026" },
+      { name: "Central Embassy Apple Store", category: "Store Opening", description: "Thailand's first official Apple flagship store opens in Central Embassy mall", openingDate: "March 2026" }
+    ],
+    emergencyAlerts: [
+      { type: "Heat Alert", description: "Extreme heat advisory. Bangkok reaching 40°C with heat index of 50°C. Avoid outdoor activities midday. Drink water frequently.", validUntil: "March 12, 2026" }
+    ],
+    popularPlaces: [
+      { name: "Chatuchak Weekend Market", type: "Mega Market", location: "Chatuchak", popularity: "Very High", description: "One of the world's largest weekend markets with 15,000+ stalls of everything imaginable", visitorCount: "200,000+" },
+      { name: "Sukhumvit Strip", type: "Nightlife & Shopping", location: "Sukhumvit", popularity: "Very High", description: "Bangkok's cosmopolitan corridor with malls, bars, restaurants, and night markets", visitorCount: "100,000+" },
+      { name: "Asiatique The Riverfront", type: "Shopping & Dining", location: "Charoen Krung", popularity: "High", description: "Night bazaar on the Chao Phraya river with restaurants and cabaret shows", visitorCount: "20,000+" },
+      { name: "Khao San Road", type: "Backpacker & Nightlife", location: "Banglamphu", popularity: "High", description: "Legendary backpacker street with hostels, bars, street food, and night market", visitorCount: "30,000+" },
+      { name: "Or Tor Kor Market", type: "Gourmet Food Market", location: "Chatuchak", popularity: "Medium", description: "Bangkok's cleanest and most upscale fresh market for premium Thai produce", visitorCount: "5,000+" }
+    ],
+    problems: [
+      { type: "Infrastructure", severity: "High", description: "Severe traffic and flooding during rainy season", details: ["Bangkok has some of Southeast Asia's worst traffic", "Flood-prone streets during monsoon season", "BTS and MRT sometimes overcrowded at peak times"], lastUpdated: "March 5, 2026" },
+      { type: "Crime", severity: "Low", description: "Generally safe with tourist scams", details: ["Tuk-tuk and gem scams near Grand Palace", "Overcharging at some tourist-area restaurants", "Very low violent crime rate"], lastUpdated: "March 4, 2026" },
+      { type: "Protests", severity: "Moderate", description: "Political demonstrations periodically arise", details: ["Youth democracy movement demonstrations", "Royalist and nationalist counter-rallies", "Areas near Government House can be blocked"], lastUpdated: "March 3, 2026" }
+    ],
+    localJobs: [
+      { title: "Muay Thai Trainer", employer: "Fairtex Gym", neighborhood: "Bang Phli", type: "Full-time", sector: "Education", description: "Train local and international fighters in traditional Thai boxing. Professional Muay Thai record required.", salary: "THB 25,000–45,000/month", posted: "Today" },
+      { title: "Software Developer", employer: "Agoda", neighborhood: "Silom", type: "Full-time", sector: "Technology", description: "Build the world's leading travel booking platform. React or Scala experience needed.", salary: "THB 80,000–150,000/month", posted: "1 day ago" },
+      { title: "Hotel Concierge", employer: "Mandarin Oriental Bangkok", neighborhood: "Charoen Nakhon", type: "Full-time", sector: "Hospitality", description: "Assist guests at one of Asia's most legendary luxury hotels. English and Thai required.", salary: "THB 20,000–28,000/month", posted: "Today" },
+      { title: "Street Food Vendor", employer: "Self-employed", neighborhood: "Yaowarat (Chinatown)", type: "Full-time", sector: "Hospitality", description: "Operate a pad thai or noodle stall in Bangkok's street food culture. No experience needed.", salary: "THB 15,000–35,000/month", posted: "2 days ago" },
+      { title: "Dive Instructor", employer: "Pro Dive Thailand", neighborhood: "Sukhumvit (office)", type: "Contract", sector: "Education", description: "Lead scuba diving trips to Thai islands. PADI Divemaster or Instructor required.", salary: "THB 30,000–60,000/month", posted: "3 days ago" }
+    ]
   },
   "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": {
     population: "10.7 million",
@@ -641,7 +684,34 @@ const cityFactsDatabase: Record<string, CityFacts> = {
     famousPeople: ["Necmettin Bilal Erdoğan", "Local Kurdish artists", "Turkish politicians"],
     currentMayor: "Gülistan Sönük",
     foundedYear: 1955,
-    nickname: "Oil Capital of Turkey"
+    nickname: "Oil Capital of Turkey",
+    whatsNew: [
+      { name: "Petrol Çarşısı Kebap House", category: "Restaurant", description: "New traditional southeastern Turkish restaurant near the bazaar with wood-fire grill", openingDate: "March 2026" },
+      { name: "Batman Üniversitesi Teknokent", category: "Business", description: "Technology park opening at Batman University for engineering and software startups", openingDate: "February 2026" },
+      { name: "Dicle River Parkway", category: "Park", description: "New riverside walking and cycling path along the Tigris tributary with rest areas", openingDate: "March 2026" },
+      { name: "LC Waikiki Batman", category: "Store Opening", description: "Major Turkish fashion chain opens new branch in Batman's main shopping district", openingDate: "March 2026" }
+    ],
+    emergencyAlerts: [
+      { type: "Heat Alert", description: "Extreme summer heat advisory. Temperatures reaching 41°C. Limit outdoor exertion during midday hours and drink water regularly.", validUntil: "March 12, 2026" }
+    ],
+    popularPlaces: [
+      { name: "Batman Çarşısı (Bazaar)", type: "Shopping & Food", location: "City Centre", popularity: "High", description: "Traditional covered market with clothing, spices, and local Kurdish crafts", visitorCount: "10,000+" },
+      { name: "Hasankeyf (nearby)", type: "Historic Site", location: "40km from Batman", popularity: "High", description: "Ancient cave city on the Tigris River with 12,000 years of continuous habitation", visitorCount: "100,000+" },
+      { name: "Batman Gölü (Lake)", type: "Nature & Recreation", location: "Batman Dam", popularity: "Medium", description: "Man-made lake on the Batman River popular for picnics and fishing", visitorCount: "5,000+" },
+      { name: "Batman Petroleum Museum", type: "Cultural Tourism", location: "TPAO District", popularity: "Low", description: "Small museum documenting Turkey's southeastern oil industry and Batman Province history", visitorCount: "1,000+" }
+    ],
+    problems: [
+      { type: "Infrastructure", severity: "Moderate", description: "Road quality and seasonal water supply issues", details: ["Dust and pothole issues on suburban roads", "Water shortages in some districts in summer", "Limited public transport options outside the centre"], lastUpdated: "March 5, 2026" },
+      { type: "Crime", severity: "Low", description: "Generally safe city with low crime", details: ["Occasional petty theft in market areas", "City is considered safe for residents and visitors"], lastUpdated: "March 4, 2026" },
+      { type: "Protests", severity: "Moderate", description: "Political demonstrations related to regional politics", details: ["HDP-affiliated political protests", "Workers' union demonstrations", "Municipal governance rallies"], lastUpdated: "March 3, 2026" }
+    ],
+    localJobs: [
+      { title: "Petroleum Engineer", employer: "TPAO (Turkish Petroleum)", neighborhood: "TPAO Complex", type: "Full-time", sector: "Construction", description: "Oil field engineering and maintenance across the Batman basin. Engineering degree required.", salary: "₺60,000–₺90,000/month", posted: "Today" },
+      { title: "English Teacher", employer: "Batman İl Milli Eğitim", neighborhood: "Citywide Schools", type: "Full-time", sector: "Education", description: "Teach English at state secondary schools. Turkish teaching certificate required.", salary: "₺18,000–₺25,000/month", posted: "2 days ago" },
+      { title: "Hospital Nurse", employer: "Batman Devlet Hastanesi", neighborhood: "City Centre", type: "Full-time", sector: "Healthcare", description: "General nursing in the city's main public hospital. Turkish nursing licence required.", salary: "₺22,000–₺30,000/month", posted: "1 day ago" },
+      { title: "Kebap Cook", employer: "Şehir Restaurant", neighborhood: "Bostancı Mahallesi", type: "Full-time", sector: "Hospitality", description: "Cook traditional Turkish and Kurdish dishes. Experience in meat grilling preferred.", salary: "₺12,000–₺18,000/month", posted: "Today" },
+      { title: "University Research Assistant", employer: "Batman Üniversitesi", neighborhood: "University Campus", type: "Part-time", sector: "Education", description: "Support faculty research in engineering and social science departments. Postgraduate preferred.", salary: "₺8,000–₺12,000/month", posted: "3 days ago" }
+    ]
   },
   "booger hole": {
     population: "50",

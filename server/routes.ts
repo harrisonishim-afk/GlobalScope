@@ -37,6 +37,86 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   };
 
+  // Weather cache (5 minutes)
+  const weatherCache = new Map<string, CacheItem>();
+
+  app.get("/api/weather/:city", async (req, res) => {
+    try {
+      const cityParam = req.params.city?.trim();
+      if (!cityParam) return res.status(400).json({ message: "City is required" });
+
+      const cacheKey = cityParam.toLowerCase();
+      const cached = weatherCache.get(cacheKey);
+      if (cached && Date.now() - cached.timestamp < 5 * 60 * 1000) {
+        return res.json(cached.data);
+      }
+
+      // Step 1: Geocode city name to coordinates
+      const geoRes = await axios.get("https://geocoding-api.open-meteo.com/v1/search", {
+        params: { name: cityParam, count: 1, language: "en", format: "json" },
+        timeout: 8000,
+      });
+
+      const results = geoRes.data?.results;
+      if (!results || results.length === 0) {
+        return res.status(404).json({ message: "City not found" });
+      }
+
+      const { latitude, longitude, name, country } = results[0];
+
+      // Step 2: Fetch current weather from Open-Meteo
+      const weatherRes = await axios.get("https://api.open-meteo.com/v1/forecast", {
+        params: {
+          latitude,
+          longitude,
+          current: "temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,visibility,weather_code,precipitation,cloud_cover",
+          wind_speed_unit: "kmh",
+          timezone: "auto",
+        },
+        timeout: 8000,
+      });
+
+      const current = weatherRes.data?.current;
+      if (!current) return res.status(500).json({ message: "Weather data unavailable" });
+
+      // Map WMO weather code to condition label
+      const code = current.weather_code ?? 0;
+      let condition = "Clear";
+      let description = "Clear skies";
+      if (code === 0) { condition = "Sunny"; description = "Clear and sunny"; }
+      else if (code <= 2) { condition = "Partly Cloudy"; description = "Partly cloudy skies"; }
+      else if (code === 3) { condition = "Cloudy"; description = "Overcast skies"; }
+      else if (code <= 48) { condition = "Foggy"; description = "Fog or mist"; }
+      else if (code <= 57) { condition = "Light Drizzle"; description = "Light drizzle"; }
+      else if (code <= 67) { condition = "Rain"; description = "Moderate to heavy rain"; }
+      else if (code <= 77) { condition = "Snow"; description = "Snow falling"; }
+      else if (code <= 82) { condition = "Heavy Rain"; description = "Heavy rain showers"; }
+      else if (code <= 86) { condition = "Heavy Snow"; description = "Heavy snow showers"; }
+      else { condition = "Thunderstorm"; description = "Thunderstorm activity"; }
+
+      const data = {
+        temperature: Math.round(current.temperature_2m),
+        condition,
+        description,
+        humidity: current.relative_humidity_2m,
+        windSpeed: Math.round(current.wind_speed_10m),
+        visibility: Math.round((current.visibility ?? 10000) / 1000),
+        feelsLike: Math.round(current.apparent_temperature),
+        precipitation: current.precipitation ?? 0,
+        cloudCover: current.cloud_cover ?? 0,
+        locationName: name,
+        country,
+        fetchedAt: new Date().toISOString(),
+      };
+
+      weatherCache.set(cacheKey, { data, timestamp: Date.now() });
+      res.json(data);
+    } catch (err) {
+      console.error("Weather fetch error:", err);
+      res.status(500).json({ message: "Failed to fetch weather data" });
+    }
+  });
+
   app.get("/api/facts/:city", async (req, res) => {
     try {
       let cityParam = req.params.city;

@@ -50,8 +50,10 @@ Globalscope is a comprehensive React-based web application that provides users w
 
 ## Technical Notes
 - NewsAPI.org free tier only allows historical data back to 2025-06-07
-- Weather data is currently mock data - would need integration with weather API for production
-- City facts database includes 15+ major cities with population, mayors, and famous people
+- Weather data is LIVE from Open-Meteo API (free, no API key required) — auto-refreshes every 5 minutes
+- Open-Meteo geocoding API used to convert city names to coordinates
+- Server-side weather cache (5-minute TTL) prevents excessive API calls
+- City facts database includes 30+ cities with all add-ons (whatsNew, emergencyAlerts, popularPlaces, problems, localJobs)
 - Music recommendations analyze news sentiment to suggest appropriate playlists
 - Neighborhood mapping works for major cities with predefined neighborhood data
 

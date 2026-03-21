@@ -1,455 +1,91 @@
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Cloud, Sun, CloudRain, CloudSnow, Wind, Thermometer, Droplets, Eye } from "lucide-react";
+import {
+  Cloud, Sun, CloudRain, CloudSnow, Wind, Thermometer,
+  Droplets, Eye, CloudLightning, CloudDrizzle, RefreshCw
+} from "lucide-react";
 
 interface WeatherData {
   temperature: number;
   condition: string;
+  description: string;
   humidity: number;
   windSpeed: number;
   visibility: number;
   feelsLike: number;
-  description: string;
+  precipitation: number;
+  cloudCover: number;
+  locationName: string;
+  country: string;
+  fetchedAt: string;
 }
 
 interface WeatherSectionProps {
   cityName: string;
 }
 
-// Mock weather data for demonstration - in production, this would come from a weather API
-const mockWeatherData: Record<string, WeatherData> = {
-  "new york": {
-    temperature: 22,
-    condition: "Partly Cloudy",
-    humidity: 65,
-    windSpeed: 12,
-    visibility: 10,
-    feelsLike: 24,
-    description: "Partly cloudy with light winds"
-  },
-  "london": {
-    temperature: 16,
-    condition: "Light Rain",
-    humidity: 78,
-    windSpeed: 8,
-    visibility: 7,
-    feelsLike: 14,
-    description: "Light rain with overcast skies"
-  },
-  "tokyo": {
-    temperature: 28,
-    condition: "Sunny",
-    humidity: 55,
-    windSpeed: 6,
-    visibility: 15,
-    feelsLike: 30,
-    description: "Clear skies with warm temperatures"
-  },
-  "paris": {
-    temperature: 19,
-    condition: "Cloudy",
-    humidity: 70,
-    windSpeed: 10,
-    visibility: 8,
-    feelsLike: 18,
-    description: "Overcast with mild temperatures"
-  },
-  "sydney": {
-    temperature: 24,
-    condition: "Sunny",
-    humidity: 60,
-    windSpeed: 15,
-    visibility: 12,
-    feelsLike: 26,
-    description: "Sunny with fresh coastal breeze"
-  },
-  "chicago": {
-    temperature: 18,
-    condition: "Windy",
-    humidity: 55,
-    windSpeed: 25,
-    visibility: 12,
-    feelsLike: 15,
-    description: "Windy conditions with clear skies"
-  },
-  "boston": {
-    temperature: 20,
-    condition: "Partly Cloudy",
-    humidity: 62,
-    windSpeed: 14,
-    visibility: 10,
-    feelsLike: 22,
-    description: "Partly cloudy with moderate winds"
-  },
-  "los angeles": {
-    temperature: 26,
-    condition: "Sunny",
-    humidity: 45,
-    windSpeed: 8,
-    visibility: 15,
-    feelsLike: 28,
-    description: "Sunny and warm with light winds"
-  },
-  "miami": {
-    temperature: 30,
-    condition: "Humid",
-    humidity: 85,
-    windSpeed: 12,
-    visibility: 8,
-    feelsLike: 35,
-    description: "Hot and humid with scattered clouds"
-  },
-  "seattle": {
-    temperature: 17,
-    condition: "Light Rain",
-    humidity: 82,
-    windSpeed: 9,
-    visibility: 6,
-    feelsLike: 15,
-    description: "Light drizzle with overcast skies"
-  },
-  "vatican city": {
-    temperature: 18,
-    condition: "Partly Cloudy",
-    humidity: 68,
-    windSpeed: 7,
-    visibility: 12,
-    feelsLike: 19,
-    description: "Partly cloudy with mild Mediterranean climate"
-  },
-  "fucking": {
-    temperature: 12,
-    condition: "Cloudy",
-    humidity: 75,
-    windSpeed: 8,
-    visibility: 9,
-    feelsLike: 10,
-    description: "Cool alpine weather with overcast skies"
-  },
-  "fucking city": {
-    temperature: 12,
-    condition: "Cloudy",
-    humidity: 75,
-    windSpeed: 8,
-    visibility: 9,
-    feelsLike: 10,
-    description: "Cool alpine weather with overcast skies"
-  },
-  "bangkok": {
-    temperature: 32,
-    condition: "Humid",
-    humidity: 89,
-    windSpeed: 6,
-    visibility: 8,
-    feelsLike: 38,
-    description: "Hot and humid tropical weather"
-  },
-  "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": {
-    temperature: 32,
-    condition: "Humid",
-    humidity: 89,
-    windSpeed: 6,
-    visibility: 8,
-    feelsLike: 38,
-    description: "Hot and humid tropical weather"
-  },
-  "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": {
-    temperature: 32,
-    condition: "Humid",
-    humidity: 89,
-    windSpeed: 6,
-    visibility: 8,
-    feelsLike: 38,
-    description: "Hot and humid tropical weather"
-  },
-  "hell": {
-    temperature: -5,
-    condition: "Snow",
-    humidity: 85,
-    windSpeed: 15,
-    visibility: 5,
-    feelsLike: -12,
-    description: "Cold Norwegian winter with snow"
-  },
-  "hell city": {
-    temperature: -5,
-    condition: "Snow",
-    humidity: 85,
-    windSpeed: 15,
-    visibility: 5,
-    feelsLike: -12,
-    description: "Cold Norwegian winter with snow"
-  },
-  "batman": {
-    temperature: 25,
-    condition: "Sunny",
-    humidity: 45,
-    windSpeed: 8,
-    visibility: 15,
-    feelsLike: 27,
-    description: "Warm and dry Mediterranean climate"
-  },
-  "booger hole": {
-    temperature: 14,
-    condition: "Partly Cloudy",
-    humidity: 68,
-    windSpeed: 10,
-    visibility: 12,
-    feelsLike: 12,
-    description: "Mild Appalachian weather with mountain breeze"
-  },
-  "b0ooger hole": {
-    temperature: 14,
-    condition: "Partly Cloudy",
-    humidity: 68,
-    windSpeed: 10,
-    visibility: 12,
-    feelsLike: 12,
-    description: "Mild Appalachian weather with mountain breeze"
-  },
-  "madrid": {
-    temperature: 21,
-    condition: "Sunny",
-    humidity: 52,
-    windSpeed: 9,
-    visibility: 15,
-    feelsLike: 23,
-    description: "Warm Mediterranean climate with clear skies"
-  },
-  "mumbai": {
-    temperature: 29,
-    condition: "Humid",
-    humidity: 84,
-    windSpeed: 14,
-    visibility: 6,
-    feelsLike: 35,
-    description: "Hot and humid monsoon climate"
-  },
-  "delhi": {
-    temperature: 27,
-    condition: "Sunny",
-    humidity: 65,
-    windSpeed: 8,
-    visibility: 10,
-    feelsLike: 31,
-    description: "Hot continental climate with haze"
-  },
-  "istanbul": {
-    temperature: 19,
-    condition: "Partly Cloudy",
-    humidity: 71,
-    windSpeed: 12,
-    visibility: 12,
-    feelsLike: 18,
-    description: "Mild continental climate with sea breeze"
-  },
-  "cairo": {
-    temperature: 26,
-    condition: "Sunny",
-    humidity: 40,
-    windSpeed: 7,
-    visibility: 15,
-    feelsLike: 28,
-    description: "Hot desert climate with clear skies"
-  },
-  "lagos": {
-    temperature: 30,
-    condition: "Humid",
-    humidity: 86,
-    windSpeed: 11,
-    visibility: 8,
-    feelsLike: 36,
-    description: "Hot tropical climate with high humidity"
-  },
-  "shanghai": {
-    temperature: 23,
-    condition: "Cloudy",
-    humidity: 76,
-    windSpeed: 13,
-    visibility: 9,
-    feelsLike: 25,
-    description: "Humid subtropical climate with overcast skies"
-  },
-  "mexico city": {
-    temperature: 20,
-    condition: "Partly Cloudy",
-    humidity: 58,
-    windSpeed: 8,
-    visibility: 12,
-    feelsLike: 22,
-    description: "Mild highland climate with afternoon clouds"
-  },
-  "sao paulo": {
-    temperature: 18,
-    condition: "Light Rain",
-    humidity: 80,
-    windSpeed: 10,
-    visibility: 7,
-    feelsLike: 17,
-    description: "Subtropical climate with light drizzle"
-  },
-  "rio de janeiro": {
-    temperature: 25,
-    condition: "Sunny",
-    humidity: 72,
-    windSpeed: 15,
-    visibility: 14,
-    feelsLike: 28,
-    description: "Tropical climate with ocean breeze"
-  },
-  "buenos aires": {
-    temperature: 17,
-    condition: "Partly Cloudy",
-    humidity: 63,
-    windSpeed: 11,
-    visibility: 13,
-    feelsLike: 16,
-    description: "Temperate climate with river winds"
-  },
-  "jakarta": {
-    temperature: 31,
-    condition: "Humid",
-    humidity: 89,
-    windSpeed: 8,
-    visibility: 5,
-    feelsLike: 38,
-    description: "Hot tropical climate with high humidity"
-  },
-
-  "seoul": {
-    temperature: 16,
-    condition: "Clear",
-    humidity: 55,
-    windSpeed: 12,
-    visibility: 14,
-    feelsLike: 15,
-    description: "Continental climate with clear skies"
-  },
-  "tehran": {
-    temperature: 22,
-    condition: "Sunny",
-    humidity: 45,
-    windSpeed: 9,
-    visibility: 12,
-    feelsLike: 24,
-    description: "Semi-arid climate with mountain air"
-  },
-  "karachi": {
-    temperature: 28,
-    condition: "Humid",
-    humidity: 82,
-    windSpeed: 16,
-    visibility: 9,
-    feelsLike: 34,
-    description: "Hot coastal climate with sea breeze"
-  },
-  "dhaka": {
-    temperature: 30,
-    condition: "Humid",
-    humidity: 87,
-    windSpeed: 7,
-    visibility: 6,
-    feelsLike: 37,
-    description: "Hot humid subtropical climate"
-  },
-  "lima": {
-    temperature: 19,
-    condition: "Foggy",
-    humidity: 77,
-    windSpeed: 13,
-    visibility: 8,
-    feelsLike: 18,
-    description: "Mild desert climate with coastal fog"
-  },
-  "chimayo": {
-    temperature: 16,
-    condition: "Clear",
-    humidity: 42,
-    windSpeed: 8,
-    visibility: 16,
-    feelsLike: 14,
-    description: "High desert climate with crisp mountain air"
-  },
-  "riz": {
-    temperature: 12,
-    condition: "Partly Cloudy",
-    humidity: 65,
-    windSpeed: 9,
-    visibility: 14,
-    feelsLike: 10,
-    description: "Cool Alpine climate with mountain breezes"
-  },
-  "jericho": {
-    temperature: 25,
-    condition: "Sunny",
-    humidity: 45,
-    windSpeed: 7,
-    visibility: 15,
-    feelsLike: 27,
-    description: "Hot desert climate with clear skies"
-  }
-};
-
 function getWeatherIcon(condition: string) {
-  const iconProps = { className: "h-8 w-8" };
-  
-  switch (condition.toLowerCase()) {
-    case "sunny":
-      return <Sun {...iconProps} className="h-8 w-8 text-yellow-500" />;
-    case "partly cloudy":
-      return <Cloud {...iconProps} className="h-8 w-8 text-gray-500" />;
-    case "cloudy":
-      return <Cloud {...iconProps} className="h-8 w-8 text-gray-600" />;
-    case "light rain":
-      return <CloudRain {...iconProps} className="h-8 w-8 text-blue-500" />;
-    case "rain":
-      return <CloudRain {...iconProps} className="h-8 w-8 text-blue-600" />;
-    case "snow":
-      return <CloudSnow {...iconProps} className="h-8 w-8 text-blue-300" />;
-    case "windy":
-      return <Wind {...iconProps} className="h-8 w-8 text-gray-500" />;
-    default:
-      return <Sun {...iconProps} className="h-8 w-8 text-yellow-500" />;
+  const c = condition.toLowerCase();
+  if (c.includes("thunder")) return <CloudLightning className="h-10 w-10 text-yellow-500" />;
+  if (c.includes("heavy rain") || c.includes("heavy snow")) return <CloudRain className="h-10 w-10 text-blue-700" />;
+  if (c.includes("snow")) return <CloudSnow className="h-10 w-10 text-blue-300" />;
+  if (c.includes("drizzle") || c.includes("rain")) return <CloudDrizzle className="h-10 w-10 text-blue-500" />;
+  if (c.includes("fog")) return <Cloud className="h-10 w-10 text-gray-400" />;
+  if (c.includes("windy")) return <Wind className="h-10 w-10 text-gray-500" />;
+  if (c.includes("cloudy") || c.includes("overcast")) return <Cloud className="h-10 w-10 text-gray-500" />;
+  if (c.includes("partly")) return <Cloud className="h-10 w-10 text-sky-400" />;
+  return <Sun className="h-10 w-10 text-yellow-500" />;
+}
+
+function getWeatherGradient(condition: string) {
+  const c = condition.toLowerCase();
+  if (c.includes("thunder")) return "from-gray-700 to-gray-900";
+  if (c.includes("snow")) return "from-blue-100 to-blue-200";
+  if (c.includes("rain") || c.includes("drizzle")) return "from-slate-500 to-slate-700";
+  if (c.includes("fog")) return "from-gray-300 to-gray-400";
+  if (c.includes("cloudy") || c.includes("overcast")) return "from-gray-400 to-slate-500";
+  if (c.includes("partly")) return "from-sky-400 to-blue-500";
+  return "from-amber-400 to-sky-500";
+}
+
+function formatTime(iso: string) {
+  try {
+    return new Date(iso).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  } catch {
+    return "";
   }
 }
 
 export default function WeatherSection({ cityName }: WeatherSectionProps) {
-  const { data: weatherData, isLoading, isError } = useQuery({
-    queryKey: ["weather", cityName],
+  const { data, isLoading, isError, dataUpdatedAt, isFetching, refetch } = useQuery<WeatherData>({
+    queryKey: ["/api/weather", cityName],
     queryFn: async () => {
-      // Simulate API call with mock data
-      const normalizedCity = cityName.toLowerCase().trim();
-      const weather = mockWeatherData[normalizedCity];
-      
-      if (!weather) {
-        throw new Error("Weather data not available for this city");
-      }
-      
-      return weather;
+      const res = await fetch(`/api/weather/${encodeURIComponent(cityName)}`);
+      if (!res.ok) throw new Error("Weather unavailable");
+      return res.json();
     },
     enabled: !!cityName,
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 5 * 60 * 1000,
     retry: 1,
   });
 
   if (isLoading) {
     return (
-      <Card className="mb-6">
+      <Card className="mb-6 overflow-hidden">
+        <div className="h-2 bg-gradient-to-r from-sky-400 to-blue-500 animate-pulse" />
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Thermometer className="h-5 w-5" />
-            Weather in {cityName}
+            Loading weather for {cityName}…
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="animate-pulse">
-            <div className="h-20 bg-gray-200 rounded mb-4"></div>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              <div className="h-16 bg-gray-200 rounded"></div>
-              <div className="h-16 bg-gray-200 rounded"></div>
-              <div className="h-16 bg-gray-200 rounded"></div>
-              <div className="h-16 bg-gray-200 rounded"></div>
+          <div className="animate-pulse space-y-4">
+            <div className="h-20 bg-muted rounded-xl" />
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {[...Array(4)].map((_, i) => <div key={i} className="h-16 bg-muted rounded-lg" />)}
             </div>
           </div>
         </CardContent>
@@ -457,7 +93,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
     );
   }
 
-  if (isError || !weatherData) {
+  if (isError || !data) {
     return (
       <Card className="mb-6">
         <CardHeader>
@@ -467,81 +103,105 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-center text-muted-foreground">
-            <p>Weather information not available for this city</p>
-            <p className="text-sm">Try searching for a major city</p>
+          <div className="text-center text-muted-foreground py-4">
+            <Cloud className="h-10 w-10 mx-auto mb-2 opacity-40" />
+            <p className="font-medium">Weather data unavailable</p>
+            <p className="text-sm">Could not locate this city in weather data</p>
           </div>
         </CardContent>
       </Card>
     );
   }
 
+  const gradient = getWeatherGradient(data.condition);
+  const lastUpdated = data.fetchedAt ? formatTime(data.fetchedAt) : (dataUpdatedAt ? formatTime(new Date(dataUpdatedAt).toISOString()) : "");
+
   return (
-    <Card className="mb-6">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Thermometer className="h-5 w-5" />
-          Weather in {cityName}
-        </CardTitle>
+    <Card className="mb-6 overflow-hidden">
+      {/* Live colour bar */}
+      <div className={`h-1.5 bg-gradient-to-r ${gradient}`} />
+
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <CardTitle className="flex items-center gap-2 text-lg">
+            <Thermometer className="h-5 w-5" />
+            Live Weather — {data.locationName}, {data.country}
+          </CardTitle>
+          <div className="flex items-center gap-2">
+            <span className="flex items-center gap-1 text-xs text-muted-foreground">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+              </span>
+              {isFetching ? "Refreshing…" : `Updated ${lastUpdated}`}
+            </span>
+            <button
+              onClick={() => refetch()}
+              className="p-1 rounded hover:bg-muted transition-colors"
+              title="Refresh weather"
+            >
+              <RefreshCw className={`h-3.5 w-3.5 text-muted-foreground ${isFetching ? "animate-spin" : ""}`} />
+            </button>
+          </div>
+        </div>
       </CardHeader>
+
       <CardContent>
-        {/* Main weather display */}
-        <div className="flex items-center justify-between mb-6">
+        {/* Hero weather display */}
+        <div className={`rounded-xl bg-gradient-to-r ${gradient} p-5 mb-4 text-white flex items-center justify-between`}>
           <div className="flex items-center gap-4">
-            {getWeatherIcon(weatherData.condition)}
+            {getWeatherIcon(data.condition)}
             <div>
-              <div className="text-3xl font-bold">
-                {weatherData.temperature}°C
-              </div>
-              <div className="text-sm text-muted-foreground">
-                Feels like {weatherData.feelsLike}°C
-              </div>
+              <div className="text-5xl font-bold leading-none">{data.temperature}°C</div>
+              <div className="text-sm opacity-80 mt-1">Feels like {data.feelsLike}°C</div>
             </div>
           </div>
           <div className="text-right">
-            <Badge variant="secondary" className="mb-2">
-              {weatherData.condition}
+            <Badge className="bg-white/20 text-white border-white/30 hover:bg-white/30 mb-2 text-sm">
+              {data.condition}
             </Badge>
-            <div className="text-sm text-muted-foreground">
-              {weatherData.description}
+            <div className="text-sm opacity-80 max-w-[160px] text-right">{data.description}</div>
+          </div>
+        </div>
+
+        {/* Detail grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <Droplets className="h-4 w-4 text-blue-500 shrink-0" />
+            <div>
+              <div className="text-sm font-semibold">{data.humidity}%</div>
+              <div className="text-xs text-muted-foreground">Humidity</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <Wind className="h-4 w-4 text-gray-500 shrink-0" />
+            <div>
+              <div className="text-sm font-semibold">{data.windSpeed} km/h</div>
+              <div className="text-xs text-muted-foreground">Wind</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <Eye className="h-4 w-4 text-green-500 shrink-0" />
+            <div>
+              <div className="text-sm font-semibold">{data.visibility} km</div>
+              <div className="text-xs text-muted-foreground">Visibility</div>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
+            <CloudRain className="h-4 w-4 text-sky-500 shrink-0" />
+            <div>
+              <div className="text-sm font-semibold">{data.precipitation} mm</div>
+              <div className="text-xs text-muted-foreground">Precipitation</div>
             </div>
           </div>
         </div>
 
-        {/* Weather details grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-            <Droplets className="h-4 w-4 text-blue-500" />
-            <div>
-              <div className="text-sm font-medium">{weatherData.humidity}%</div>
-              <div className="text-xs text-muted-foreground">Humidity</div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-            <Wind className="h-4 w-4 text-gray-500" />
-            <div>
-              <div className="text-sm font-medium">{weatherData.windSpeed} km/h</div>
-              <div className="text-xs text-muted-foreground">Wind Speed</div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-            <Eye className="h-4 w-4 text-green-500" />
-            <div>
-              <div className="text-sm font-medium">{weatherData.visibility} km</div>
-              <div className="text-xs text-muted-foreground">Visibility</div>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
-            <Thermometer className="h-4 w-4 text-red-500" />
-            <div>
-              <div className="text-sm font-medium">{weatherData.feelsLike}°C</div>
-              <div className="text-xs text-muted-foreground">Feels Like</div>
-            </div>
-          </div>
-        </div>
+        <p className="text-xs text-muted-foreground mt-3 text-center">
+          Source: Open-Meteo · Refreshes every 5 minutes · Click ↻ to refresh now
+        </p>
       </CardContent>
     </Card>
   );
