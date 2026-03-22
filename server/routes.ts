@@ -396,40 +396,58 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const { latitude, longitude, name, country } = results[0];
 
-      // Step 2: Fetch current weather from Open-Meteo
+      // Step 2: Fetch current weather + 7-day daily forecast from Open-Meteo
       const weatherRes = await axios.get("https://api.open-meteo.com/v1/forecast", {
         params: {
           latitude,
           longitude,
           current: "temperature_2m,relative_humidity_2m,apparent_temperature,wind_speed_10m,visibility,weather_code,precipitation,cloud_cover",
+          daily: "temperature_2m_max,temperature_2m_min,weather_code,precipitation_sum,wind_speed_10m_max,relative_humidity_2m_mean",
           wind_speed_unit: "kmh",
           timezone: "auto",
+          forecast_days: 7,
         },
         timeout: 8000,
       });
 
       const current = weatherRes.data?.current;
+      const daily = weatherRes.data?.daily;
       if (!current) return res.status(500).json({ message: "Weather data unavailable" });
 
-      // Map WMO weather code to condition label
-      const code = current.weather_code ?? 0;
-      let condition = "Clear";
-      let description = "Clear skies";
-      if (code === 0) { condition = "Sunny"; description = "Clear and sunny"; }
-      else if (code <= 2) { condition = "Partly Cloudy"; description = "Partly cloudy skies"; }
-      else if (code === 3) { condition = "Cloudy"; description = "Overcast skies"; }
-      else if (code <= 48) { condition = "Foggy"; description = "Fog or mist"; }
-      else if (code <= 57) { condition = "Light Drizzle"; description = "Light drizzle"; }
-      else if (code <= 67) { condition = "Rain"; description = "Moderate to heavy rain"; }
-      else if (code <= 77) { condition = "Snow"; description = "Snow falling"; }
-      else if (code <= 82) { condition = "Heavy Rain"; description = "Heavy rain showers"; }
-      else if (code <= 86) { condition = "Heavy Snow"; description = "Heavy snow showers"; }
-      else { condition = "Thunderstorm"; description = "Thunderstorm activity"; }
+      function wmoToCondition(code: number): { condition: string; description: string } {
+        if (code === 0) return { condition: "Sunny", description: "Clear and sunny" };
+        if (code <= 2) return { condition: "Partly Cloudy", description: "Partly cloudy skies" };
+        if (code === 3) return { condition: "Cloudy", description: "Overcast skies" };
+        if (code <= 48) return { condition: "Foggy", description: "Fog or mist" };
+        if (code <= 57) return { condition: "Light Drizzle", description: "Light drizzle" };
+        if (code <= 67) return { condition: "Rain", description: "Moderate to heavy rain" };
+        if (code <= 77) return { condition: "Snow", description: "Snow falling" };
+        if (code <= 82) return { condition: "Heavy Rain", description: "Heavy rain showers" };
+        if (code <= 86) return { condition: "Heavy Snow", description: "Heavy snow showers" };
+        return { condition: "Thunderstorm", description: "Thunderstorm activity" };
+      }
+
+      const todayWeather = wmoToCondition(current.weather_code ?? 0);
+
+      // Build daily forecast array
+      const forecast = daily ? daily.time.map((date: string, i: number) => {
+        const { condition, description } = wmoToCondition(daily.weather_code[i] ?? 0);
+        return {
+          date,
+          condition,
+          description,
+          tempMax: Math.round(daily.temperature_2m_max[i]),
+          tempMin: Math.round(daily.temperature_2m_min[i]),
+          precipitation: Math.round((daily.precipitation_sum[i] ?? 0) * 10) / 10,
+          windSpeed: Math.round(daily.wind_speed_10m_max[i] ?? 0),
+          humidity: Math.round(daily.relative_humidity_2m_mean?.[i] ?? 0),
+        };
+      }) : [];
 
       const data = {
         temperature: Math.round(current.temperature_2m),
-        condition,
-        description,
+        condition: todayWeather.condition,
+        description: todayWeather.description,
         humidity: current.relative_humidity_2m,
         windSpeed: Math.round(current.wind_speed_10m),
         visibility: Math.round((current.visibility ?? 10000) / 1000),
@@ -439,6 +457,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         locationName: name,
         country,
         fetchedAt: new Date().toISOString(),
+        forecast,
       };
 
       weatherCache.set(cacheKey, { data, timestamp: Date.now() });
