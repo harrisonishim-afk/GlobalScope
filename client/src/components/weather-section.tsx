@@ -6,6 +6,7 @@ import {
   Cloud, Sun, CloudRain, CloudSnow, Wind, Thermometer,
   Droplets, Eye, CloudLightning, CloudDrizzle, RefreshCw, CalendarDays
 } from "lucide-react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface ForecastDay {
   date: string;
@@ -70,17 +71,10 @@ function formatTime(iso: string) {
   }
 }
 
-function getDayLabel(dateStr: string, index: number): string {
-  if (index === 0) return "Today";
-  if (index === 1) return "Tomorrow";
-  const date = new Date(dateStr + "T12:00:00");
-  return date.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
-}
-
 export default function WeatherSection({ cityName }: WeatherSectionProps) {
+  const { t } = useLanguage();
   const [selectedDay, setSelectedDay] = useState(0);
 
-  // Reset to today whenever the city changes
   useEffect(() => { setSelectedDay(0); }, [cityName]);
 
   const { data, isLoading, isError, dataUpdatedAt, isFetching, refetch } = useQuery<WeatherData>({
@@ -96,8 +90,12 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
     retry: 1,
   });
 
-  // Reset to today whenever city changes
-  const handleCityChange = () => setSelectedDay(0);
+  function getDayLabel(dateStr: string, index: number): string {
+    if (index === 0) return t("today");
+    if (index === 1) return t("tomorrow");
+    const date = new Date(dateStr + "T12:00:00");
+    return date.toLocaleDateString([], { weekday: "short", month: "short", day: "numeric" });
+  }
 
   if (isLoading) {
     return (
@@ -106,7 +104,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Thermometer className="h-5 w-5" />
-            Loading weather for {cityName}…
+            {t("weatherLive")} — {cityName}…
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -128,7 +126,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Thermometer className="h-5 w-5" />
-            Weather in {cityName}
+            {t("weatherLive")} — {cityName}
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -145,7 +143,6 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
   const forecast = data.forecast ?? [];
   const isToday = selectedDay === 0;
   const dayData = forecast[selectedDay];
-
   const displayCondition = isToday ? data.condition : (dayData?.condition ?? data.condition);
   const gradient = getWeatherGradient(displayCondition);
   const lastUpdated = data.fetchedAt
@@ -154,14 +151,13 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
 
   return (
     <Card className="mb-6 overflow-hidden">
-      {/* Live colour bar */}
       <div className={`h-1.5 bg-gradient-to-r ${gradient}`} />
 
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <CardTitle className="flex items-center gap-2 text-lg">
             <Thermometer className="h-5 w-5" />
-            {isToday ? "Live Weather" : "Forecast"} — {data.locationName}, {data.country}
+            {isToday ? t("weatherLive") : t("weatherForecast")} — {data.locationName}, {data.country}
           </CardTitle>
           <div className="flex items-center gap-2">
             {isToday && (
@@ -170,13 +166,13 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
                 </span>
-                {isFetching ? "Refreshing…" : `Updated ${lastUpdated}`}
+                {isFetching ? "…" : `Updated ${lastUpdated}`}
               </span>
             )}
             <button
               onClick={() => { setSelectedDay(0); refetch(); }}
               className="p-1 rounded hover:bg-muted transition-colors"
-              title="Refresh weather"
+              title="Refresh"
             >
               <RefreshCw className={`h-3.5 w-3.5 text-muted-foreground ${isFetching ? "animate-spin" : ""}`} />
             </button>
@@ -185,7 +181,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
       </CardHeader>
 
       <CardContent>
-        {/* ── Day picker ───────────────────────────────────────────── */}
+        {/* Day picker */}
         {forecast.length > 0 && (
           <div className="flex gap-1.5 mb-4 overflow-x-auto pb-1">
             <div className="flex items-center gap-1 mr-1 shrink-0">
@@ -210,7 +206,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
           </div>
         )}
 
-        {/* ── Today: live real-time view ───────────────────────────── */}
+        {/* Today: live view */}
         {isToday && (
           <>
             <div className={`rounded-xl bg-gradient-to-r ${gradient} p-5 mb-4 text-white flex items-center justify-between`}>
@@ -218,7 +214,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
                 {getWeatherIcon(data.condition)}
                 <div>
                   <div className="text-5xl font-bold leading-none">{data.temperature}°C</div>
-                  <div className="text-sm opacity-80 mt-1">Feels like {data.feelsLike}°C</div>
+                  <div className="text-sm opacity-80 mt-1">{t("feelsLike")} {data.feelsLike}°C</div>
                 </div>
               </div>
               <div className="text-right">
@@ -234,39 +230,37 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
                 <Droplets className="h-4 w-4 text-blue-500 shrink-0" />
                 <div>
                   <div className="text-sm font-semibold">{data.humidity}%</div>
-                  <div className="text-xs text-muted-foreground">Humidity</div>
+                  <div className="text-xs text-muted-foreground">{t("humidity")}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
                 <Wind className="h-4 w-4 text-gray-500 shrink-0" />
                 <div>
                   <div className="text-sm font-semibold">{data.windSpeed} km/h</div>
-                  <div className="text-xs text-muted-foreground">Wind</div>
+                  <div className="text-xs text-muted-foreground">{t("wind")}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
                 <Eye className="h-4 w-4 text-green-500 shrink-0" />
                 <div>
                   <div className="text-sm font-semibold">{data.visibility} km</div>
-                  <div className="text-xs text-muted-foreground">Visibility</div>
+                  <div className="text-xs text-muted-foreground">{t("visibility")}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
                 <CloudRain className="h-4 w-4 text-sky-500 shrink-0" />
                 <div>
                   <div className="text-sm font-semibold">{data.precipitation} mm</div>
-                  <div className="text-xs text-muted-foreground">Precipitation</div>
+                  <div className="text-xs text-muted-foreground">{t("precipitation")}</div>
                 </div>
               </div>
             </div>
 
-            <p className="text-xs text-muted-foreground mt-3 text-center">
-              Source: Open-Meteo · Refreshes every 5 minutes · Click ↻ to refresh now
-            </p>
+            <p className="text-xs text-muted-foreground mt-3 text-center">{t("weatherSource")}</p>
           </>
         )}
 
-        {/* ── Future day: forecast view ────────────────────────────── */}
+        {/* Future day: forecast view */}
         {!isToday && dayData && (
           <>
             <div className={`rounded-xl bg-gradient-to-r ${gradient} p-5 mb-4 text-white flex items-center justify-between`}>
@@ -277,7 +271,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
                     <div className="text-5xl font-bold leading-none">{dayData.tempMax}°C</div>
                     <div className="text-2xl opacity-70 pb-1">/ {dayData.tempMin}°C</div>
                   </div>
-                  <div className="text-sm opacity-80 mt-1">High / Low</div>
+                  <div className="text-sm opacity-80 mt-1">{t("highLow")}</div>
                 </div>
               </div>
               <div className="text-right">
@@ -293,28 +287,26 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
                 <Droplets className="h-4 w-4 text-blue-500 shrink-0" />
                 <div>
                   <div className="text-sm font-semibold">{dayData.humidity}%</div>
-                  <div className="text-xs text-muted-foreground">Avg. Humidity</div>
+                  <div className="text-xs text-muted-foreground">{t("avgHumidity")}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
                 <Wind className="h-4 w-4 text-gray-500 shrink-0" />
                 <div>
                   <div className="text-sm font-semibold">{dayData.windSpeed} km/h</div>
-                  <div className="text-xs text-muted-foreground">Max Wind</div>
+                  <div className="text-xs text-muted-foreground">{t("maxWind")}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2 p-3 bg-muted rounded-lg">
                 <CloudRain className="h-4 w-4 text-sky-500 shrink-0" />
                 <div>
                   <div className="text-sm font-semibold">{dayData.precipitation} mm</div>
-                  <div className="text-xs text-muted-foreground">Precipitation</div>
+                  <div className="text-xs text-muted-foreground">{t("precipitation")}</div>
                 </div>
               </div>
             </div>
 
-            <p className="text-xs text-muted-foreground mt-3 text-center">
-              Forecast from Open-Meteo · Select a different day above · Click ↻ to return to today
-            </p>
+            <p className="text-xs text-muted-foreground mt-3 text-center">{t("forecastSource")}</p>
           </>
         )}
       </CardContent>

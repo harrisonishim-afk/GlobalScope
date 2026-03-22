@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MapPin, X } from "lucide-react";
 import { useState, FormEvent } from "react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface SearchFormProps {
   searchQuery: string;
@@ -9,22 +10,16 @@ interface SearchFormProps {
   handleSearch: (city: string) => void;
 }
 
-export default function SearchForm({ 
-  searchQuery, 
-  setSearchQuery, 
-  handleSearch 
-}: SearchFormProps) {
-  const popularCities = ["New York", "London", "Tokyo", "Paris", "Sydney"];
-  
+const popularCities = ["New York", "London", "Tokyo", "Paris", "Sydney"];
+
+export default function SearchForm({ searchQuery, setSearchQuery, handleSearch }: SearchFormProps) {
+  const { t } = useLanguage();
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     handleSearch(searchQuery);
   };
-  
-  const handleClearSearch = () => {
-    setSearchQuery("");
-  };
-  
+
   const handleQuickSearch = (city: string) => {
     setSearchQuery(city);
     handleSearch(city);
@@ -41,7 +36,7 @@ export default function SearchForm({
             type="text"
             id="location-search"
             className="block w-full pl-10 pr-20 py-3 border border-gray-300 rounded-md"
-            placeholder="Enter a city (e.g., New York, Tokyo)"
+            placeholder={t("searchPlaceholder")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
@@ -50,22 +45,19 @@ export default function SearchForm({
               <button
                 type="button"
                 className="p-2 text-gray-400 hover:text-gray-500 focus:outline-none"
-                onClick={handleClearSearch}
+                onClick={() => setSearchQuery("")}
               >
                 <X className="h-5 w-5" />
               </button>
             )}
-            <Button 
-              type="submit" 
-              className="rounded-l-none h-full"
-            >
-              Search
+            <Button type="submit" className="rounded-l-none h-full">
+              {t("searchButton")}
             </Button>
           </div>
         </div>
       </form>
       <div className="mt-2 flex justify-between text-sm">
-        <span className="text-gray-500">Try popular: </span>
+        <span className="text-gray-500">{t("popularLabel")}</span>
         <div className="space-x-2">
           {popularCities.map((city) => (
             <button
