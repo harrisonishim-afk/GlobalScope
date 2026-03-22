@@ -45,7 +45,7 @@ export default function EmergencyAlerts({ cityName }: EmergencyAlertsProps) {
   };
 
   return (
-    <Card className="mb-6 border-2 border-red-200 bg-gradient-to-r from-red-50 to-orange-50">
+    <Card className="border-2 border-red-200 bg-gradient-to-r from-red-50 to-orange-50">
       <CardHeader className="pb-3">
         <CardTitle className="flex items-center gap-2 text-red-700">
           <AlertTriangle className="h-5 w-5" />

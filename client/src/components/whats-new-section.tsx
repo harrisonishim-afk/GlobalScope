@@ -35,7 +35,7 @@ export default function WhatsNewSection({ cityName }: WhatsNewSectionProps) {
   };
 
   return (
-    <Card className="mb-8">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Calendar className="h-5 w-5" />

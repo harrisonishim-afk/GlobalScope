@@ -122,7 +122,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
 
   if (isError || !data) {
     return (
-      <Card className="mb-6">
+      <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Thermometer className="h-5 w-5" />
@@ -150,7 +150,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
     : dataUpdatedAt ? formatTime(new Date(dataUpdatedAt).toISOString()) : "";
 
   return (
-    <Card className="mb-6 overflow-hidden">
+    <Card className="overflow-hidden">
       <div className={`h-1.5 bg-gradient-to-r ${gradient}`} />
 
       <CardHeader className="pb-2">

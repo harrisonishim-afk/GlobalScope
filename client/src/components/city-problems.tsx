@@ -43,7 +43,7 @@ export default function CityProblems({ cityName }: CityProblemsProps) {
   if (!problems || problems.length === 0) return null;
 
   return (
-    <Card className="mb-8 border-amber-200">
+    <Card className="border-amber-200 h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-amber-800">
           <AlertTriangle className="h-5 w-5" />

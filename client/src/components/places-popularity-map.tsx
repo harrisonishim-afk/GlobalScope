@@ -46,7 +46,7 @@ export default function PlacesPopularityMap({ cityName }: PlacesPopularityMapPro
   if (!places || places.length === 0) return null;
 
   return (
-    <Card className="mb-8">
+    <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MapPin className="h-5 w-5" />

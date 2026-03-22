@@ -3,12 +3,14 @@ import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { Users, Star, Crown, Calendar, MapPin } from "lucide-react";
 import { getCityFacts, hasCityFacts } from "@/lib/cityFacts";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CityFactsProps {
   cityName: string;
 }
 
 export default function CityFacts({ cityName }: CityFactsProps) {
+  const { t } = useLanguage();
   const {
     data: cityFacts,
     isLoading,
@@ -26,11 +28,11 @@ export default function CityFacts({ cityName }: CityFactsProps) {
   }
 
   return (
-    <Card className="mb-6">
+    <Card className="h-full">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <MapPin className="h-5 w-5" />
-          Quick Facts about {cityName}
+          {t("cityFactsTitle")} — {cityName}
           {cityFacts.nickname && (
             <Badge variant="outline" className="ml-2">
               {cityFacts.nickname}
@@ -48,7 +50,7 @@ export default function CityFacts({ cityName }: CityFactsProps) {
             </div>
             <div>
               <div className="font-semibold text-lg">{cityFacts.population.city}</div>
-              <div className="text-sm text-muted-foreground">Population</div>
+              <div className="text-sm text-muted-foreground">{t("population")}</div>
             </div>
           </div>
 
@@ -59,7 +61,7 @@ export default function CityFacts({ cityName }: CityFactsProps) {
             </div>
             <div>
               <div className="font-semibold text-lg">{cityFacts.government.mayor}</div>
-              <div className="text-sm text-muted-foreground">Current Mayor</div>
+              <div className="text-sm text-muted-foreground">{t("currentMayor")}</div>
             </div>
           </div>
 
@@ -73,7 +75,7 @@ export default function CityFacts({ cityName }: CityFactsProps) {
                 <div className="font-semibold text-lg">
                   {cityFacts.settled_founded > 0 ? cityFacts.settled_founded : `${Math.abs(cityFacts.settled_founded)} BC`}
                 </div>
-                <div className="text-sm text-muted-foreground">Founded</div>
+                <div className="text-sm text-muted-foreground">{t("founded")}</div>
               </div>
             </div>
           )}
@@ -83,7 +85,7 @@ export default function CityFacts({ cityName }: CityFactsProps) {
         <div className="mt-6">
           <div className="flex items-center gap-2 mb-3">
             <Star className="h-5 w-5 text-yellow-500" />
-            <h4 className="font-semibold">Famous People Born Here</h4>
+            <h4 className="font-semibold">{t("famousPeople")}</h4>
           </div>
           <div className="flex flex-wrap gap-2">
             {cityFacts.famousPeople.map((person, index) => (
