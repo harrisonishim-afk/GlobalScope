@@ -1,5 +1,5 @@
 export type LangCode =
-  | "en" | "es" | "fr" | "de" | "pt"
+  | "en" | "en-us" | "es" | "fr" | "de" | "pt"
   | "ar" | "ja" | "zh" | "hi" | "ru"
   | "ko" | "it" | "tr";
 
@@ -11,7 +11,8 @@ export interface Language {
 }
 
 export const LANGUAGES: Language[] = [
-  { code: "en", name: "English",    flag: "🇬🇧" },
+  { code: "en",    name: "English",        flag: "🇬🇧" },
+  { code: "en-us", name: "English (US)",   flag: "🇺🇸" },
   { code: "es", name: "Español",    flag: "🇪🇸" },
   { code: "fr", name: "Français",   flag: "🇫🇷" },
   { code: "de", name: "Deutsch",    flag: "🇩🇪" },

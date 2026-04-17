@@ -71,8 +71,12 @@ function formatTime(iso: string) {
   }
 }
 
+function toF(c: number) { return Math.round(c * 9 / 5 + 32); }
+
 export default function WeatherSection({ cityName }: WeatherSectionProps) {
-  const { t } = useLanguage();
+  const { t, lang } = useLanguage();
+  const useFahrenheit = lang === "en-us";
+  const fmt = (c: number) => useFahrenheit ? `${toF(c)}°F` : `${c}°C`;
   const [selectedDay, setSelectedDay] = useState(0);
 
   useEffect(() => { setSelectedDay(0); }, [cityName]);
@@ -199,7 +203,7 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
               >
                 {getDayLabel(day.date, i)}
                 <div className="text-xs opacity-75 font-normal">
-                  {day.tempMax}° / {day.tempMin}°
+                  {useFahrenheit ? `${toF(day.tempMax)}° / ${toF(day.tempMin)}°` : `${day.tempMax}° / ${day.tempMin}°`}
                 </div>
               </button>
             ))}
@@ -213,8 +217,8 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
               <div className="flex items-center gap-4">
                 {getWeatherIcon(data.condition)}
                 <div>
-                  <div className="text-5xl font-bold leading-none">{data.temperature}°C</div>
-                  <div className="text-sm opacity-80 mt-1">{t("feelsLike")} {data.feelsLike}°C</div>
+                  <div className="text-5xl font-bold leading-none">{fmt(data.temperature)}</div>
+                  <div className="text-sm opacity-80 mt-1">{t("feelsLike")} {fmt(data.feelsLike)}</div>
                 </div>
               </div>
               <div className="text-right">
@@ -268,8 +272,8 @@ export default function WeatherSection({ cityName }: WeatherSectionProps) {
                 {getWeatherIcon(dayData.condition)}
                 <div>
                   <div className="flex items-end gap-2">
-                    <div className="text-5xl font-bold leading-none">{dayData.tempMax}°C</div>
-                    <div className="text-2xl opacity-70 pb-1">/ {dayData.tempMin}°C</div>
+                    <div className="text-5xl font-bold leading-none">{fmt(dayData.tempMax)}</div>
+                    <div className="text-2xl opacity-70 pb-1">/ {fmt(dayData.tempMin)}</div>
                   </div>
                   <div className="text-sm opacity-80 mt-1">{t("highLow")}</div>
                 </div>
