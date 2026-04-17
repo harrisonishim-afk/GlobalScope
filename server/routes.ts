@@ -345,7 +345,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
       const cacheKey = cityParam.toLowerCase();
       const cached = addonsCache.get(cacheKey);
-      if (cached && Date.now() - cached.timestamp < 24 * 60 * 60 * 1000) {
+      if (cached && Date.now() - cached.timestamp < 60 * 1000) {
         return res.json(cached.data);
       }
 

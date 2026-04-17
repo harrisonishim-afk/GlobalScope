@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Star, Building2, Trees, ShoppingBag, Calendar } from "lucide-react";
 import { getWhatsNewItems } from "@/lib/cityFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useCityAddons } from "@/hooks/useCityAddons";
 
 interface WhatsNewSectionProps {
   cityName: string;
@@ -10,9 +11,10 @@ interface WhatsNewSectionProps {
 
 export default function WhatsNewSection({ cityName }: WhatsNewSectionProps) {
   const { t } = useLanguage();
-  const whatsNewItems = getWhatsNewItems(cityName);
+  const { data: addons, isLoading } = useCityAddons(cityName);
 
-  if (!whatsNewItems || whatsNewItems.length === 0) return null;
+  const staticItems = getWhatsNewItems(cityName);
+  const whatsNewItems = staticItems.length > 0 ? staticItems : (addons?.whatsNew ?? []);
 
   const getCategoryIcon = (category: string) => {
     switch (category) {
@@ -33,6 +35,34 @@ export default function WhatsNewSection({ cityName }: WhatsNewSectionProps) {
       default:              return "bg-gray-100 text-gray-800";
     }
   };
+
+  if (isLoading && whatsNewItems.length === 0) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calendar className="h-5 w-5" />
+            {t("whatsNewIn")} {cityName}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4 animate-pulse">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="flex gap-4 pb-4 border-b last:border-b-0">
+                <div className="h-5 w-5 bg-muted rounded-full shrink-0" />
+                <div className="flex-grow space-y-2">
+                  <div className="h-4 bg-muted rounded w-3/4" />
+                  <div className="h-3 bg-muted rounded w-full" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (!whatsNewItems || whatsNewItems.length === 0) return null;
 
   return (
     <Card className="h-full">

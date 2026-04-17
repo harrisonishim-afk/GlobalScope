@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { AlertTriangle, Users, AlertCircle, Zap } from "lucide-react";
 import { getCityProblems } from "@/lib/cityFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useCityAddons } from "@/hooks/useCityAddons";
 
 interface CityProblemsProps {
   cityName: string;
@@ -38,7 +39,30 @@ function getSeverityColor(severity: string) {
 
 export default function CityProblems({ cityName }: CityProblemsProps) {
   const { t } = useLanguage();
-  const problems = getCityProblems(cityName);
+  const { data: addons, isLoading } = useCityAddons(cityName);
+
+  const staticProblems = getCityProblems(cityName);
+  const problems = staticProblems.length > 0 ? staticProblems : (addons?.problems ?? []);
+
+  if (isLoading && problems.length === 0) {
+    return (
+      <Card className="border-amber-200 h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2 text-amber-800">
+            <AlertTriangle className="h-5 w-5" />
+            {t("problemsIn")} {cityName}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4 animate-pulse">
+            {[...Array(3)].map((_, i) => (
+              <div key={i} className="h-20 bg-muted rounded-lg" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (!problems || problems.length === 0) return null;
 

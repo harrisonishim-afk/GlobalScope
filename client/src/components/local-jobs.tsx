@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Briefcase, MapPin, Clock, DollarSign, ExternalLink } from "lucide-react";
 import { getLocalJobs } from "@/lib/cityFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useCityAddons } from "@/hooks/useCityAddons";
 
 interface LocalJobsProps {
   cityName: string;
@@ -33,7 +34,30 @@ function getJobTypeColor(type: string) {
 
 export default function LocalJobs({ cityName }: LocalJobsProps) {
   const { t } = useLanguage();
-  const jobs = getLocalJobs(cityName);
+  const { data: addons, isLoading } = useCityAddons(cityName);
+
+  const staticJobs = getLocalJobs(cityName);
+  const jobs = staticJobs.length > 0 ? staticJobs : (addons?.localJobs ?? []);
+
+  if (isLoading && jobs.length === 0) {
+    return (
+      <Card className="h-full">
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Briefcase className="h-5 w-5" />
+            {t("jobsIn")} {cityName}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 animate-pulse">
+            {[...Array(4)].map((_, i) => (
+              <div key={i} className="h-32 bg-muted rounded-xl" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (!jobs || jobs.length === 0) return null;
 

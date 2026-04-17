@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { MapPin, Zap } from "lucide-react";
 import { getPopularPlaces } from "@/lib/cityFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useCityAddons } from "@/hooks/useCityAddons";
 
 interface PlacesPopularityMapProps {
   cityName: string;
@@ -41,7 +42,30 @@ function getBorderClass(popularity: string) {
 
 export default function PlacesPopularityMap({ cityName }: PlacesPopularityMapProps) {
   const { t } = useLanguage();
-  const places = getPopularPlaces(cityName);
+  const { data: addons, isLoading } = useCityAddons(cityName);
+
+  const staticPlaces = getPopularPlaces(cityName);
+  const places = staticPlaces.length > 0 ? staticPlaces : (addons?.popularPlaces ?? []);
+
+  if (isLoading && places.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <MapPin className="h-5 w-5" />
+            {t("popularPlacesIn")} {cityName}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-pulse">
+            {[...Array(6)].map((_, i) => (
+              <div key={i} className="h-24 bg-muted rounded-lg" />
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   if (!places || places.length === 0) return null;
 
@@ -56,7 +80,6 @@ export default function PlacesPopularityMap({ cityName }: PlacesPopularityMapPro
       </CardHeader>
       <CardContent>
         <div className="space-y-6">
-          {/* Legend */}
           <div className="bg-gray-50 p-4 rounded-lg">
             <h4 className="font-semibold text-sm mb-3">{t("popularityLegend")}</h4>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -69,7 +92,6 @@ export default function PlacesPopularityMap({ cityName }: PlacesPopularityMapPro
             </div>
           </div>
 
-          {/* Places Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {places.map((place, index) => (
               <div key={index} className={`border-l-4 p-4 rounded-lg transition-all hover:shadow-md ${getBorderClass(place.popularity)}`}>

@@ -3,6 +3,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle, Flame, CloudLightning, AlertCircle } from "lucide-react";
 import { getEmergencyAlerts } from "@/lib/cityFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useCityAddons } from "@/hooks/useCityAddons";
 
 interface EmergencyAlertsProps {
   cityName: string;
@@ -10,7 +11,10 @@ interface EmergencyAlertsProps {
 
 export default function EmergencyAlerts({ cityName }: EmergencyAlertsProps) {
   const { t } = useLanguage();
-  const alerts = getEmergencyAlerts(cityName);
+  const { data: addons } = useCityAddons(cityName);
+
+  const staticAlerts = getEmergencyAlerts(cityName);
+  const alerts = staticAlerts.length > 0 ? staticAlerts : (addons?.emergencyAlerts ?? []);
 
   if (!alerts || alerts.length === 0) return null;
 
