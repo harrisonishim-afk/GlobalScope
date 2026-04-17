@@ -42,7 +42,8 @@ export default function CityProblems({ cityName }: CityProblemsProps) {
   const { data: addons, isLoading } = useCityAddons(cityName);
 
   const staticProblems = getCityProblems(cityName);
-  const problems = staticProblems.length > 0 ? staticProblems : (addons?.problems ?? []);
+  // API data takes priority (live); static is only shown while API is still loading
+  const problems = addons?.problems ?? staticProblems;
 
   if (isLoading && problems.length === 0) {
     return (

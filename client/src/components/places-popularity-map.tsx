@@ -45,7 +45,8 @@ export default function PlacesPopularityMap({ cityName }: PlacesPopularityMapPro
   const { data: addons, isLoading } = useCityAddons(cityName);
 
   const staticPlaces = getPopularPlaces(cityName);
-  const places = staticPlaces.length > 0 ? staticPlaces : (addons?.popularPlaces ?? []);
+  // API data takes priority (live); static is only shown while API is still loading
+  const places = addons?.popularPlaces ?? staticPlaces;
 
   if (isLoading && places.length === 0) {
     return (

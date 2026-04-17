@@ -37,7 +37,8 @@ export default function LocalJobs({ cityName }: LocalJobsProps) {
   const { data: addons, isLoading } = useCityAddons(cityName);
 
   const staticJobs = getLocalJobs(cityName);
-  const jobs = staticJobs.length > 0 ? staticJobs : (addons?.localJobs ?? []);
+  // API data takes priority (live); static is only shown while API is still loading
+  const jobs = addons?.localJobs ?? staticJobs;
 
   if (isLoading && jobs.length === 0) {
     return (

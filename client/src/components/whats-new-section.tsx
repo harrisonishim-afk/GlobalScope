@@ -14,7 +14,8 @@ export default function WhatsNewSection({ cityName }: WhatsNewSectionProps) {
   const { data: addons, isLoading } = useCityAddons(cityName);
 
   const staticItems = getWhatsNewItems(cityName);
-  const whatsNewItems = staticItems.length > 0 ? staticItems : (addons?.whatsNew ?? []);
+  // API data takes priority (live); static is only shown while API is still loading
+  const whatsNewItems = addons?.whatsNew ?? staticItems;
 
   const getCategoryIcon = (category: string) => {
     switch (category) {

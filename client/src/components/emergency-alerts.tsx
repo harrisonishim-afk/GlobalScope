@@ -14,7 +14,8 @@ export default function EmergencyAlerts({ cityName }: EmergencyAlertsProps) {
   const { data: addons } = useCityAddons(cityName);
 
   const staticAlerts = getEmergencyAlerts(cityName);
-  const alerts = staticAlerts.length > 0 ? staticAlerts : (addons?.emergencyAlerts ?? []);
+  // API data takes priority (live); static is only shown while API is still loading
+  const alerts = addons?.emergencyAlerts ?? staticAlerts;
 
   if (!alerts || alerts.length === 0) return null;
 
