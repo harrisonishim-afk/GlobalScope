@@ -83,10 +83,15 @@ export default function LocalJobs({ cityName }: LocalJobsProps) {
                 <Badge variant="outline" className={SECTOR_COLORS[job.sector] || "bg-gray-100 text-gray-800"}>
                   {job.sector}
                 </Badge>
-                <button className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors">
+                <a
+                  href={`https://www.indeed.com/jobs?q=${encodeURIComponent(job.title)}&l=${encodeURIComponent(cityName)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-xs font-medium text-blue-600 hover:text-blue-800 hover:underline transition-colors"
+                >
                   {t("applyNow")}
                   <ExternalLink className="h-3 w-3" />
-                </button>
+                </a>
               </div>
             </div>
           ))}
