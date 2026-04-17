@@ -25,10 +25,26 @@ export default function NewsSection({
   handleQuickSearch,
 }: NewsSectionProps) {
   const [visibleCount, setVisibleCount] = useState(6);
-  
+
+  // Deduplicate on the client as a safety net (by URL, then title)
+  const uniqueItems = (() => {
+    if (!newsItems) return undefined;
+    const seenUrls = new Set<string>();
+    const seenTitles = new Set<string>();
+    return newsItems.filter((item) => {
+      const u = item.url?.trim().toLowerCase();
+      const t = item.title?.trim().toLowerCase();
+      if (u && seenUrls.has(u)) return false;
+      if (t && seenTitles.has(t)) return false;
+      if (u) seenUrls.add(u);
+      if (t) seenTitles.add(t);
+      return true;
+    });
+  })();
+
   const loadMore = () => {
-    if (newsItems) {
-      setVisibleCount(Math.min(visibleCount + 6, newsItems.length));
+    if (uniqueItems) {
+      setVisibleCount(Math.min(visibleCount + 6, uniqueItems.length));
     }
   };
 
@@ -94,7 +110,7 @@ export default function NewsSection({
     );
   }
 
-  if (newsItems && newsItems.length === 0) {
+  if (uniqueItems && uniqueItems.length === 0) {
     const popularCities = ["New York", "London", "Tokyo", "Paris", "Chicago"];
     
     return (
@@ -134,7 +150,7 @@ export default function NewsSection({
         <h2 className="text-xl font-semibold text-gray-900">
           Headlines in <span className="text-primary">{currentCity}</span>
           <span className="text-sm text-gray-500 ml-2">
-            ({newsItems?.length} articles)
+            ({uniqueItems?.length} articles)
           </span>
         </h2>
         <div className="text-sm">
@@ -144,12 +160,12 @@ export default function NewsSection({
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {newsItems?.slice(0, visibleCount).map((item, index) => (
-          <NewsCard key={index} item={item} />
+        {uniqueItems?.slice(0, visibleCount).map((item, index) => (
+          <NewsCard key={item.url || index} item={item} />
         ))}
       </div>
 
-      {newsItems && visibleCount < newsItems.length && (
+      {uniqueItems && visibleCount < uniqueItems.length && (
         <div className="mt-8 flex justify-center">
           <Button variant="outline" onClick={loadMore}>
             Load more headlines

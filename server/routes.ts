@@ -562,7 +562,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         };
       });
 
-      // Validate and store news items
+      // Validate news items
       const validNewsItems = newsItems.filter((item: any) => {
         try {
           insertNewsSchema.parse(item);
@@ -572,15 +572,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
 
+      // Deduplicate by URL, then by title
+      const seenUrls = new Set<string>();
+      const seenTitles = new Set<string>();
+      const uniqueNewsItems = validNewsItems.filter((item: any) => {
+        const urlKey = item.url?.trim().toLowerCase();
+        const titleKey = item.title?.trim().toLowerCase();
+        if (urlKey && seenUrls.has(urlKey)) return false;
+        if (titleKey && seenTitles.has(titleKey)) return false;
+        if (urlKey) seenUrls.add(urlKey);
+        if (titleKey) seenTitles.add(titleKey);
+        return true;
+      });
+
       // Save news items to storage
-      for (const item of validNewsItems) {
+      for (const item of uniqueNewsItems) {
         await storage.createNews(item);
       }
 
       // Cache results
-      setCachedNews(city, validNewsItems);
+      setCachedNews(city, uniqueNewsItems);
 
-      res.json(validNewsItems);
+      res.json(uniqueNewsItems);
     } catch (error) {
       console.error("Error fetching news:", error);
       
@@ -698,10 +711,23 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
 
-      // Cache results
-      setCachedNews(cacheKey, validNewsItems);
+      // Deduplicate by URL, then by title
+      const seenUrls2 = new Set<string>();
+      const seenTitles2 = new Set<string>();
+      const uniqueNewsItems = validNewsItems.filter((item: any) => {
+        const urlKey = item.url?.trim().toLowerCase();
+        const titleKey = item.title?.trim().toLowerCase();
+        if (urlKey && seenUrls2.has(urlKey)) return false;
+        if (titleKey && seenTitles2.has(titleKey)) return false;
+        if (urlKey) seenUrls2.add(urlKey);
+        if (titleKey) seenTitles2.add(titleKey);
+        return true;
+      });
 
-      res.json(validNewsItems);
+      // Cache results
+      setCachedNews(cacheKey, uniqueNewsItems);
+
+      res.json(uniqueNewsItems);
     } catch (error) {
       console.error("Error fetching historical news:", error);
       
