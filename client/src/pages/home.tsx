@@ -16,16 +16,25 @@ import CityProblems from "@/components/city-problems";
 import LocalJobs from "@/components/local-jobs";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
-import { MapPin, X } from "lucide-react";
+import { MapPin, X, Newspaper, CloudSun, Briefcase, Globe, Zap } from "lucide-react";
+
+const FEATURES = [
+  { icon: CloudSun,  label: "Live Weather" },
+  { icon: Newspaper, label: "Breaking News" },
+  { icon: Briefcase, label: "Local Jobs" },
+  { icon: MapPin,    label: "Popular Places" },
+  { icon: Globe,     label: "13 Languages" },
+  { icon: Zap,       label: "Real-time Data" },
+];
 
 function SectionDivider({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-3 my-6">
-      <div className="flex-grow h-px bg-gray-200" />
-      <span className="text-xs font-semibold uppercase tracking-widest text-gray-400 whitespace-nowrap">
+    <div className="flex items-center gap-4 my-8">
+      <div className="flex-grow h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+      <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 bg-gray-50 px-4 py-1.5 rounded-full border border-gray-200 whitespace-nowrap">
         {label}
       </span>
-      <div className="flex-grow h-px bg-gray-200" />
+      <div className="flex-grow h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
     </div>
   );
 }
@@ -50,33 +59,85 @@ export default function Home() {
   };
 
   const showNeighborhoodMap = currentCity && newsItems && newsItems.length > 0 && hasNeighborhoodData(currentCity);
-  const showCityFeatures = currentCity && newsItems && newsItems.length > 0;
+  const showCityFeatures   = currentCity && newsItems && newsItems.length > 0;
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <Header />
+
       <main className="flex-grow">
 
-        {/* ── BEFORE SEARCH: hero landing ───────────────────────────────── */}
+        {/* ── HERO (before search) ─────────────────────────────────────── */}
         {!currentCity && (
-          <div className="bg-white border-b border-gray-100 shadow-sm">
-            <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-              <h2 className="text-4xl font-bold text-gray-900 mb-3 tracking-tight">
-                {t("pageTitle")}
+          <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900">
+
+            {/* Decorative blobs */}
+            <div className="pointer-events-none absolute inset-0 overflow-hidden">
+              <div className="absolute -top-40 -right-40 w-[500px] h-[500px] bg-sky-500/10 rounded-full blur-3xl" />
+              <div className="absolute -bottom-40 -left-40 w-[500px] h-[500px] bg-indigo-500/10 rounded-full blur-3xl" />
+              <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-blue-600/5 rounded-full blur-3xl" />
+            </div>
+
+            <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-24 flex flex-col items-center text-center">
+
+              {/* Live badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-sky-500/10 border border-sky-400/20 rounded-full text-sky-300 text-sm font-medium mb-8">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                  <span className="relative inline-flex h-2 w-2 rounded-full bg-green-400" />
+                </span>
+                Live data for every city on Earth
+              </div>
+
+              {/* Headline */}
+              <h2 className="text-5xl sm:text-6xl font-extrabold text-white mb-5 tracking-tight leading-tight">
+                {t("pageTitle").split(",")[0]},
+                <br />
+                <span className="bg-gradient-to-r from-sky-400 via-blue-400 to-indigo-400 bg-clip-text text-transparent">
+                  {t("pageTitle").split(",")[1] ?? "Local Focus"}
+                </span>
               </h2>
-              <p className="text-lg text-gray-500 mb-8">{t("pageSubtitle")}</p>
-              <SearchForm
-                searchQuery={searchQuery}
-                setSearchQuery={setSearchQuery}
-                handleSearch={handleSearch}
-              />
+
+              <p className="text-lg text-slate-300 mb-10 max-w-xl leading-relaxed">
+                {t("pageSubtitle")}
+              </p>
+
+              {/* Search box */}
+              <div className="w-full max-w-xl bg-white/5 border border-white/10 backdrop-blur-sm rounded-2xl p-2 shadow-2xl">
+                <SearchForm
+                  searchQuery={searchQuery}
+                  setSearchQuery={setSearchQuery}
+                  handleSearch={handleSearch}
+                  dark
+                />
+              </div>
+
+              {/* Feature pills */}
+              <div className="flex flex-wrap justify-center gap-2.5 mt-10">
+                {FEATURES.map(({ icon: Icon, label }) => (
+                  <div
+                    key={label}
+                    className="flex items-center gap-1.5 px-3.5 py-1.5 bg-white/8 border border-white/10 rounded-full text-slate-300 text-sm font-medium hover:bg-white/12 transition-colors"
+                  >
+                    <Icon className="h-3.5 w-3.5 text-sky-400" />
+                    {label}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Bottom wave */}
+            <div className="relative h-12 overflow-hidden">
+              <svg viewBox="0 0 1440 48" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute bottom-0 w-full">
+                <path d="M0 48L60 42C120 36 240 24 360 18C480 12 600 12 720 16.5C840 21 960 30 1080 33C1200 36 1320 33 1380 31.5L1440 30V48H0Z" fill="rgb(249 250 251)" />
+              </svg>
             </div>
           </div>
         )}
 
-        {/* ── AFTER SEARCH: compact top bar ─────────────────────────────── */}
+        {/* ── STICKY COMPACT BAR (after search) ─────────────────────────── */}
         {currentCity && (
-          <div className="bg-white border-b border-gray-200 shadow-sm sticky top-0 z-30">
+          <div className="bg-white border-b border-gray-200 shadow-sm sticky top-16 z-30">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center gap-3">
               <div className="flex-grow max-w-lg">
                 <SearchForm
@@ -85,15 +146,17 @@ export default function Home() {
                   handleSearch={handleSearch}
                 />
               </div>
-              <div className="hidden sm:flex items-center gap-2 text-sm text-gray-500 shrink-0">
-                <MapPin className="h-4 w-4 text-sky-500" />
-                <span className="font-semibold text-gray-800">{currentCity}</span>
+              <div className="hidden sm:flex items-center gap-2 text-sm shrink-0">
+                <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-sky-50 border border-sky-200 rounded-full text-sky-700 font-semibold text-xs">
+                  <MapPin className="h-3.5 w-3.5" />
+                  {currentCity}
+                </span>
                 <button
                   onClick={clearCity}
-                  className="ml-1 p-1 rounded-full hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
+                  className="p-1.5 rounded-full hover:bg-gray-100 transition-colors text-gray-400 hover:text-gray-600"
                   title="Clear city"
                 >
-                  <X className="h-3.5 w-3.5" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
             </div>
@@ -102,72 +165,77 @@ export default function Home() {
 
         {/* ── CITY DASHBOARD ────────────────────────────────────────────── */}
         {currentCity && (
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-0">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
             {/* City banner */}
-            <div className="bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 rounded-2xl p-5 mb-6 text-white flex items-center justify-between shadow-md">
-              <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-white/20 rounded-xl">
-                  <MapPin className="h-6 w-6" />
+            <div className="relative overflow-hidden bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 rounded-2xl p-6 mb-6 text-white shadow-lg">
+              <div className="pointer-events-none absolute inset-0">
+                <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/5 rounded-full" />
+                <div className="absolute -bottom-8 -left-8 w-36 h-36 bg-white/5 rounded-full" />
+              </div>
+              <div className="relative flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="p-3 bg-white/15 rounded-xl backdrop-blur-sm">
+                    <MapPin className="h-7 w-7" />
+                  </div>
+                  <div>
+                    <h2 className="text-3xl font-extrabold tracking-tight leading-none">{currentCity}</h2>
+                    <p className="text-sky-200 text-sm mt-1 font-medium">City Dashboard · Live Data</p>
+                  </div>
                 </div>
-                <div>
-                  <h2 className="text-2xl font-bold tracking-tight leading-none">{currentCity}</h2>
-                  <p className="text-sky-200 text-sm mt-0.5">City Dashboard</p>
+                <div className="flex items-center gap-2">
+                  <span className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white/15 rounded-full text-white/90 text-xs font-medium backdrop-blur-sm">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute h-full w-full rounded-full bg-green-300 opacity-75" />
+                      <span className="relative h-2 w-2 rounded-full bg-green-400" />
+                    </span>
+                    Live
+                  </span>
+                  <button
+                    onClick={clearCity}
+                    className="sm:hidden p-2 rounded-lg bg-white/15 hover:bg-white/25 transition-colors"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
                 </div>
               </div>
-              <button
-                onClick={clearCity}
-                className="sm:hidden p-2 rounded-lg bg-white/10 hover:bg-white/20 transition-colors"
-              >
-                <X className="h-4 w-4" />
-              </button>
             </div>
 
-            {/* ── Weather + Alerts ───────────────────────────────────────── */}
+            {/* Weather + Alerts */}
             <WeatherSection cityName={currentCity} />
-            <EmergencyAlerts cityName={currentCity} />
+            <div className="mt-4">
+              <EmergencyAlerts cityName={currentCity} />
+            </div>
 
-            {/* ── City Info ─────────────────────────────────────────────── */}
+            {/* City Info */}
             <SectionDivider label="City Info" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="min-w-0">
-                <CityFacts cityName={currentCity} />
-              </div>
-              <div className="min-w-0">
-                <WhatsNewSection cityName={currentCity} />
-              </div>
+              <CityFacts cityName={currentCity} />
+              <WhatsNewSection cityName={currentCity} />
             </div>
 
-            {/* ── Popular Places ─────────────────────────────────────────── */}
+            {/* Around the City */}
             <SectionDivider label="Around the City" />
             <PlacesPopularityMap cityName={currentCity} />
-
-            {/* ── Problems + Jobs ────────────────────────────────────────── */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div className="min-w-0">
-                <CityProblems cityName={currentCity} />
-              </div>
-              <div className="min-w-0">
-                <LocalJobs cityName={currentCity} />
-              </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
+              <CityProblems cityName={currentCity} />
+              <LocalJobs cityName={currentCity} />
             </div>
 
-            {/* ── Culture & Media ────────────────────────────────────────── */}
+            {/* Culture & Media */}
             {(showNeighborhoodMap || showCityFeatures) && (
               <SectionDivider label="Culture & Media" />
             )}
-
             {showNeighborhoodMap && newsItems && (
               <div className="mb-6">
                 <NeighborhoodMap newsItems={newsItems} cityName={currentCity} />
               </div>
             )}
-
             {showCityFeatures && (
               <CityVibe newsItems={newsItems} cityName={currentCity} />
             )}
 
-            {/* ── News ──────────────────────────────────────────────────── */}
+            {/* News */}
             <NewsSection
               newsItems={newsItems}
               isLoading={isLoading}
@@ -180,7 +248,7 @@ export default function Home() {
           </div>
         )}
 
-        {/* When no city yet, still show news section prompt */}
+        {/* Pre-search news placeholder */}
         {!currentCity && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <NewsSection
