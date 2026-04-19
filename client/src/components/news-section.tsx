@@ -146,16 +146,15 @@ export default function NewsSection({
 
   return (
     <section>
-      <div className="flex justify-between items-center mb-6 border-b border-gray-200 pb-4">
-        <h2 className="text-xl font-semibold text-gray-900">
-          Headlines in <span className="text-primary">{currentCity}</span>
-          <span className="text-sm text-gray-500 ml-2">
-            ({uniqueItems?.length} articles)
-          </span>
-        </h2>
-        <div className="text-sm">
-          <span className="text-gray-500">Last updated: </span>
-          <span className="font-medium">{getCurrentTime()}</span>
+      <div className="flex items-center justify-between mb-5">
+        <div>
+          <h2 className="text-lg font-bold text-gray-900 tracking-tight">
+            Headlines in{" "}
+            <span className="bg-gradient-to-r from-sky-600 to-blue-600 bg-clip-text text-transparent">
+              {currentCity}
+            </span>
+          </h2>
+          <p className="text-xs text-gray-400 mt-0.5">{uniqueItems?.length} articles · {getCurrentTime()}</p>
         </div>
       </div>
 

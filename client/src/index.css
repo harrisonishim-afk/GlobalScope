@@ -36,3 +36,15 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 }
+
+@layer components {
+  /* Consistent card polish across all sections */
+  [data-slot="card"] {
+    @apply rounded-2xl border border-gray-100 shadow-sm;
+  }
+
+  /* News card lift effect */
+  .news-card {
+    @apply rounded-2xl border border-gray-100 shadow-sm;
+  }
+}

@@ -16,7 +16,7 @@ import CityProblems from "@/components/city-problems";
 import LocalJobs from "@/components/local-jobs";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
-import { MapPin, X, Newspaper, CloudSun, Briefcase, Globe, Zap } from "lucide-react";
+import { MapPin, X, Newspaper, CloudSun, Briefcase, Globe } from "lucide-react";
 
 const FEATURES = [
   { icon: CloudSun,  label: "Live Weather" },
@@ -24,17 +24,16 @@ const FEATURES = [
   { icon: Briefcase, label: "Local Jobs" },
   { icon: MapPin,    label: "Popular Places" },
   { icon: Globe,     label: "13 Languages" },
-  { icon: Zap,       label: "Real-time Data" },
 ];
 
 function SectionDivider({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-4 my-8">
-      <div className="flex-grow h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
-      <span className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-gray-400 bg-gray-50 px-4 py-1.5 rounded-full border border-gray-200 whitespace-nowrap">
+    <div className="flex items-center gap-3 my-6">
+      <div className="flex-grow h-px bg-gray-200" />
+      <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 px-3 py-1 rounded-full bg-white border border-gray-200 whitespace-nowrap shadow-sm">
         {label}
       </span>
-      <div className="flex-grow h-px bg-gradient-to-r from-transparent via-gray-200 to-transparent" />
+      <div className="flex-grow h-px bg-gray-200" />
     </div>
   );
 }
@@ -202,24 +201,26 @@ export default function Home() {
             </div>
 
             {/* Weather + Alerts */}
-            <WeatherSection cityName={currentCity} />
-            <div className="mt-4">
+            <div className="space-y-4">
+              <WeatherSection cityName={currentCity} />
               <EmergencyAlerts cityName={currentCity} />
             </div>
 
             {/* City Info */}
             <SectionDivider label="City Info" />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <CityFacts cityName={currentCity} />
               <WhatsNewSection cityName={currentCity} />
             </div>
 
             {/* Around the City */}
             <SectionDivider label="Around the City" />
-            <PlacesPopularityMap cityName={currentCity} />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-              <CityProblems cityName={currentCity} />
-              <LocalJobs cityName={currentCity} />
+            <div className="space-y-5">
+              <PlacesPopularityMap cityName={currentCity} />
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                <CityProblems cityName={currentCity} />
+                <LocalJobs cityName={currentCity} />
+              </div>
             </div>
 
             {/* Culture & Media */}
@@ -236,6 +237,7 @@ export default function Home() {
             )}
 
             {/* News */}
+            <SectionDivider label="Latest Headlines" />
             <NewsSection
               newsItems={newsItems}
               isLoading={isLoading}

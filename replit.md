@@ -24,6 +24,15 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **State Management**: TanStack Query for data fetching and caching
 - **Routing**: Wouter for client-side routing
 
+## Design System
+- **Theme**: Vibrant sky-blue primary (`hsl(211 96% 48%)`), rounded corners (0.75), light mode
+- **Hero**: Dark gradient (slate-900 → blue-950 → slate-900) with live badge, gradient headline, glass search box, feature pills
+- **Header**: Sticky white with backdrop blur, gradient logo wordmark, polished language picker with flags
+- **Dashboard**: City banner with gradient + live indicator, section dividers with labels, 2-column grids for City Info and Problems/Jobs
+- **Cards**: Consistent `rounded-2xl border-gray-100 shadow-sm` via global CSS override
+- **News cards**: Image zoom on hover, category pill top-left, compact typography
+- **Footer**: Dark slate-900 multi-column with brand description, feature links, company links
+
 ## Recent Changes
 - **2026-03-07**: Added Local Jobs section showing open positions for new workers (salary, employer, type, sector)
 - **2026-03-07**: Added City Problems & Issues section showing protests, crime statistics, and infrastructure problems

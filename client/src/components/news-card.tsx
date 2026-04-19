@@ -71,45 +71,45 @@ export default function NewsCard({ item }: NewsCardProps) {
   const fallbackImage = "https://images.unsplash.com/photo-1542281286-9e0a16bb7366?q=80&w=500&auto=format";
 
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-all duration-200 hover:-translate-y-1 news-card">
-      <div className="relative h-48 bg-gray-200">
-        <img 
+    <Card className="overflow-hidden hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 news-card group">
+      <div className="relative h-44 bg-gray-100 overflow-hidden">
+        <img
           src={item.imageUrl || fallbackImage}
-          alt={item.title} 
-          className="w-full h-full object-cover"
+          alt={item.title}
+          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+          onError={(e) => { (e.target as HTMLImageElement).src = fallbackImage; }}
         />
         {item.category && (
-          <div className={`absolute top-0 right-0 ${getCategoryClass(item.category)} text-white text-xs font-medium px-2 py-1 rounded-bl`}>
+          <div className={`absolute top-2.5 left-2.5 ${getCategoryClass(item.category)} text-white text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full`}>
             {item.category}
           </div>
         )}
       </div>
-      <CardContent className="p-5">
-        <div className="flex items-center text-xs text-gray-500 mb-2">
-          <span className="font-medium text-gray-700">{item.source}</span>
-          <span className="mx-2">•</span>
+      <CardContent className="p-4">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 mb-2">
+          <span className="font-semibold text-gray-600">{item.source}</span>
+          <span>·</span>
           <span>{formatDate(item.publishedAt)}</span>
         </div>
-        <h3 className="text-lg font-medium text-gray-900 mb-2 line-clamp-2">{item.title}</h3>
-        <p className="text-gray-600 text-sm mb-3 line-clamp-3">{item.description}</p>
-        
-        {neighborhood && (
-          <div className="mb-3">
-            <Badge variant="outline" className="flex items-center gap-1 text-xs">
-              <MapPin className="h-3 w-3" />
+        <h3 className="text-sm font-bold text-gray-900 mb-1.5 line-clamp-2 leading-snug">{item.title}</h3>
+        <p className="text-gray-500 text-xs mb-3 line-clamp-2 leading-relaxed">{item.description}</p>
+
+        <div className="flex items-center justify-between">
+          {neighborhood ? (
+            <Badge variant="outline" className="flex items-center gap-1 text-xs py-0 border-gray-200">
+              <MapPin className="h-2.5 w-2.5" />
               {neighborhood.charAt(0).toUpperCase() + neighborhood.slice(1)}
             </Badge>
-          </div>
-        )}
-        
-        <a 
-          href={item.url || "#"} 
-          target="_blank" 
-          rel="noopener noreferrer" 
-          className="text-primary font-medium text-sm hover:underline"
-        >
-          Read full story →
-        </a>
+          ) : <span />}
+          <a
+            href={item.url || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sky-600 font-semibold text-xs hover:text-sky-800 hover:underline transition-colors"
+          >
+            Read more →
+          </a>
+        </div>
       </CardContent>
     </Card>
   );
