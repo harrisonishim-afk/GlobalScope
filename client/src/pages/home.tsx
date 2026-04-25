@@ -14,6 +14,8 @@ import WhatsNewSection from "@/components/whats-new-section";
 import PlacesPopularityMap from "@/components/places-popularity-map";
 import CityProblems from "@/components/city-problems";
 import LocalJobs from "@/components/local-jobs";
+import LockedSection from "@/components/locked-section";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
 import { MapPin, X, Newspaper, CloudSun, Briefcase, Globe } from "lucide-react";
@@ -42,6 +44,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentCity, setCurrentCity] = useState<string>("");
   const { t } = useLanguage();
+  const { isSubscribed } = useSubscription();
 
   const { data: newsItems, isLoading, isError, error, refetch } = useQuery<NewsItem[]>({
     queryKey: [`/api/news/${currentCity}`],
@@ -203,37 +206,93 @@ export default function Home() {
             {/* Weather + Alerts */}
             <div className="space-y-4">
               <WeatherSection cityName={currentCity} />
-              <EmergencyAlerts cityName={currentCity} />
+              {isSubscribed ? (
+                <EmergencyAlerts cityName={currentCity} />
+              ) : (
+                <LockedSection
+                  title="Emergency Alerts"
+                  description="Get real-time weather warnings, heat alerts, storm alerts, and road closures."
+                >
+                  <EmergencyAlerts cityName={currentCity} />
+                </LockedSection>
+              )}
             </div>
 
             {/* City Info */}
             <SectionDivider label="City Info" />
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
               <CityFacts cityName={currentCity} />
-              <WhatsNewSection cityName={currentCity} />
+              {isSubscribed ? (
+                <WhatsNewSection cityName={currentCity} />
+              ) : (
+                <LockedSection
+                  title="What's New"
+                  description="See the latest happenings, openings, and events in your city."
+                >
+                  <WhatsNewSection cityName={currentCity} />
+                </LockedSection>
+              )}
             </div>
 
             {/* Around the City */}
             <SectionDivider label="Around the City" />
             <div className="space-y-5">
-              <PlacesPopularityMap cityName={currentCity} />
+              {isSubscribed ? (
+                <PlacesPopularityMap cityName={currentCity} />
+              ) : (
+                <LockedSection
+                  title="Popular Places Map"
+                  description="Discover top-rated shops, venues, and hotspots with live popularity ratings."
+                >
+                  <PlacesPopularityMap cityName={currentCity} />
+                </LockedSection>
+              )}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-                <CityProblems cityName={currentCity} />
-                <LocalJobs cityName={currentCity} />
+                {isSubscribed ? (
+                  <CityProblems cityName={currentCity} />
+                ) : (
+                  <LockedSection
+                    title="City Problems"
+                    description="Track protests, crime statistics, and infrastructure issues."
+                  >
+                    <CityProblems cityName={currentCity} />
+                  </LockedSection>
+                )}
+                {isSubscribed ? (
+                  <LocalJobs cityName={currentCity} />
+                ) : (
+                  <LockedSection
+                    title="Local Jobs"
+                    description="Browse open positions with salary, employer, and sector details."
+                  >
+                    <LocalJobs cityName={currentCity} />
+                  </LockedSection>
+                )}
               </div>
             </div>
 
-            {/* Culture & Media */}
-            {(showNeighborhoodMap || showCityFeatures) && (
+            {/* Culture & Media — Premium only */}
+            {isSubscribed && (showNeighborhoodMap || showCityFeatures) && (
               <SectionDivider label="Culture & Media" />
             )}
-            {showNeighborhoodMap && newsItems && (
+            {isSubscribed && showNeighborhoodMap && newsItems && (
               <div className="mb-6">
                 <NeighborhoodMap newsItems={newsItems} cityName={currentCity} />
               </div>
             )}
-            {showCityFeatures && (
+            {isSubscribed && showCityFeatures && (
               <CityVibe newsItems={newsItems} cityName={currentCity} />
+            )}
+            {!isSubscribed && (
+              <>
+                <SectionDivider label="Culture & Media" />
+                <LockedSection
+                  title="Neighborhood Map & Music Mood"
+                  description="Visualize news activity by neighborhood and get music recommendations matched to your city's mood."
+                >
+                  <CityVibe newsItems={newsItems} cityName={currentCity} />
+                </LockedSection>
+              </>
             )}
 
             {/* News */}

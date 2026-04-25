@@ -1,11 +1,13 @@
 import { useState, useRef, useEffect } from "react";
-import { Globe, ChevronDown } from "lucide-react";
+import { Globe, ChevronDown, Crown, Sparkles } from "lucide-react";
 import logoPath from "../assets/logo.png";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { LANGUAGES } from "@/lib/translations";
+import { useSubscription } from "@/contexts/SubscriptionContext";
 
 export default function Header() {
   const { lang, setLang, t } = useLanguage();
+  const { isSubscribed, openModal } = useSubscription();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -49,7 +51,27 @@ export default function Header() {
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="hidden md:block text-sm text-gray-400 font-medium">{t("tagline")}</span>
+          <span className="hidden lg:block text-sm text-gray-400 font-medium">{t("tagline")}</span>
+
+          {/* Subscribe / Premium badge */}
+          {isSubscribed ? (
+            <button
+              onClick={openModal}
+              className="hidden sm:flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold text-amber-700 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 hover:border-amber-300 transition-all shadow-sm"
+            >
+              <Crown className="h-3.5 w-3.5" />
+              <span>Premium</span>
+            </button>
+          ) : (
+            <button
+              onClick={openModal}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 shadow-md shadow-sky-500/20 hover:shadow-lg transition-all"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              <span className="hidden sm:inline">Subscribe · $10/mo</span>
+              <span className="sm:hidden">Premium</span>
+            </button>
+          )}
 
           {/* Language picker */}
           <div className="relative" ref={ref}>

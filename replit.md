@@ -33,6 +33,12 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **News cards**: Image zoom on hover, category pill top-left, compact typography
 - **Footer**: Dark slate-900 multi-column with brand description, feature links, company links
 
+## Subscription Tiers
+- **Free tier**: Live weather, latest news, City Facts (1 add-on only). All other add-ons show locked overlays with blur + grayscale preview and "Unlock with Premium · $10/mo" CTA.
+- **Premium tier ($10/month)**: Unlocks Emergency Alerts, What's New, Popular Places Map, City Problems, Local Jobs, Neighborhood Map, and Music Mood (City Vibe).
+- **Implementation**: `SubscriptionContext` stores state in `localStorage` (`globalscope_premium`). Header shows blue "Subscribe · $10/mo" button when free, amber "Premium" crown badge when subscribed. Both open a centered modal with feature comparison and Subscribe / Cancel actions. `LockedSection` wrapper component renders blurred + faded preview of the underlying component with an unlock CTA.
+- **Note**: This is a demo subscription with no real payment processing — state is local to the browser.
+
 ## Recent Changes
 - **2026-03-07**: Added Local Jobs section showing open positions for new workers (salary, employer, type, sector)
 - **2026-03-07**: Added City Problems & Issues section showing protests, crime statistics, and infrastructure problems
