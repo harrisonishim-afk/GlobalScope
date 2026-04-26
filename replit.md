@@ -39,6 +39,12 @@ Globalscope is a comprehensive React-based web application that provides users w
 - **Implementation**: `SubscriptionContext` stores state in `localStorage` (`globalscope_premium`). Header shows blue "Subscribe · $10/mo" button when free, amber "Premium" crown badge when subscribed. Both open a centered modal with feature comparison and Subscribe / Cancel actions. `LockedSection` wrapper component renders blurred + faded preview of the underlying component with an unlock CTA.
 - **Note**: This is a demo subscription with no real payment processing — state is local to the browser.
 
+## News Relevance
+- **Query construction**: City name wrapped in quotes for exact phrase match. Ambiguous cities (London, Georgia, Jordan, etc.) get a disambiguation context appended via boolean `AND (term1 OR term2 OR …)`.
+- **NewsAPI scoping**: `searchIn=title,description` so matches are restricted to article titles/descriptions, not full body content.
+- **Post-fetch relevance filter**: `filterRelevantToCity()` keeps only articles whose title or description actually mentions the city name (regex with word boundaries). Handles aliases like Kiev/Kyiv and Bangkok's full ceremonial name.
+- **Page size**: Live endpoint fetches 30 articles, returns top 20 after filtering. Historical endpoint fetches 15, returns top 5.
+
 ## Recent Changes
 - **2026-03-07**: Added Local Jobs section showing open positions for new workers (salary, employer, type, sector)
 - **2026-03-07**: Added City Problems & Issues section showing protests, crime statistics, and infrastructure problems

@@ -529,13 +529,15 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const searchQuery = getImprovedSearchQuery(city);
       
       // Use News API to get articles related to the city
+      // searchIn restricts matches to title + description (not full content) for higher relevance
       const response = await axios.get("https://newsapi.org/v2/everything", {
         params: {
           q: searchQuery,
+          searchIn: "title,description",
           language: "en",
           sortBy: "publishedAt",
           apiKey: NEWS_API_KEY,
-          pageSize: 20, // Limit to 20 articles
+          pageSize: 30, // Fetch more so we have enough after relevance filtering
         },
         timeout: 5000,
       });
@@ -572,10 +574,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
 
+      // Relevance filter: require the city name to actually appear in title or description
+      const relevantNewsItems = filterRelevantToCity(validNewsItems, city);
+
       // Deduplicate by URL, then by title
       const seenUrls = new Set<string>();
       const seenTitles = new Set<string>();
-      const uniqueNewsItems = validNewsItems.filter((item: any) => {
+      const uniqueNewsItems = relevantNewsItems.filter((item: any) => {
         const urlKey = item.url?.trim().toLowerCase();
         const titleKey = item.title?.trim().toLowerCase();
         if (urlKey && seenUrls.has(urlKey)) return false;
@@ -583,7 +588,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (urlKey) seenUrls.add(urlKey);
         if (titleKey) seenTitles.add(titleKey);
         return true;
-      });
+      }).slice(0, 20);
 
       // Save news items to storage
       for (const item of uniqueNewsItems) {
@@ -668,11 +673,12 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Use News API to get articles from one year ago
       const response = await axios.get("https://newsapi.org/v2/everything", {
         params: {
-          q: city,
+          q: getImprovedSearchQuery(city),
+          searchIn: "title,description",
           language: "en",
           sortBy: "relevancy",
           apiKey: NEWS_API_KEY,
-          pageSize: 5, // Limit to 5 articles
+          pageSize: 15,
           from: fromDateStr,
           to: toDateStr
         },
@@ -711,10 +717,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         }
       });
 
+      // Relevance filter: require the city name in title or description
+      const relevantNewsItems = filterRelevantToCity(validNewsItems, city);
+
       // Deduplicate by URL, then by title
       const seenUrls2 = new Set<string>();
       const seenTitles2 = new Set<string>();
-      const uniqueNewsItems = validNewsItems.filter((item: any) => {
+      const uniqueNewsItems = relevantNewsItems.filter((item: any) => {
         const urlKey = item.url?.trim().toLowerCase();
         const titleKey = item.title?.trim().toLowerCase();
         if (urlKey && seenUrls2.has(urlKey)) return false;
@@ -722,7 +731,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (urlKey) seenUrls2.add(urlKey);
         if (titleKey) seenTitles2.add(titleKey);
         return true;
-      });
+      }).slice(0, 5);
 
       // Cache results
       setCachedNews(cacheKey, uniqueNewsItems);
@@ -751,67 +760,101 @@ export async function registerRoutes(app: Express): Promise<Server> {
 }
 
 // Helper function to improve search queries for specific cities
+// Builds a NewsAPI-compatible boolean query that requires the city name
+// (as an exact phrase) AND, for ambiguous names, at least one disambiguation term.
+// This is far stricter than space-separated keywords (which NewsAPI treats as OR).
 function getImprovedSearchQuery(city: string): string {
   const normalizedCity = city.toLowerCase().trim();
-  
-  // Special cases for cities that commonly have disambiguation issues
-  const cityMappings: Record<string, string> = {
-    "vatican city": "Vatican City Holy See Pope",
-    "vatican": "Vatican City Holy See Pope",
-    "monaco": "Monaco Monte Carlo",
-    "san marino": "San Marino Republic",
-    "luxembourg": "Luxembourg City Europe",
-    "andorra": "Andorra la Vella",
-    "liechtenstein": "Liechtenstein Vaduz",
-    "georgia": "Georgia Tbilisi country",
-    "jordan": "Jordan Amman country",
-    "lebanon": "Lebanon Beirut country",
-    "malta": "Malta Valletta",
-    "cyprus": "Cyprus Nicosia",
-    "dublin": "Dublin Ireland",
-    "paris": "Paris France",
-    "london": "London UK Britain",
-    "rome": "Rome Italy",
-    "athens": "Athens Greece",
-    "madrid": "Madrid Spain",
-    "berlin": "Berlin Germany",
-    "vienna": "Vienna Austria",
-    "brussels": "Brussels Belgium",
-    "amsterdam": "Amsterdam Netherlands",
-    "stockholm": "Stockholm Sweden",
-    "oslo": "Oslo Norway",
-    "copenhagen": "Copenhagen Denmark",
-    "helsinki": "Helsinki Finland",
-    "moscow": "Moscow Russia",
-    "warsaw": "Warsaw Poland",
-    "prague": "Prague Czech Republic",
-    "budapest": "Budapest Hungary",
-    "bucharest": "Bucharest Romania",
-    "sofia": "Sofia Bulgaria",
-    "zagreb": "Zagreb Croatia",
-    "belgrade": "Belgrade Serbia",
-    "kiev": "Kiev Ukraine",
-    "minsk": "Minsk Belarus",
-    "riga": "Riga Latvia",
-    "tallinn": "Tallinn Estonia",
-    "vilnius": "Vilnius Lithuania",
-    "fucking": "\"Fugging\" Austria village renamed 2020",
-    "fucking city": "\"Fugging\" Austria village renamed 2020",
-    "bangkok": "Bangkok Thailand",
-    "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit": "Bangkok Thailand",
-    "krungthepmahanakhon amonrattanakosin mahintharayutthaya mahadilokphop noppharatratchathaniburirom udomratchaniwetmahasathan amonphimanawatansathit sakkathattiyawitsanukamprasit city": "Bangkok Thailand",
-    "hell": "\"Hell\" Norway village Trondheim",
-    "hell city": "\"Hell\" Norway village Trondheim", 
-    "batman": "\"Batman\" Turkey city province oil",
-    "booger hole": "\"Booger Hole\" West Virginia Clay County community",
-    "b0ooger hole": "\"Booger Hole\" West Virginia Clay County community",
-    "chimayo": "\"Chimayo\" New Mexico sanctuary pilgrimage site",
-    "riz": "\"Riz\" South Tyrol Italy Alpine village",
-    "jericho": "\"Jericho\" West Bank Palestine ancient city"
+
+  // Disambiguation context for ambiguous city names (added with AND)
+  const disambig: Record<string, string[]> = {
+    "vatican city": ["Holy See", "Pope", "Rome"],
+    "vatican": ["Holy See", "Pope", "Rome"],
+    "monaco": ["Monte Carlo", "Riviera", "principality"],
+    "san marino": ["Republic", "Italy", "Europe"],
+    "luxembourg": ["Europe", "Grand Duchy"],
+    "andorra": ["Pyrenees", "principality"],
+    "liechtenstein": ["Vaduz", "principality"],
+    "georgia": ["Tbilisi", "Caucasus"],
+    "jordan": ["Amman", "Middle East"],
+    "lebanon": ["Beirut", "Middle East"],
+    "malta": ["Valletta", "Mediterranean"],
+    "cyprus": ["Nicosia", "Mediterranean"],
+    "dublin": ["Ireland", "Irish"],
+    "paris": ["France", "French"],
+    "london": ["UK", "Britain", "England"],
+    "rome": ["Italy", "Italian"],
+    "athens": ["Greece", "Greek"],
+    "madrid": ["Spain", "Spanish"],
+    "berlin": ["Germany", "German"],
+    "vienna": ["Austria", "Austrian"],
+    "brussels": ["Belgium", "Belgian"],
+    "amsterdam": ["Netherlands", "Dutch"],
+    "stockholm": ["Sweden", "Swedish"],
+    "oslo": ["Norway", "Norwegian"],
+    "copenhagen": ["Denmark", "Danish"],
+    "helsinki": ["Finland", "Finnish"],
+    "moscow": ["Russia", "Russian", "Kremlin"],
+    "warsaw": ["Poland", "Polish"],
+    "prague": ["Czech"],
+    "budapest": ["Hungary", "Hungarian"],
+    "bucharest": ["Romania", "Romanian"],
+    "sofia": ["Bulgaria", "Bulgarian"],
+    "zagreb": ["Croatia", "Croatian"],
+    "belgrade": ["Serbia", "Serbian"],
+    "kiev": ["Ukraine", "Ukrainian"],
+    "kyiv": ["Ukraine", "Ukrainian"],
+    "minsk": ["Belarus", "Belarusian"],
+    "riga": ["Latvia", "Latvian"],
+    "tallinn": ["Estonia", "Estonian"],
+    "vilnius": ["Lithuania", "Lithuanian"],
+    "bangkok": ["Thailand", "Thai"],
+    "hell": ["Norway", "Trondheim", "village"],
+    "batman": ["Turkey", "province", "Kurdish"],
+    "booger hole": ["West Virginia", "Clay County"],
+    "chimayo": ["New Mexico", "sanctuary"],
+    "riz": ["South Tyrol", "Italy", "Alpine"],
+    "jericho": ["West Bank", "Palestine", "Palestinian"],
   };
-  
-  // Return improved query if mapping exists, otherwise return original city
-  return cityMappings[normalizedCity] || city;
+
+  // Bangkok's full ceremonial name is unsearchable, fall back to "Bangkok"
+  const bangkokFull = "krungthepmahanakhon amonrattanakosin mahintharayutthaya";
+  const cityForQuery = normalizedCity.startsWith(bangkokFull) ? "Bangkok" : city;
+
+  const phrase = `"${cityForQuery}"`;
+  const context = disambig[normalizedCity];
+  if (context && context.length > 0) {
+    const orList = context.map((c) => (c.includes(" ") ? `"${c}"` : c)).join(" OR ");
+    return `${phrase} AND (${orList})`;
+  }
+  return phrase;
+}
+
+// Post-fetch relevance filter: keep only articles whose title or description
+// actually mentions the city. NewsAPI sometimes returns loosely related articles
+// despite searchIn=title,description, so this is a safety net.
+function filterRelevantToCity(items: any[], city: string): any[] {
+  const cityLower = city.toLowerCase().trim();
+  // Build candidate names to check (handle Bangkok's long ceremonial name etc.)
+  const aliases = new Set<string>([cityLower]);
+  if (cityLower.startsWith("krungthepmahanakhon")) aliases.add("bangkok");
+  if (cityLower === "kiev") aliases.add("kyiv");
+  if (cityLower === "kyiv") aliases.add("kiev");
+
+  return items.filter((item) => {
+    const haystack = `${item.title || ""} ${item.description || ""}`.toLowerCase();
+    for (const name of Array.from(aliases)) {
+      if (name.length < 2) continue;
+      // Word-boundary-ish check: surround with non-letter chars or string boundary
+      const pattern = new RegExp(`(^|[^a-z])${escapeRegex(name)}([^a-z]|$)`, "i");
+      if (pattern.test(haystack)) return true;
+    }
+    return false;
+  });
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 // Helper function to determine article category based on content
