@@ -10,25 +10,24 @@ interface NewsCardProps {
 }
 
 export default function NewsCard({ item }: NewsCardProps) {
-  const getCategoryClass = (category: string) => {
-    const categoryClasses: Record<string, string> = {
-      "local": "bg-primary",
-      "traffic": "bg-warning",
-      "food": "bg-success",
-      "housing": "bg-primary",
-      "sports": "bg-accent",
-      "community": "bg-success",
-      "politics": "bg-primary",
-      "business": "bg-accent",
-      "health": "bg-success",
-      "technology": "bg-warning",
-      "entertainment": "bg-accent",
-      "science": "bg-primary",
-      "education": "bg-success",
-      "environment": "bg-accent",
+  const getCategoryStyle = (category: string): string => {
+    const styles: Record<string, string> = {
+      "politics":     "bg-blue-600",
+      "business":     "bg-emerald-600",
+      "technology":   "bg-violet-600",
+      "health":       "bg-rose-600",
+      "sports":       "bg-orange-500",
+      "entertainment":"bg-pink-500",
+      "science":      "bg-cyan-600",
+      "environment":  "bg-green-600",
+      "education":    "bg-indigo-500",
+      "food":         "bg-amber-500",
+      "housing":      "bg-slate-500",
+      "traffic":      "bg-yellow-500",
+      "crime":        "bg-red-600",
+      "local":        "bg-sky-600",
     };
-    
-    return categoryClasses[category.toLowerCase()] || "bg-primary";
+    return styles[category.toLowerCase()] ?? "bg-sky-600";
   };
 
   // Check if this article mentions a specific neighborhood
@@ -80,7 +79,7 @@ export default function NewsCard({ item }: NewsCardProps) {
           onError={(e) => { (e.target as HTMLImageElement).src = fallbackImage; }}
         />
         {item.category && (
-          <div className={`absolute top-2.5 left-2.5 ${getCategoryClass(item.category)} text-white text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full`}>
+          <div className={`absolute top-2.5 left-2.5 ${getCategoryStyle(item.category)} text-white text-[10px] font-bold uppercase tracking-wide px-2 py-0.5 rounded-full`}>
             {item.category}
           </div>
         )}

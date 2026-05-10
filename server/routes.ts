@@ -857,32 +857,109 @@ function escapeRegex(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-// Helper function to determine article category based on content
+// Helper function to determine article category based on content.
+// Uses a scoring system: every keyword match adds 1 point, and the
+// category with the most points wins. This avoids false positives from
+// a single generic word triggering the wrong label.
 function determineCategory(title?: string, description?: string): string {
-  const content = `${title || ""} ${description || ""}`.toLowerCase();
-  const categoryKeywords: Record<string, string[]> = {
-    "politics": ["politic", "government", "election", "vote", "congress", "senate", "president", "democrat", "republican"],
-    "business": ["business", "economy", "market", "stock", "invest", "finance", "economic", "trade", "company"],
-    "technology": ["tech", "technology", "software", "app", "digital", "internet", "cyber", "ai", "artificial intelligence"],
-    "health": ["health", "covid", "medical", "hospital", "doctor", "patient", "disease", "virus", "vaccine"],
-    "sports": ["sport", "game", "team", "player", "championship", "tournament", "match", "league", "athlete"],
-    "entertainment": ["entertainment", "movie", "film", "music", "celebrity", "actor", "actress", "show", "star"],
-    "science": ["science", "research", "study", "discover", "scientific", "scientist", "lab", "experiment"],
-    "environment": ["environment", "climate", "pollution", "energy", "sustainable", "green", "recycle", "carbon"],
-    "education": ["education", "school", "university", "college", "student", "teacher", "professor", "class", "academic"],
-    "food": ["food", "restaurant", "dining", "cuisine", "chef", "recipe", "menu", "dish"],
-    "housing": ["housing", "real estate", "property", "apartment", "house", "rent", "mortgage", "building"],
-    "traffic": ["traffic", "transit", "commute", "transportation", "road", "highway", "street", "bridge"],
-    "community": ["community", "neighborhood", "local", "resident", "volunteer", "charity", "donate", "program"],
+  // Weight the title more heavily than the description
+  const titleText = (title || "").toLowerCase();
+  const descText = (description || "").toLowerCase();
+
+  // Each entry is [keyword, weight] — higher weight for more distinctive terms
+  const categoryKeywords: Record<string, Array<[string, number]>> = {
+    "politics": [
+      ["election", 3], ["ballot", 3], ["referendum", 3], ["parliament", 3],
+      ["senate", 3], ["congress", 3], ["democrat", 3], ["republican", 3],
+      ["political", 2], ["politician", 2], ["minister", 2], ["prime minister", 3],
+      ["president", 2], ["legislation", 2], ["policy", 1], ["government", 1],
+      ["vote", 1], ["campaign", 1],
+    ],
+    "business": [
+      ["stock exchange", 3], ["wall street", 3], ["ipo", 3], ["gdp", 3],
+      ["inflation", 3], ["interest rate", 3], ["hedge fund", 3],
+      ["earnings", 2], ["revenue", 2], ["profit", 2], ["startup", 2],
+      ["investment", 2], ["merger", 2], ["acquisition", 2], ["ceo", 2],
+      ["economy", 1], ["finance", 1], ["trade", 1],
+    ],
+    "technology": [
+      ["artificial intelligence", 3], ["machine learning", 3], ["blockchain", 3],
+      ["cryptocurrency", 3], ["cybersecurity", 3], ["robotics", 3],
+      ["software", 2], ["smartphone", 2], ["silicon valley", 2], ["startup tech", 2],
+      ["technology", 2], ["digital", 2], ["internet", 1], ["cyber", 1],
+    ],
+    "health": [
+      ["pandemic", 3], ["vaccine", 3], ["epidemic", 3], ["surgery", 3],
+      ["cancer", 3], ["diabetes", 3], ["mental health", 3], ["covid", 3],
+      ["hospital", 2], ["medical", 2], ["disease", 2], ["virus", 2],
+      ["health care", 2], ["doctor", 1], ["patient", 1],
+    ],
+    "sports": [
+      ["world cup", 3], ["olympic", 3], ["championship", 3], ["tournament", 3],
+      ["formula 1", 3], ["nba", 3], ["nfl", 3], ["premier league", 3],
+      ["athlete", 2], ["goalkeeper", 2], ["quarterback", 2], ["marathon", 2],
+      ["stadium", 2], ["league", 1], ["match", 1], ["player", 1], ["team", 1],
+    ],
+    "entertainment": [
+      ["box office", 3], ["oscar", 3], ["grammy", 3], ["emmy", 3],
+      ["film festival", 3], ["blockbuster", 3], ["streaming", 2],
+      ["concert", 2], ["album", 2], ["movie", 2], ["celebrity", 2],
+      ["actor", 2], ["actress", 2], ["director", 2], ["entertainment", 1],
+    ],
+    "science": [
+      ["nasa", 3], ["spacex", 3], ["quantum", 3], ["genome", 3],
+      ["archaeology", 3], ["fossil", 3], ["telescope", 3],
+      ["scientific", 2], ["scientist", 2], ["research", 2], ["experiment", 2],
+      ["discovery", 2], ["space", 1], ["climate science", 2],
+    ],
+    "environment": [
+      ["climate change", 3], ["global warming", 3], ["carbon emission", 3],
+      ["deforestation", 3], ["endangered species", 3], ["wildfire", 3],
+      ["renewable energy", 3], ["solar panel", 2], ["wind farm", 2],
+      ["pollution", 2], ["flood", 2], ["drought", 2], ["environment", 1],
+    ],
+    "education": [
+      ["university", 2], ["college", 2], ["scholarship", 3], ["graduation", 3],
+      ["curriculum", 3], ["academic", 2], ["tuition", 3], ["campus", 2],
+      ["school", 1], ["student", 1], ["teacher", 1], ["professor", 2],
+    ],
+    "food": [
+      ["michelin star", 3], ["restaurant", 2], ["cuisine", 2], ["chef", 2],
+      ["dining", 2], ["recipe", 2], ["menu", 2], ["food festival", 3],
+      ["culinary", 3], ["food", 1],
+    ],
+    "housing": [
+      ["real estate", 3], ["housing market", 3], ["mortgage", 3], ["eviction", 3],
+      ["gentrification", 3], ["landlord", 2], ["tenant", 2], ["apartment", 2],
+      ["affordable housing", 3], ["rent", 1], ["property", 1],
+    ],
+    "traffic": [
+      ["traffic jam", 3], ["road closure", 3], ["subway", 2], ["metro", 2],
+      ["public transit", 3], ["commute", 2], ["highway", 2], ["bridge closure", 3],
+      ["traffic", 1], ["transportation", 1],
+    ],
+    "crime": [
+      ["murder", 3], ["robbery", 3], ["arrest", 3], ["police", 2],
+      ["shooting", 3], ["stabbing", 3], ["court", 2], ["trial", 2],
+      ["convicted", 3], ["suspect", 2], ["investigation", 1], ["crime", 1],
+    ],
   };
 
-  // Check for each category
-  for (const [category, keywords] of Object.entries(categoryKeywords)) {
-    if (keywords.some(keyword => content.includes(keyword))) {
-      return category;
+  let bestCategory = "local";
+  let bestScore = 0;
+
+  for (const [category, entries] of Object.entries(categoryKeywords)) {
+    let score = 0;
+    for (const [keyword, weight] of entries) {
+      // Title matches count 2× more than description matches
+      if (titleText.includes(keyword)) score += weight * 2;
+      else if (descText.includes(keyword)) score += weight;
+    }
+    if (score > bestScore) {
+      bestScore = score;
+      bestCategory = category;
     }
   }
 
-  // Default category
-  return "local";
+  return bestCategory;
 }
