@@ -1,23 +1,15 @@
 import { useSubscription } from "@/contexts/SubscriptionContext";
-import { Check, X, Crown, Sparkles } from "lucide-react";
+import { X, Crown, Check, Zap, Bell, MapPin, Briefcase, Music, Shield, Star } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
-const PREMIUM_FEATURES = [
-  "Emergency Alerts & weather warnings",
-  "What's New in your city this week",
-  "Popular Places map with live ratings",
-  "City Problems & safety statistics",
-  "Local Jobs feed",
-  "Neighborhood activity heatmap",
-  "Music recommendations from city mood",
-  "Premium polished design",
-  "Priority data refresh",
-];
-
-const FREE_FEATURES = [
-  "Live weather",
-  "Latest news",
-  "City Facts (1 add-on only)",
+const PLAN_FEATURES = [
+  { icon: Bell,     color: "text-rose-500",   bg: "bg-rose-50",   label: "Emergency Alerts",         desc: "Real-time warnings & closures" },
+  { icon: Star,     color: "text-amber-500",  bg: "bg-amber-50",  label: "What's New",               desc: "Weekly openings & city events" },
+  { icon: MapPin,   color: "text-sky-500",    bg: "bg-sky-50",    label: "Popular Places Map",        desc: "Live popularity ratings" },
+  { icon: Shield,   color: "text-red-500",    bg: "bg-red-50",    label: "City Problems",             desc: "Safety stats & infrastructure" },
+  { icon: Briefcase,color: "text-emerald-500",bg: "bg-emerald-50",label: "Local Jobs",               desc: "Open roles with salaries" },
+  { icon: Zap,      color: "text-violet-500", bg: "bg-violet-50", label: "Neighborhood Heatmap",      desc: "News activity by area" },
+  { icon: Music,    color: "text-pink-500",   bg: "bg-pink-50",   label: "Music Mood",               desc: "City vibe playlists" },
 ];
 
 export default function SubscribeModal() {
@@ -30,7 +22,7 @@ export default function SubscribeModal() {
     subscribe();
     closeModal();
     toast({
-      title: "Welcome to Globalscope Premium!",
+      title: "Welcome to Globalscope Premium! 🎉",
       description: "All add-ons are now unlocked. Enjoy the full experience.",
     });
   };
@@ -46,75 +38,84 @@ export default function SubscribeModal() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/70 backdrop-blur-sm animate-in fade-in"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-slate-900/75 backdrop-blur-sm"
       onClick={closeModal}
     >
       <div
-        className="relative w-full max-w-lg bg-white rounded-3xl shadow-2xl overflow-hidden"
+        className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl overflow-hidden"
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Close */}
         <button
           onClick={closeModal}
-          className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100 transition-colors z-10"
+          className="absolute top-4 right-4 z-20 p-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
           aria-label="Close"
         >
-          <X className="h-5 w-5 text-gray-500" />
+          <X className="h-4 w-4 text-white/70" />
         </button>
 
-        {/* Header */}
-        <div className="bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 text-white px-8 pt-10 pb-8 text-center relative overflow-hidden">
-          <div className="absolute top-10 left-10 w-32 h-32 bg-sky-500/20 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-10 w-32 h-32 bg-blue-400/20 rounded-full blur-3xl" />
+        {/* Hero header */}
+        <div className="relative bg-gradient-to-br from-slate-900 via-blue-950 to-slate-900 px-8 pt-10 pb-7 text-center overflow-hidden">
+          {/* Decorative blobs */}
+          <div className="pointer-events-none absolute inset-0">
+            <div className="absolute top-6 left-6 w-40 h-40 bg-sky-500/15 rounded-full blur-3xl" />
+            <div className="absolute bottom-0 right-4 w-40 h-40 bg-indigo-400/15 rounded-full blur-3xl" />
+          </div>
           <div className="relative">
-            <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-sky-400 to-blue-600 mb-4 shadow-lg">
-              <Crown className="h-7 w-7 text-white" />
+            {/* Icon */}
+            <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 shadow-lg shadow-amber-500/30 mb-4">
+              <Crown className="h-8 w-8 text-white" />
             </div>
-            <h2 className="text-2xl font-bold mb-1.5">Globalscope Premium</h2>
-            <p className="text-sm text-sky-200/80">Unlock the full city dashboard</p>
-            <div className="mt-5 flex items-baseline justify-center gap-1">
-              <span className="text-5xl font-extrabold">$10</span>
-              <span className="text-sky-200/80 text-sm">/month</span>
-            </div>
+            {isSubscribed ? (
+              <>
+                <h2 className="text-2xl font-extrabold text-white mb-1">You're Premium</h2>
+                <p className="text-sky-300/80 text-sm">All add-ons are unlocked</p>
+              </>
+            ) : (
+              <>
+                <h2 className="text-2xl font-extrabold text-white mb-1">Globalscope Premium</h2>
+                <p className="text-sky-300/80 text-sm">Unlock the full city experience</p>
+                <div className="mt-4 inline-flex items-baseline gap-1 bg-white/10 px-5 py-2 rounded-2xl border border-white/10">
+                  <span className="text-4xl font-black text-white">$10</span>
+                  <span className="text-sky-300/80 text-sm font-medium">/month</span>
+                </div>
+              </>
+            )}
           </div>
         </div>
 
-        {/* Body */}
-        <div className="p-8">
-          <div className="grid grid-cols-2 gap-6 mb-6">
-            <div>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-3">Free</h3>
-              <ul className="space-y-2">
-                {FREE_FEATURES.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-xs text-gray-600">
-                    <Check className="h-3.5 w-3.5 text-gray-400 mt-0.5 flex-shrink-0" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-xs font-bold uppercase tracking-widest text-sky-600 mb-3 flex items-center gap-1">
-                <Sparkles className="h-3 w-3" /> Premium
-              </h3>
-              <ul className="space-y-2">
-                {PREMIUM_FEATURES.map((f) => (
-                  <li key={f} className="flex items-start gap-2 text-xs text-gray-700 font-medium">
-                    <Check className="h-3.5 w-3.5 text-sky-500 mt-0.5 flex-shrink-0" />
-                    <span>{f}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+        {/* Features */}
+        <div className="px-6 pt-5 pb-2">
+          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">
+            {isSubscribed ? "Your unlocked features" : "Everything you unlock"}
+          </p>
+          <div className="space-y-2">
+            {PLAN_FEATURES.map(({ icon: Icon, color, bg, label, desc }) => (
+              <div key={label} className="flex items-center gap-3">
+                <div className={`flex-shrink-0 w-8 h-8 ${bg} rounded-xl flex items-center justify-center`}>
+                  <Icon className={`h-4 w-4 ${color}`} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="text-xs font-semibold text-gray-800">{label}</span>
+                  <span className="text-xs text-gray-400"> — {desc}</span>
+                </div>
+                <Check className="h-3.5 w-3.5 text-emerald-500 flex-shrink-0" />
+              </div>
+            ))}
           </div>
+        </div>
 
+        {/* CTA */}
+        <div className="px-6 py-5">
           {isSubscribed ? (
-            <div className="space-y-3">
-              <div className="text-center text-sm text-emerald-700 bg-emerald-50 border border-emerald-200 rounded-xl py-3 font-semibold">
-                You're a Premium member
+            <div className="space-y-2.5">
+              <div className="flex items-center justify-center gap-2 bg-emerald-50 border border-emerald-200 text-emerald-700 rounded-2xl py-3 text-sm font-semibold">
+                <Check className="h-4 w-4" />
+                Premium active — all features unlocked
               </div>
               <button
                 onClick={handleCancel}
-                className="w-full py-3 rounded-xl text-sm font-semibold text-gray-600 bg-gray-100 hover:bg-gray-200 transition-colors"
+                className="w-full py-2.5 rounded-2xl text-xs font-semibold text-gray-400 hover:text-gray-600 hover:bg-gray-50 transition-colors"
               >
                 Cancel subscription
               </button>
@@ -123,12 +124,12 @@ export default function SubscribeModal() {
             <>
               <button
                 onClick={handleSubscribe}
-                className="w-full py-3.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 shadow-lg shadow-sky-500/30 transition-all hover:shadow-xl hover:shadow-sky-500/40"
+                className="w-full py-3.5 rounded-2xl text-sm font-extrabold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 transition-all hover:-translate-y-0.5 active:translate-y-0"
               >
-                Subscribe for $10/month
+                Start Premium · $10/month
               </button>
-              <p className="text-center text-[11px] text-gray-400 mt-3">
-                Cancel anytime. Demo subscription — no real charge.
+              <p className="text-center text-[11px] text-gray-400 mt-2.5">
+                Cancel anytime · Demo — no real charge
               </p>
             </>
           )}

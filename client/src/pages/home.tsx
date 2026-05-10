@@ -18,7 +18,7 @@ import LockedSection from "@/components/locked-section";
 import { useSubscription } from "@/contexts/SubscriptionContext";
 import { NewsItem } from "@shared/schema";
 import { hasNeighborhoodData } from "@/lib/neighborhoodAnalysis";
-import { MapPin, X, Newspaper, CloudSun, Briefcase, Globe } from "lucide-react";
+import { MapPin, X, Newspaper, CloudSun, Briefcase, Globe, Crown } from "lucide-react";
 
 const FEATURES = [
   { icon: CloudSun,  label: "Live Weather" },
@@ -44,7 +44,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentCity, setCurrentCity] = useState<string>("");
   const { t } = useLanguage();
-  const { isSubscribed } = useSubscription();
+  const { isSubscribed, openModal } = useSubscription();
 
   const { data: newsItems, isLoading, isError, error, refetch } = useQuery<NewsItem[]>({
     queryKey: [`/api/news/${currentCity}`],
@@ -170,7 +170,7 @@ export default function Home() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
             {/* City banner */}
-            <div className="relative overflow-hidden bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 rounded-2xl p-6 mb-6 text-white shadow-lg">
+            <div className="relative overflow-hidden bg-gradient-to-r from-sky-600 via-blue-600 to-indigo-600 rounded-2xl p-6 mb-3 text-white shadow-lg">
               <div className="pointer-events-none absolute inset-0">
                 <div className="absolute -top-10 -right-10 w-48 h-48 bg-white/5 rounded-full" />
                 <div className="absolute -bottom-8 -left-8 w-36 h-36 bg-white/5 rounded-full" />
@@ -181,7 +181,14 @@ export default function Home() {
                     <MapPin className="h-7 w-7" />
                   </div>
                   <div>
-                    <h2 className="text-3xl font-extrabold tracking-tight leading-none">{currentCity}</h2>
+                    <div className="flex items-center gap-2">
+                      <h2 className="text-3xl font-extrabold tracking-tight leading-none">{currentCity}</h2>
+                      {isSubscribed && (
+                        <span className="flex items-center gap-1 bg-amber-400/20 border border-amber-300/40 text-amber-200 text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full">
+                          <Crown className="h-2.5 w-2.5" /> Premium
+                        </span>
+                      )}
+                    </div>
                     <p className="text-sky-200 text-sm mt-1 font-medium">City Dashboard · Live Data</p>
                   </div>
                 </div>
@@ -202,6 +209,27 @@ export default function Home() {
                 </div>
               </div>
             </div>
+
+            {/* Premium active banner */}
+            {isSubscribed && (
+              <div className="flex items-center justify-between bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-xl px-4 py-2.5 mb-4">
+                <div className="flex items-center gap-2.5">
+                  <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-amber-100">
+                    <Crown className="h-3.5 w-3.5 text-amber-600" />
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-amber-800">Premium Active</span>
+                    <span className="text-xs text-amber-600 ml-2">All 7 add-ons unlocked</span>
+                  </div>
+                </div>
+                <button
+                  onClick={openModal}
+                  className="text-[11px] font-semibold text-amber-600 hover:text-amber-800 transition-colors"
+                >
+                  Manage →
+                </button>
+              </div>
+            )}
 
             {/* Weather + Alerts */}
             <div className="space-y-4">
