@@ -414,7 +414,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const daily = weatherRes.data?.daily;
       if (!current) return res.status(500).json({ message: "Weather data unavailable" });
 
-      function wmoToCondition(code: number): { condition: string; description: string } {
+      const wmoToCondition = (code: number): { condition: string; description: string } => {
         if (code === 0) return { condition: "Sunny", description: "Clear and sunny" };
         if (code <= 2) return { condition: "Partly Cloudy", description: "Partly cloudy skies" };
         if (code === 3) return { condition: "Cloudy", description: "Overcast skies" };
@@ -425,7 +425,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         if (code <= 82) return { condition: "Heavy Rain", description: "Heavy rain showers" };
         if (code <= 86) return { condition: "Heavy Snow", description: "Heavy snow showers" };
         return { condition: "Thunderstorm", description: "Thunderstorm activity" };
-      }
+      };
 
       const todayWeather = wmoToCondition(current.weather_code ?? 0);
 
@@ -476,12 +476,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "City parameter is required" });
       }
       
-      cityParam = cityParam.toLowerCase()
-      let cityWords = cityParam.split(" ")
-      cityWords.forEach(s => {
-        return s.charAt(0).toUpperCase() + s.slice(1);
-      })
-      cityParam = cityWords.join("_");
+      cityParam = cityParam.toLowerCase().split(" ")
+        .map((s: string) => s.charAt(0).toUpperCase() + s.slice(1))
+        .join("_");
     
       const response = await axios.get("https://citystats.xyz/cities/" + cityParam, {
         timeout: 5000,
@@ -577,16 +574,25 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Relevance filter: require the city name to actually appear in title or description
       const relevantNewsItems = filterRelevantToCity(validNewsItems, city);
 
-      // Deduplicate by URL, then by title
+      // Deduplicate: exact URL, exact title, and normalized title (strips special chars, slices 100)
       const seenUrls = new Set<string>();
       const seenTitles = new Set<string>();
+      const normalizeTitle = (t: string) =>
+        t.toLowerCase()
+          .replace(/[^a-z0-9 ]/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .slice(0, 100);
       const uniqueNewsItems = relevantNewsItems.filter((item: any) => {
         const urlKey = item.url?.trim().toLowerCase();
-        const titleKey = item.title?.trim().toLowerCase();
+        const rawTitle = item.title?.trim().toLowerCase();
+        const normTitle = item.title ? normalizeTitle(item.title) : null;
         if (urlKey && seenUrls.has(urlKey)) return false;
-        if (titleKey && seenTitles.has(titleKey)) return false;
+        if (rawTitle && seenTitles.has(rawTitle)) return false;
+        if (normTitle && seenTitles.has(normTitle)) return false;
         if (urlKey) seenUrls.add(urlKey);
-        if (titleKey) seenTitles.add(titleKey);
+        if (rawTitle) seenTitles.add(rawTitle);
+        if (normTitle) seenTitles.add(normTitle);
         return true;
       }).slice(0, 20);
 
@@ -720,16 +726,21 @@ export async function registerRoutes(app: Express): Promise<Server> {
       // Relevance filter: require the city name in title or description
       const relevantNewsItems = filterRelevantToCity(validNewsItems, city);
 
-      // Deduplicate by URL, then by title
+      // Deduplicate: exact URL, raw title, and normalized title
       const seenUrls2 = new Set<string>();
       const seenTitles2 = new Set<string>();
+      const normalizeTitle2 = (t: string) =>
+        t.toLowerCase().replace(/[^a-z0-9 ]/g, " ").replace(/\s+/g, " ").trim().slice(0, 100);
       const uniqueNewsItems = relevantNewsItems.filter((item: any) => {
         const urlKey = item.url?.trim().toLowerCase();
-        const titleKey = item.title?.trim().toLowerCase();
+        const rawTitle = item.title?.trim().toLowerCase();
+        const normTitle = item.title ? normalizeTitle2(item.title) : null;
         if (urlKey && seenUrls2.has(urlKey)) return false;
-        if (titleKey && seenTitles2.has(titleKey)) return false;
+        if (rawTitle && seenTitles2.has(rawTitle)) return false;
+        if (normTitle && seenTitles2.has(normTitle)) return false;
         if (urlKey) seenUrls2.add(urlKey);
-        if (titleKey) seenTitles2.add(titleKey);
+        if (rawTitle) seenTitles2.add(rawTitle);
+        if (normTitle) seenTitles2.add(normTitle);
         return true;
       }).slice(0, 5);
 
@@ -869,36 +880,45 @@ function determineCategory(title?: string, description?: string): string {
   // Each entry is [keyword, weight] — higher weight for more distinctive terms
   const categoryKeywords: Record<string, Array<[string, number]>> = {
     "politics": [
-      ["election", 3], ["ballot", 3], ["referendum", 3], ["parliament", 3],
+      ["election", 3], ["elections", 3], ["ballot", 3], ["referendum", 3], ["parliament", 3],
       ["senate", 3], ["congress", 3], ["democrat", 3], ["republican", 3],
       ["political", 2], ["politician", 2], ["minister", 2], ["prime minister", 3],
-      ["president", 2], ["legislation", 2], ["policy", 1], ["government", 1],
-      ["vote", 1], ["campaign", 1],
+      ["president", 2], ["legislation", 2], ["policy", 2], ["government", 1],
+      ["votes", 2], ["vote", 1], ["campaign", 1], ["trump", 2], ["white house", 3],
+      ["pentagon", 3], ["cabinet", 2], ["secretary of state", 3],
+      ["chancellor", 2], ["foreign policy", 3], ["diplomatic", 2],
     ],
     "business": [
       ["stock exchange", 3], ["wall street", 3], ["ipo", 3], ["gdp", 3],
       ["inflation", 3], ["interest rate", 3], ["hedge fund", 3],
       ["earnings", 2], ["revenue", 2], ["profit", 2], ["startup", 2],
       ["investment", 2], ["merger", 2], ["acquisition", 2], ["ceo", 2],
-      ["economy", 1], ["finance", 1], ["trade", 1],
+      ["nasdaq", 3], ["s&p", 3], ["shares", 2], ["shareholder", 2],
+      ["economy", 1], ["finance", 1], ["fiscal", 2],
     ],
     "technology": [
       ["artificial intelligence", 3], ["machine learning", 3], ["blockchain", 3],
       ["cryptocurrency", 3], ["cybersecurity", 3], ["robotics", 3],
-      ["software", 2], ["smartphone", 2], ["silicon valley", 2], ["startup tech", 2],
-      ["technology", 2], ["digital", 2], ["internet", 1], ["cyber", 1],
+      ["software", 2], ["smartphone", 2], ["silicon valley", 2],
+      ["technology", 2], ["digital", 2], ["internet", 2], ["cyber", 2],
+      ["robot", 2], ["robots", 2], ["algorithm", 2], ["app", 2],
     ],
     "health": [
       ["pandemic", 3], ["vaccine", 3], ["epidemic", 3], ["surgery", 3],
       ["cancer", 3], ["diabetes", 3], ["mental health", 3], ["covid", 3],
       ["hospital", 2], ["medical", 2], ["disease", 2], ["virus", 2],
-      ["health care", 2], ["doctor", 1], ["patient", 1],
+      ["health care", 2], ["doctor", 2], ["patient", 2],
+      ["outbreak", 3], ["infection", 2], ["infectious", 2], ["drug approval", 3],
+      ["clinical trial", 3], ["fda", 2], ["pharmaceutical", 2],
     ],
     "sports": [
       ["world cup", 3], ["olympic", 3], ["championship", 3], ["tournament", 3],
       ["formula 1", 3], ["nba", 3], ["nfl", 3], ["premier league", 3],
       ["athlete", 2], ["goalkeeper", 2], ["quarterback", 2], ["marathon", 2],
-      ["stadium", 2], ["league", 1], ["match", 1], ["player", 1], ["team", 1],
+      ["stadium", 2], ["leagues", 2], ["league", 2], ["sport", 2], ["sports", 2],
+      ["soccer", 2], ["football", 2], ["basketball", 2], ["baseball", 2],
+      ["cricket", 2], ["tennis", 2], ["golf", 2], ["wrestling", 2],
+      ["boxing", 2], ["swimming", 2], ["cycling", 2], ["sprinter", 2],
     ],
     "entertainment": [
       ["box office", 3], ["oscar", 3], ["grammy", 3], ["emmy", 3],
@@ -910,7 +930,8 @@ function determineCategory(title?: string, description?: string): string {
       ["nasa", 3], ["spacex", 3], ["quantum", 3], ["genome", 3],
       ["archaeology", 3], ["fossil", 3], ["telescope", 3],
       ["scientific", 2], ["scientist", 2], ["research", 2], ["experiment", 2],
-      ["discovery", 2], ["space", 1], ["climate science", 2],
+      ["discovery", 2], ["climate science", 2], ["science", 2], ["physics", 2],
+      ["astronomy", 2], ["biology", 2], ["chemistry", 2], ["geology", 2],
     ],
     "environment": [
       ["climate change", 3], ["global warming", 3], ["carbon emission", 3],
@@ -931,7 +952,8 @@ function determineCategory(title?: string, description?: string): string {
     "housing": [
       ["real estate", 3], ["housing market", 3], ["mortgage", 3], ["eviction", 3],
       ["gentrification", 3], ["landlord", 2], ["tenant", 2], ["apartment", 2],
-      ["affordable housing", 3], ["rent", 1], ["property", 1],
+      ["apartments", 2], ["affordable housing", 3], ["rent hike", 3],
+      ["house prices", 3], ["home prices", 3], ["renting", 2], ["for rent", 3],
     ],
     "traffic": [
       ["traffic jam", 3], ["road closure", 3], ["subway", 2], ["metro", 2],
@@ -939,23 +961,40 @@ function determineCategory(title?: string, description?: string): string {
       ["traffic", 1], ["transportation", 1],
     ],
     "crime": [
-      ["murder", 3], ["robbery", 3], ["arrest", 3], ["police", 2],
-      ["shooting", 3], ["stabbing", 3], ["court", 2], ["trial", 2],
-      ["convicted", 3], ["suspect", 2], ["investigation", 1], ["crime", 1],
+      ["murder", 3], ["murders", 3], ["robbery", 3], ["arrest", 3], ["arrested", 3],
+      ["shooting", 3], ["shooter", 3], ["gunman", 3], ["stabbing", 3],
+      ["convicted", 3], ["suspect", 2], ["suspects", 2],
+      ["criminal", 3], ["burglary", 3], ["homicide", 3], ["felony", 3],
+      ["police", 2], ["crime wave", 3], ["police raid", 3], ["crimes", 2], ["crime", 2],
+      ["fbi", 2], ["cia", 2], ["terrorism", 3], ["terrorist", 3],
     ],
+  };
+
+  // Word-boundary aware match: prevents "rent" inside "different", "trade" inside "trademark" etc.
+  // Multi-word phrases use substring (already specific enough).
+  // Single words use full \b...\b boundaries; plural/conjugated forms are listed explicitly.
+  const hasKeyword = (text: string, keyword: string): boolean => {
+    if (keyword.includes(" ")) return text.includes(keyword);
+    try {
+      const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      return new RegExp(`\\b${escaped}\\b`).test(text);
+    } catch {
+      return text.includes(keyword);
+    }
   };
 
   let bestCategory = "local";
   let bestScore = 0;
+  const MIN_SCORE = 2; // require at least 2 points to override "local" default
 
   for (const [category, entries] of Object.entries(categoryKeywords)) {
     let score = 0;
     for (const [keyword, weight] of entries) {
       // Title matches count 2× more than description matches
-      if (titleText.includes(keyword)) score += weight * 2;
-      else if (descText.includes(keyword)) score += weight;
+      if (hasKeyword(titleText, keyword)) score += weight * 2;
+      else if (hasKeyword(descText, keyword)) score += weight;
     }
-    if (score > bestScore) {
+    if (score > bestScore && score >= MIN_SCORE) {
       bestScore = score;
       bestCategory = category;
     }

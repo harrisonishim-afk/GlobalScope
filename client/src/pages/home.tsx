@@ -309,7 +309,7 @@ export default function Home() {
               </div>
             )}
             {isSubscribed && showCityFeatures && (
-              <CityVibe newsItems={newsItems} cityName={currentCity} />
+              <CityVibe newsItems={newsItems ?? []} cityName={currentCity} />
             )}
             {!isSubscribed && (
               <>
@@ -318,7 +318,7 @@ export default function Home() {
                   title="Neighborhood Map & Music Mood"
                   description="Visualize news activity by neighborhood and get music recommendations matched to your city's mood."
                 >
-                  <CityVibe newsItems={newsItems} cityName={currentCity} />
+                  <CityVibe newsItems={newsItems ?? []} cityName={currentCity} />
                 </LockedSection>
               </>
             )}

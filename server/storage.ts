@@ -22,7 +22,7 @@ export interface IStorage {
 export class MemStorage implements IStorage {
   private users: Map<number, User>;
   private newsItems: Map<number, NewsItem>;
-  private cities: Map<string, CitySearch>;
+  private cities: Map<number, CitySearch>;
   
   private userCurrentId: number;
   private newsCurrentId: number;
@@ -65,7 +65,16 @@ export class MemStorage implements IStorage {
 
   async createNews(insertNews: InsertNews): Promise<NewsItem> {
     const id = this.newsCurrentId++;
-    const newsItem: NewsItem = { ...insertNews, id };
+    const newsItem: NewsItem = {
+      ...insertNews,
+      id,
+      content: insertNews.content ?? null,
+      url: insertNews.url ?? null,
+      imageUrl: insertNews.imageUrl ?? null,
+      author: insertNews.author ?? null,
+      category: insertNews.category ?? null,
+      publishedAt: insertNews.publishedAt ?? null,
+    };
     this.newsItems.set(id, newsItem);
     return newsItem;
   }

@@ -1,6 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
 import { Users, Star, Crown, Calendar, MapPin } from "lucide-react";
 import { getCityFacts, hasCityFacts } from "@/lib/cityFacts";
 import { useLanguage } from "@/contexts/LanguageContext";
@@ -11,18 +10,9 @@ interface CityFactsProps {
 
 export default function CityFacts({ cityName }: CityFactsProps) {
   const { t } = useLanguage();
-  const {
-    data: cityFacts,
-    isLoading,
-    isError,
-    error,
-    refetch,
-  } = useQuery<Object>({
-    queryKey: [`/api/facts/${cityName}`],
-    enabled: !!cityName,
-  });
- // const cityFacts = getCityFacts(cityName);
-  
+
+  const cityFacts = getCityFacts(cityName);
+
   if (!cityFacts || !hasCityFacts(cityName)) {
     return null;
   }
@@ -49,7 +39,7 @@ export default function CityFacts({ cityName }: CityFactsProps) {
               <Users className="h-5 w-5 text-blue-600" />
             </div>
             <div>
-              <div className="font-semibold text-lg">{cityFacts.population.city}</div>
+              <div className="font-semibold text-lg">{cityFacts.population}</div>
               <div className="text-sm text-muted-foreground">{t("population")}</div>
             </div>
           </div>
@@ -60,7 +50,7 @@ export default function CityFacts({ cityName }: CityFactsProps) {
               <Crown className="h-5 w-5 text-purple-600" />
             </div>
             <div>
-              <div className="font-semibold text-lg">{cityFacts.government.mayor}</div>
+              <div className="font-semibold text-lg">{cityFacts.currentMayor}</div>
               <div className="text-sm text-muted-foreground">{t("currentMayor")}</div>
             </div>
           </div>
@@ -73,7 +63,9 @@ export default function CityFacts({ cityName }: CityFactsProps) {
               </div>
               <div>
                 <div className="font-semibold text-lg">
-                  {cityFacts.settled_founded > 0 ? cityFacts.settled_founded : `${Math.abs(cityFacts.settled_founded)} BC`}
+                  {cityFacts.foundedYear > 0
+                    ? cityFacts.foundedYear
+                    : `${Math.abs(cityFacts.foundedYear)} BC`}
                 </div>
                 <div className="text-sm text-muted-foreground">{t("founded")}</div>
               </div>
