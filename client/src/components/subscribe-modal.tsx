@@ -76,8 +76,8 @@ export default function SubscribeModal() {
                 <h2 className="text-2xl font-extrabold text-white mb-1">Globalscope Premium</h2>
                 <p className="text-sky-300/80 text-sm">Unlock the full city experience</p>
                 <div className="mt-4 inline-flex items-baseline gap-1 bg-white/10 px-5 py-2 rounded-2xl border border-white/10">
-                  <span className="text-4xl font-black text-white">$10</span>
-                  <span className="text-sky-300/80 text-sm font-medium">/month</span>
+                  <span className="text-4xl font-black text-white">$20</span>
+                  <span className="text-sky-300/80 text-sm font-medium">/year</span>
                 </div>
               </>
             )}
@@ -126,7 +126,7 @@ export default function SubscribeModal() {
                 onClick={handleSubscribe}
                 className="w-full py-3.5 rounded-2xl text-sm font-extrabold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 shadow-lg shadow-sky-500/25 hover:shadow-sky-500/40 transition-all hover:-translate-y-0.5 active:translate-y-0"
               >
-                Start Premium · $10/month
+                Start Premium · $20/year
               </button>
               <p className="text-center text-[11px] text-gray-400 mt-2.5">
                 Cancel anytime · Demo — no real charge

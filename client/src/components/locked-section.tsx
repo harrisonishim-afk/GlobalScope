@@ -35,7 +35,7 @@ export default function LockedSection({ children, title, description }: Props) {
             className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-600 hover:to-blue-700 shadow-md shadow-sky-500/20 hover:shadow-lg transition-all"
           >
             <Sparkles className="h-3.5 w-3.5" />
-            Unlock with Premium · $10/mo
+            Unlock with Premium · $20/yr
           </button>
         </div>
       </div>
